@@ -1,0 +1,12 @@
+/Users/developer/workspace/side-rust/target/debug/deps/libasync_trait-8d650c894c9283e1.dylib: /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/lib.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/args.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/bound.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/expand.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/lifetime.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/parse.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/receiver.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/verbatim.rs
+
+/Users/developer/workspace/side-rust/target/debug/deps/async_trait-8d650c894c9283e1.d: /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/lib.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/args.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/bound.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/expand.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/lifetime.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/parse.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/receiver.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/verbatim.rs
+
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/lib.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/args.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/bound.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/expand.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/lifetime.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/parse.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/receiver.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/async-trait-0.1.83/src/verbatim.rs:

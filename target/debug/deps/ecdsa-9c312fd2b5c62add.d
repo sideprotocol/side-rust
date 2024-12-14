@@ -1,0 +1,12 @@
+/Users/developer/workspace/side-rust/target/debug/deps/libecdsa-9c312fd2b5c62add.rmeta: /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/lib.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/normalized.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/recovery.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/der.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/hazmat.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/signing.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/verifying.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/../README.md
+
+/Users/developer/workspace/side-rust/target/debug/deps/ecdsa-9c312fd2b5c62add.d: /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/lib.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/normalized.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/recovery.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/der.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/hazmat.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/signing.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/verifying.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/../README.md
+
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/lib.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/normalized.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/recovery.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/der.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/hazmat.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/signing.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/verifying.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ecdsa-0.16.9/src/../README.md:

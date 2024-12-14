@@ -1,0 +1,10 @@
+/Users/developer/workspace/side-rust/target/debug/deps/libed25519_consensus-4704adc548a8ff0a.rmeta: /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/lib.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/error.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/signature.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/signing_key.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/verification_key.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/../README.md
+
+/Users/developer/workspace/side-rust/target/debug/deps/ed25519_consensus-4704adc548a8ff0a.d: /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/lib.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/error.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/signature.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/signing_key.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/verification_key.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/../README.md
+
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/lib.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/error.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/signature.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/signing_key.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/verification_key.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/ed25519-consensus-2.1.0/src/../README.md:

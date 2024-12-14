@@ -1,0 +1,11 @@
+/Users/developer/workspace/side-rust/target/debug/deps/libtonic_build-08edaf10f7ac3e6b.rmeta: /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/lib.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/prost.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/manual.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/client.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/server.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/code_gen.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/compile_settings.rs
+
+/Users/developer/workspace/side-rust/target/debug/deps/tonic_build-08edaf10f7ac3e6b.d: /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/lib.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/prost.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/manual.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/client.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/server.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/code_gen.rs /Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/compile_settings.rs
+
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/lib.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/prost.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/manual.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/client.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/server.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/code_gen.rs:
+/Users/developer/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-build-0.12.3/src/compile_settings.rs:

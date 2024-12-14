@@ -1,0 +1,4 @@
+[submodule "side"]
+	path = side
+	url = https://github.com/sideprotocol/side.git
+	branch = lending
