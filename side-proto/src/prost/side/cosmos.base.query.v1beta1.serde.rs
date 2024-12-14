@@ -23,18 +23,26 @@ impl serde::Serialize for PageRequest {
         if self.reverse {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("cosmos.base.query.v1beta1.PageRequest", len)?;
+        let mut struct_ser =
+            serializer.serialize_struct("cosmos.base.query.v1beta1.PageRequest", len)?;
         if !self.key.is_empty() {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("key", pbjson::private::base64::encode(&self.key).as_str())?;
+            struct_ser
+                .serialize_field("key", pbjson::private::base64::encode(&self.key).as_str())?;
         }
         if self.offset != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("offset", alloc::string::ToString::to_string(&self.offset).as_str())?;
+            struct_ser.serialize_field(
+                "offset",
+                alloc::string::ToString::to_string(&self.offset).as_str(),
+            )?;
         }
         if self.limit != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("limit", alloc::string::ToString::to_string(&self.limit).as_str())?;
+            struct_ser.serialize_field(
+                "limit",
+                alloc::string::ToString::to_string(&self.limit).as_str(),
+            )?;
         }
         if self.count_total {
             struct_ser.serialize_field("countTotal", &self.count_total)?;
@@ -70,7 +78,7 @@ impl<'de> serde::Deserialize<'de> for PageRequest {
             Reverse,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -80,7 +88,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -111,51 +122,54 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<PageRequest, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut key__ =None;
-                let mut offset__ =None;
-                let mut limit__ =None;
-                let mut count_total__ =None;
-                let mut reverse__ =None;
+                let mut key__ = None;
+                let mut offset__ = None;
+                let mut limit__ = None;
+                let mut count_total__ = None;
+                let mut reverse__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Key => {
                             if key__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("key"));
                             }
-                            key__ =
-                                Some(map_.next_value::<::pbjson::private::BytesDeserialize<_>>()?.0)
-                            ;
+                            key__ = Some(
+                                map_.next_value::<::pbjson::private::BytesDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::Offset => {
                             if offset__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("offset"));
                             }
-                            offset__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            offset__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::Limit => {
                             if limit__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("limit"));
                             }
-                            limit__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            limit__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::CountTotal => {
                             if count_total__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("countTotal"));
                             }
-                            count_total__ =Some(map_.next_value()?);
+                            count_total__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Reverse => {
                             if reverse__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("reverse"));
                             }
-                            reverse__ =Some(map_.next_value()?);
+                            reverse__ = Some(map_.next_value()?);
                         }
                     }
                 }
@@ -168,7 +182,11 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 })
             }
         }
-        deserializer.deserialize_struct("cosmos.base.query.v1beta1.PageRequest", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct(
+            "cosmos.base.query.v1beta1.PageRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }
 #[cfg(feature = "serde")]
@@ -186,14 +204,21 @@ impl serde::Serialize for PageResponse {
         if self.total != 0 {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("cosmos.base.query.v1beta1.PageResponse", len)?;
+        let mut struct_ser =
+            serializer.serialize_struct("cosmos.base.query.v1beta1.PageResponse", len)?;
         if !self.next_key.is_empty() {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("nextKey", pbjson::private::base64::encode(&self.next_key).as_str())?;
+            struct_ser.serialize_field(
+                "nextKey",
+                pbjson::private::base64::encode(&self.next_key).as_str(),
+            )?;
         }
         if self.total != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("total", alloc::string::ToString::to_string(&self.total).as_str())?;
+            struct_ser.serialize_field(
+                "total",
+                alloc::string::ToString::to_string(&self.total).as_str(),
+            )?;
         }
         struct_ser.end()
     }
@@ -205,11 +230,7 @@ impl<'de> serde::Deserialize<'de> for PageResponse {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "next_key",
-            "nextKey",
-            "total",
-        ];
+        const FIELDS: &[&str] = &["next_key", "nextKey", "total"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -217,7 +238,7 @@ impl<'de> serde::Deserialize<'de> for PageResponse {
             Total,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -227,7 +248,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -255,28 +279,30 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<PageResponse, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut next_key__ =None;
-                let mut total__ =None;
+                let mut next_key__ = None;
+                let mut total__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::NextKey => {
                             if next_key__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("nextKey"));
                             }
-                            next_key__ =
-                                Some(map_.next_value::<::pbjson::private::BytesDeserialize<_>>()?.0)
-                            ;
+                            next_key__ = Some(
+                                map_.next_value::<::pbjson::private::BytesDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::Total => {
                             if total__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("total"));
                             }
-                            total__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            total__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                     }
                 }
@@ -286,6 +312,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 })
             }
         }
-        deserializer.deserialize_struct("cosmos.base.query.v1beta1.PageResponse", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct(
+            "cosmos.base.query.v1beta1.PageResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }

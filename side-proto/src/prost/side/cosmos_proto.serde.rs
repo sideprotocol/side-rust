@@ -14,7 +14,8 @@ impl serde::Serialize for InterfaceDescriptor {
         if !self.description.is_empty() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("cosmos_proto.InterfaceDescriptor", len)?;
+        let mut struct_ser =
+            serializer.serialize_struct("cosmos_proto.InterfaceDescriptor", len)?;
         if !self.name.is_empty() {
             struct_ser.serialize_field("name", &self.name)?;
         }
@@ -31,10 +32,7 @@ impl<'de> serde::Deserialize<'de> for InterfaceDescriptor {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "name",
-            "description",
-        ];
+        const FIELDS: &[&str] = &["name", "description"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -42,7 +40,7 @@ impl<'de> serde::Deserialize<'de> for InterfaceDescriptor {
             Description,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -52,7 +50,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -79,25 +80,28 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 formatter.write_str("struct cosmos_proto.InterfaceDescriptor")
             }
 
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<InterfaceDescriptor, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<InterfaceDescriptor, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut name__ =None;
-                let mut description__ =None;
+                let mut name__ = None;
+                let mut description__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Name => {
                             if name__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("name"));
                             }
-                            name__ =Some(map_.next_value()?);
+                            name__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Description => {
                             if description__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("description"));
                             }
-                            description__ =Some(map_.next_value()?);
+                            description__ = Some(map_.next_value()?);
                         }
                     }
                 }
@@ -107,7 +111,11 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 })
             }
         }
-        deserializer.deserialize_struct("cosmos_proto.InterfaceDescriptor", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct(
+            "cosmos_proto.InterfaceDescriptor",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }
 #[cfg(feature = "serde")]
@@ -136,10 +144,16 @@ impl serde::Serialize for ScalarDescriptor {
             struct_ser.serialize_field("description", &self.description)?;
         }
         if !self.field_type.is_empty() {
-            let v = self.field_type.iter().cloned().map(|v| {
-                ScalarType::try_from(v)
-                    .map_err(|_| serde::ser::Error::custom(alloc::format!("Invalid variant {}", v)))
-                }).collect::<Result<alloc::vec::Vec<_>, _>>()?;
+            let v = self
+                .field_type
+                .iter()
+                .cloned()
+                .map(|v| {
+                    ScalarType::try_from(v).map_err(|_| {
+                        serde::ser::Error::custom(alloc::format!("Invalid variant {}", v))
+                    })
+                })
+                .collect::<Result<alloc::vec::Vec<_>, _>>()?;
             struct_ser.serialize_field("fieldType", &v)?;
         }
         struct_ser.end()
@@ -152,12 +166,7 @@ impl<'de> serde::Deserialize<'de> for ScalarDescriptor {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "name",
-            "description",
-            "field_type",
-            "fieldType",
-        ];
+        const FIELDS: &[&str] = &["name", "description", "field_type", "fieldType"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -166,7 +175,7 @@ impl<'de> serde::Deserialize<'de> for ScalarDescriptor {
             FieldType,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -176,7 +185,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -205,31 +217,36 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<ScalarDescriptor, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut name__ =None;
-                let mut description__ =None;
-                let mut field_type__ =None;
+                let mut name__ = None;
+                let mut description__ = None;
+                let mut field_type__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Name => {
                             if name__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("name"));
                             }
-                            name__ =Some(map_.next_value()?);
+                            name__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Description => {
                             if description__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("description"));
                             }
-                            description__ =Some(map_.next_value()?);
+                            description__ = Some(map_.next_value()?);
                         }
                         GeneratedField::FieldType => {
                             if field_type__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("fieldType"));
                             }
-                            field_type__ =Some(map_.next_value::<alloc::vec::Vec<ScalarType>>()?.into_iter().map(|x| x as i32).collect());
+                            field_type__ = Some(
+                                map_.next_value::<alloc::vec::Vec<ScalarType>>()?
+                                    .into_iter()
+                                    .map(|x| x as i32)
+                                    .collect(),
+                            );
                         }
                     }
                 }

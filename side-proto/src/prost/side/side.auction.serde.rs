@@ -19,9 +19,7 @@ impl<'de> serde::Deserialize<'de> for AssetType {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "Bitcoin",
-        ];
+        const FIELDS: &[&str] = &["Bitcoin"];
 
         struct GeneratedVisitor;
 
@@ -108,7 +106,8 @@ impl serde::Serialize for Auction {
         let mut struct_ser = serializer.serialize_struct("side.auction.Auction", len)?;
         if self.id != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
         }
         if let Some(v) = self.deposited_asset.as_ref() {
             struct_ser.serialize_field("depositedAsset", v)?;
@@ -118,25 +117,35 @@ impl serde::Serialize for Auction {
         }
         if self.liquidated_price != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("liquidatedPrice", alloc::string::ToString::to_string(&self.liquidated_price).as_str())?;
+            struct_ser.serialize_field(
+                "liquidatedPrice",
+                alloc::string::ToString::to_string(&self.liquidated_price).as_str(),
+            )?;
         }
         if let Some(v) = self.liquidated_time.as_ref() {
             struct_ser.serialize_field("liquidatedTime", v)?;
         }
         if self.expected_value != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("expectedValue", alloc::string::ToString::to_string(&self.expected_value).as_str())?;
+            struct_ser.serialize_field(
+                "expectedValue",
+                alloc::string::ToString::to_string(&self.expected_value).as_str(),
+            )?;
         }
         if self.bidded_value != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("biddedValue", alloc::string::ToString::to_string(&self.bidded_value).as_str())?;
+            struct_ser.serialize_field(
+                "biddedValue",
+                alloc::string::ToString::to_string(&self.bidded_value).as_str(),
+            )?;
         }
         if !self.payment_tx_id.is_empty() {
             struct_ser.serialize_field("paymentTxId", &self.payment_tx_id)?;
         }
         if self.status != 0 {
-            let v = AuctionStatus::try_from(self.status)
-                .map_err(|_| serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status)))?;
+            let v = AuctionStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
             struct_ser.serialize_field("status", &v)?;
         }
         struct_ser.end()
@@ -180,7 +189,7 @@ impl<'de> serde::Deserialize<'de> for Auction {
             Status,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -190,7 +199,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -201,10 +213,16 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                     {
                         match value {
                             "id" => Ok(GeneratedField::Id),
-                            "depositedAsset" | "deposited_asset" => Ok(GeneratedField::DepositedAsset),
+                            "depositedAsset" | "deposited_asset" => {
+                                Ok(GeneratedField::DepositedAsset)
+                            }
                             "borrower" => Ok(GeneratedField::Borrower),
-                            "liquidatedPrice" | "liquidated_price" => Ok(GeneratedField::LiquidatedPrice),
-                            "liquidatedTime" | "liquidated_time" => Ok(GeneratedField::LiquidatedTime),
+                            "liquidatedPrice" | "liquidated_price" => {
+                                Ok(GeneratedField::LiquidatedPrice)
+                            }
+                            "liquidatedTime" | "liquidated_time" => {
+                                Ok(GeneratedField::LiquidatedTime)
+                            }
                             "expectedValue" | "expected_value" => Ok(GeneratedField::ExpectedValue),
                             "biddedValue" | "bidded_value" => Ok(GeneratedField::BiddedValue),
                             "paymentTxId" | "payment_tx_id" => Ok(GeneratedField::PaymentTxId),
@@ -225,81 +243,85 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<Auction, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut id__ =None;
-                let mut deposited_asset__ =None;
-                let mut borrower__ =None;
-                let mut liquidated_price__ =None;
-                let mut liquidated_time__ =None;
-                let mut expected_value__ =None;
-                let mut bidded_value__ =None;
-                let mut payment_tx_id__ =None;
-                let mut status__ =None;
+                let mut id__ = None;
+                let mut deposited_asset__ = None;
+                let mut borrower__ = None;
+                let mut liquidated_price__ = None;
+                let mut liquidated_time__ = None;
+                let mut expected_value__ = None;
+                let mut bidded_value__ = None;
+                let mut payment_tx_id__ = None;
+                let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Id => {
                             if id__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("id"));
                             }
-                            id__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::DepositedAsset => {
                             if deposited_asset__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("depositedAsset"));
                             }
-                            deposited_asset__ =map_.next_value()?;
+                            deposited_asset__ = map_.next_value()?;
                         }
                         GeneratedField::Borrower => {
                             if borrower__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("borrower"));
                             }
-                            borrower__ =Some(map_.next_value()?);
+                            borrower__ = Some(map_.next_value()?);
                         }
                         GeneratedField::LiquidatedPrice => {
                             if liquidated_price__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("liquidatedPrice"));
                             }
-                            liquidated_price__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            liquidated_price__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::LiquidatedTime => {
                             if liquidated_time__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("liquidatedTime"));
                             }
-                            liquidated_time__ =map_.next_value()?;
+                            liquidated_time__ = map_.next_value()?;
                         }
                         GeneratedField::ExpectedValue => {
                             if expected_value__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("expectedValue"));
                             }
-                            expected_value__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            expected_value__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::BiddedValue => {
                             if bidded_value__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("biddedValue"));
                             }
-                            bidded_value__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            bidded_value__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::PaymentTxId => {
                             if payment_tx_id__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("paymentTxId"));
                             }
-                            payment_tx_id__ =Some(map_.next_value()?);
+                            payment_tx_id__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Status => {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
                             }
-                            status__ =Some(map_.next_value::<AuctionStatus>()? as i32);
+                            status__ = Some(map_.next_value::<AuctionStatus>()? as i32);
                         }
                     }
                 }
@@ -340,10 +362,7 @@ impl<'de> serde::Deserialize<'de> for AuctionStatus {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "AuctionOpen",
-            "AuctionClose",
-        ];
+        const FIELDS: &[&str] = &["AuctionOpen", "AuctionClose"];
 
         struct GeneratedVisitor;
 
@@ -422,25 +441,33 @@ impl serde::Serialize for Bid {
         let mut struct_ser = serializer.serialize_struct("side.auction.Bid", len)?;
         if self.id != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
         }
         if self.auction_id != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("auctionId", alloc::string::ToString::to_string(&self.auction_id).as_str())?;
+            struct_ser.serialize_field(
+                "auctionId",
+                alloc::string::ToString::to_string(&self.auction_id).as_str(),
+            )?;
         }
         if !self.bidder.is_empty() {
             struct_ser.serialize_field("bidder", &self.bidder)?;
         }
         if self.bid_price != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("bidPrice", alloc::string::ToString::to_string(&self.bid_price).as_str())?;
+            struct_ser.serialize_field(
+                "bidPrice",
+                alloc::string::ToString::to_string(&self.bid_price).as_str(),
+            )?;
         }
         if let Some(v) = self.bid_amount.as_ref() {
             struct_ser.serialize_field("bidAmount", v)?;
         }
         if self.status != 0 {
-            let v = BidStatus::try_from(self.status)
-                .map_err(|_| serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status)))?;
+            let v = BidStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
             struct_ser.serialize_field("status", &v)?;
         }
         struct_ser.end()
@@ -475,7 +502,7 @@ impl<'de> serde::Deserialize<'de> for Bid {
             Status,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -485,7 +512,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -517,58 +547,61 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<Bid, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut id__ =None;
-                let mut auction_id__ =None;
-                let mut bidder__ =None;
-                let mut bid_price__ =None;
-                let mut bid_amount__ =None;
-                let mut status__ =None;
+                let mut id__ = None;
+                let mut auction_id__ = None;
+                let mut bidder__ = None;
+                let mut bid_price__ = None;
+                let mut bid_amount__ = None;
+                let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Id => {
                             if id__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("id"));
                             }
-                            id__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::AuctionId => {
                             if auction_id__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("auctionId"));
                             }
-                            auction_id__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            auction_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::Bidder => {
                             if bidder__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("bidder"));
                             }
-                            bidder__ =Some(map_.next_value()?);
+                            bidder__ = Some(map_.next_value()?);
                         }
                         GeneratedField::BidPrice => {
                             if bid_price__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("bidPrice"));
                             }
-                            bid_price__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            bid_price__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::BidAmount => {
                             if bid_amount__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("bidAmount"));
                             }
-                            bid_amount__ =map_.next_value()?;
+                            bid_amount__ = map_.next_value()?;
                         }
                         GeneratedField::Status => {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
                             }
-                            status__ =Some(map_.next_value::<BidStatus>()? as i32);
+                            status__ = Some(map_.next_value::<BidStatus>()? as i32);
                         }
                     }
                 }
@@ -607,11 +640,7 @@ impl<'de> serde::Deserialize<'de> for BidStatus {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "Bidding",
-            "Accepted",
-            "Rejected",
-        ];
+        const FIELDS: &[&str] = &["Bidding", "Accepted", "Rejected"];
 
         struct GeneratedVisitor;
 
@@ -699,11 +728,7 @@ impl<'de> serde::Deserialize<'de> for GenesisState {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "params",
-            "auctions",
-            "bids",
-        ];
+        const FIELDS: &[&str] = &["params", "auctions", "bids"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -712,7 +737,7 @@ impl<'de> serde::Deserialize<'de> for GenesisState {
             Bids,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -722,7 +747,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -751,31 +779,31 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<GenesisState, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut params__ =None;
-                let mut auctions__ =None;
-                let mut bids__ =None;
+                let mut params__ = None;
+                let mut auctions__ = None;
+                let mut bids__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Params => {
                             if params__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("params"));
                             }
-                            params__ =map_.next_value()?;
+                            params__ = map_.next_value()?;
                         }
                         GeneratedField::Auctions => {
                             if auctions__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("auctions"));
                             }
-                            auctions__ =Some(map_.next_value()?);
+                            auctions__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Bids => {
                             if bids__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("bids"));
                             }
-                            bids__ =Some(map_.next_value()?);
+                            bids__ = Some(map_.next_value()?);
                         }
                     }
                 }
@@ -816,11 +844,17 @@ impl serde::Serialize for MsgBid {
         }
         if self.auction_id != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("auctionId", alloc::string::ToString::to_string(&self.auction_id).as_str())?;
+            struct_ser.serialize_field(
+                "auctionId",
+                alloc::string::ToString::to_string(&self.auction_id).as_str(),
+            )?;
         }
         if self.price != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("price", alloc::string::ToString::to_string(&self.price).as_str())?;
+            struct_ser.serialize_field(
+                "price",
+                alloc::string::ToString::to_string(&self.price).as_str(),
+            )?;
         }
         if let Some(v) = self.amount.as_ref() {
             struct_ser.serialize_field("amount", v)?;
@@ -835,13 +869,7 @@ impl<'de> serde::Deserialize<'de> for MsgBid {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "sender",
-            "auction_id",
-            "auctionId",
-            "price",
-            "amount",
-        ];
+        const FIELDS: &[&str] = &["sender", "auction_id", "auctionId", "price", "amount"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -851,7 +879,7 @@ impl<'de> serde::Deserialize<'de> for MsgBid {
             Amount,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -861,7 +889,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -891,42 +922,44 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgBid, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut sender__ =None;
-                let mut auction_id__ =None;
-                let mut price__ =None;
-                let mut amount__ =None;
+                let mut sender__ = None;
+                let mut auction_id__ = None;
+                let mut price__ = None;
+                let mut amount__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Sender => {
                             if sender__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("sender"));
                             }
-                            sender__ =Some(map_.next_value()?);
+                            sender__ = Some(map_.next_value()?);
                         }
                         GeneratedField::AuctionId => {
                             if auction_id__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("auctionId"));
                             }
-                            auction_id__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            auction_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::Price => {
                             if price__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("price"));
                             }
-                            price__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            price__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::Amount => {
                             if amount__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("amount"));
                             }
-                            amount__ =map_.next_value()?;
+                            amount__ = map_.next_value()?;
                         }
                     }
                 }
@@ -961,14 +994,12 @@ impl<'de> serde::Deserialize<'de> for MsgBidResponse {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-        ];
+        const FIELDS: &[&str] = &[];
 
         #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {
-        }
+        enum GeneratedField {}
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -978,7 +1009,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -987,7 +1021,7 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                     where
                         E: serde::de::Error,
                     {
-                            Err(serde::de::Error::unknown_field(value, FIELDS))
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
                     }
                 }
                 deserializer.deserialize_identifier(GeneratedVisitor)
@@ -1002,14 +1036,13 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgBidResponse, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
                 while map_.next_key::<GeneratedField>()?.is_some() {
                     let _ = map_.next_value::<serde::de::IgnoredAny>()?;
                 }
-                Ok(MsgBidResponse {
-                })
+                Ok(MsgBidResponse {})
             }
         }
         deserializer.deserialize_struct("side.auction.MsgBidResponse", FIELDS, GeneratedVisitor)
@@ -1048,7 +1081,10 @@ impl serde::Serialize for Params {
         }
         if self.min_bid_amount != 0 {
             #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field("minBidAmount", alloc::string::ToString::to_string(&self.min_bid_amount).as_str())?;
+            struct_ser.serialize_field(
+                "minBidAmount",
+                alloc::string::ToString::to_string(&self.min_bid_amount).as_str(),
+            )?;
         }
         struct_ser.end()
     }
@@ -1079,7 +1115,7 @@ impl<'de> serde::Deserialize<'de> for Params {
             MinBidAmount,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -1089,7 +1125,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -1099,8 +1138,12 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                         E: serde::de::Error,
                     {
                         match value {
-                            "priceDropPeriod" | "price_drop_period" => Ok(GeneratedField::PriceDropPeriod),
-                            "initialDiscount" | "initial_discount" => Ok(GeneratedField::InitialDiscount),
+                            "priceDropPeriod" | "price_drop_period" => {
+                                Ok(GeneratedField::PriceDropPeriod)
+                            }
+                            "initialDiscount" | "initial_discount" => {
+                                Ok(GeneratedField::InitialDiscount)
+                            }
                             "feeRate" | "fee_rate" => Ok(GeneratedField::FeeRate),
                             "minBidAmount" | "min_bid_amount" => Ok(GeneratedField::MinBidAmount),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -1119,44 +1162,47 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<Params, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut price_drop_period__ =None;
-                let mut initial_discount__ =None;
-                let mut fee_rate__ =None;
-                let mut min_bid_amount__ =None;
+                let mut price_drop_period__ = None;
+                let mut initial_discount__ = None;
+                let mut fee_rate__ = None;
+                let mut min_bid_amount__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::PriceDropPeriod => {
                             if price_drop_period__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("priceDropPeriod"));
                             }
-                            price_drop_period__ =map_.next_value()?;
+                            price_drop_period__ = map_.next_value()?;
                         }
                         GeneratedField::InitialDiscount => {
                             if initial_discount__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("initialDiscount"));
                             }
-                            initial_discount__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            initial_discount__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::FeeRate => {
                             if fee_rate__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("feeRate"));
                             }
-                            fee_rate__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            fee_rate__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::MinBidAmount => {
                             if min_bid_amount__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("minBidAmount"));
                             }
-                            min_bid_amount__ =
-                                Some(map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?.0)
-                            ;
+                            min_bid_amount__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                     }
                 }
@@ -1186,10 +1232,12 @@ impl serde::Serialize for QueryAuctionsRequest {
         if self.pagination.is_some() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.auction.QueryAuctionsRequest", len)?;
+        let mut struct_ser =
+            serializer.serialize_struct("side.auction.QueryAuctionsRequest", len)?;
         if self.status != 0 {
-            let v = AuctionStatus::try_from(self.status)
-                .map_err(|_| serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status)))?;
+            let v = AuctionStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
             struct_ser.serialize_field("status", &v)?;
         }
         if let Some(v) = self.pagination.as_ref() {
@@ -1205,10 +1253,7 @@ impl<'de> serde::Deserialize<'de> for QueryAuctionsRequest {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "status",
-            "pagination",
-        ];
+        const FIELDS: &[&str] = &["status", "pagination"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -1216,7 +1261,7 @@ impl<'de> serde::Deserialize<'de> for QueryAuctionsRequest {
             Pagination,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -1226,7 +1271,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -1253,25 +1301,28 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 formatter.write_str("struct side.auction.QueryAuctionsRequest")
             }
 
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryAuctionsRequest, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryAuctionsRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut status__ =None;
-                let mut pagination__ =None;
+                let mut status__ = None;
+                let mut pagination__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Status => {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
                             }
-                            status__ =Some(map_.next_value::<AuctionStatus>()? as i32);
+                            status__ = Some(map_.next_value::<AuctionStatus>()? as i32);
                         }
                         GeneratedField::Pagination => {
                             if pagination__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("pagination"));
                             }
-                            pagination__ =map_.next_value()?;
+                            pagination__ = map_.next_value()?;
                         }
                     }
                 }
@@ -1281,7 +1332,11 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 })
             }
         }
-        deserializer.deserialize_struct("side.auction.QueryAuctionsRequest", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct(
+            "side.auction.QueryAuctionsRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }
 #[cfg(feature = "serde")]
@@ -1299,7 +1354,8 @@ impl serde::Serialize for QueryAuctionsResponse {
         if self.pagination.is_some() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.auction.QueryAuctionsResponse", len)?;
+        let mut struct_ser =
+            serializer.serialize_struct("side.auction.QueryAuctionsResponse", len)?;
         if !self.auctions.is_empty() {
             struct_ser.serialize_field("auctions", &self.auctions)?;
         }
@@ -1316,10 +1372,7 @@ impl<'de> serde::Deserialize<'de> for QueryAuctionsResponse {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "auctions",
-            "pagination",
-        ];
+        const FIELDS: &[&str] = &["auctions", "pagination"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -1327,7 +1380,7 @@ impl<'de> serde::Deserialize<'de> for QueryAuctionsResponse {
             Pagination,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -1337,7 +1390,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -1364,25 +1420,28 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 formatter.write_str("struct side.auction.QueryAuctionsResponse")
             }
 
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryAuctionsResponse, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryAuctionsResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut auctions__ =None;
-                let mut pagination__ =None;
+                let mut auctions__ = None;
+                let mut pagination__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Auctions => {
                             if auctions__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("auctions"));
                             }
-                            auctions__ =Some(map_.next_value()?);
+                            auctions__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Pagination => {
                             if pagination__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("pagination"));
                             }
-                            pagination__ =map_.next_value()?;
+                            pagination__ = map_.next_value()?;
                         }
                     }
                 }
@@ -1392,7 +1451,11 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 })
             }
         }
-        deserializer.deserialize_struct("side.auction.QueryAuctionsResponse", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct(
+            "side.auction.QueryAuctionsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }
 #[cfg(feature = "serde")]
@@ -1412,8 +1475,9 @@ impl serde::Serialize for QueryBidsRequest {
         }
         let mut struct_ser = serializer.serialize_struct("side.auction.QueryBidsRequest", len)?;
         if self.status != 0 {
-            let v = BidStatus::try_from(self.status)
-                .map_err(|_| serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status)))?;
+            let v = BidStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
             struct_ser.serialize_field("status", &v)?;
         }
         if let Some(v) = self.pagination.as_ref() {
@@ -1429,10 +1493,7 @@ impl<'de> serde::Deserialize<'de> for QueryBidsRequest {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "status",
-            "pagination",
-        ];
+        const FIELDS: &[&str] = &["status", "pagination"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -1440,7 +1501,7 @@ impl<'de> serde::Deserialize<'de> for QueryBidsRequest {
             Pagination,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -1450,7 +1511,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -1478,24 +1542,24 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryBidsRequest, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut status__ =None;
-                let mut pagination__ =None;
+                let mut status__ = None;
+                let mut pagination__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Status => {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
                             }
-                            status__ =Some(map_.next_value::<BidStatus>()? as i32);
+                            status__ = Some(map_.next_value::<BidStatus>()? as i32);
                         }
                         GeneratedField::Pagination => {
                             if pagination__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("pagination"));
                             }
-                            pagination__ =map_.next_value()?;
+                            pagination__ = map_.next_value()?;
                         }
                     }
                 }
@@ -1540,10 +1604,7 @@ impl<'de> serde::Deserialize<'de> for QueryBidsResponse {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "bids",
-            "pagination",
-        ];
+        const FIELDS: &[&str] = &["bids", "pagination"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -1551,7 +1612,7 @@ impl<'de> serde::Deserialize<'de> for QueryBidsResponse {
             Pagination,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -1561,7 +1622,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -1589,24 +1653,24 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryBidsResponse, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut bids__ =None;
-                let mut pagination__ =None;
+                let mut bids__ = None;
+                let mut pagination__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Bids => {
                             if bids__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("bids"));
                             }
-                            bids__ =Some(map_.next_value()?);
+                            bids__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Pagination => {
                             if pagination__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("pagination"));
                             }
-                            pagination__ =map_.next_value()?;
+                            pagination__ = map_.next_value()?;
                         }
                     }
                 }
@@ -1639,14 +1703,12 @@ impl<'de> serde::Deserialize<'de> for QueryParamsRequest {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-        ];
+        const FIELDS: &[&str] = &[];
 
         #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {
-        }
+        enum GeneratedField {}
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -1656,7 +1718,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -1665,7 +1730,7 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                     where
                         E: serde::de::Error,
                     {
-                            Err(serde::de::Error::unknown_field(value, FIELDS))
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
                     }
                 }
                 deserializer.deserialize_identifier(GeneratedVisitor)
@@ -1680,14 +1745,13 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryParamsRequest, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
                 while map_.next_key::<GeneratedField>()?.is_some() {
                     let _ = map_.next_value::<serde::de::IgnoredAny>()?;
                 }
-                Ok(QueryParamsRequest {
-                })
+                Ok(QueryParamsRequest {})
             }
         }
         deserializer.deserialize_struct("side.auction.QueryParamsRequest", FIELDS, GeneratedVisitor)
@@ -1705,7 +1769,8 @@ impl serde::Serialize for QueryParamsResponse {
         if self.params.is_some() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.auction.QueryParamsResponse", len)?;
+        let mut struct_ser =
+            serializer.serialize_struct("side.auction.QueryParamsResponse", len)?;
         if let Some(v) = self.params.as_ref() {
             struct_ser.serialize_field("params", v)?;
         }
@@ -1719,16 +1784,14 @@ impl<'de> serde::Deserialize<'de> for QueryParamsResponse {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "params",
-        ];
+        const FIELDS: &[&str] = &["params"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Params,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -1738,7 +1801,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -1764,26 +1830,31 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 formatter.write_str("struct side.auction.QueryParamsResponse")
             }
 
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryParamsResponse, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryParamsResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut params__ =None;
+                let mut params__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Params => {
                             if params__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("params"));
                             }
-                            params__ =map_.next_value()?;
+                            params__ = map_.next_value()?;
                         }
                     }
                 }
-                Ok(QueryParamsResponse {
-                    params: params__,
-                })
+                Ok(QueryParamsResponse { params: params__ })
             }
         }
-        deserializer.deserialize_struct("side.auction.QueryParamsResponse", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct(
+            "side.auction.QueryParamsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }

@@ -22,7 +22,7 @@ pub use tendermint_proto::google::protobuf::{Any, Timestamp};
 pub use cosmos_sdk_proto::cosmos;
 
 /// The version (commit hash) of the Cosmos SDK used when generating this library.
-// pub const COSMOS_SDK_VERSION: &str = include_str!("prost/cosmos-sdk/COSMOS_SDK_COMMIT");
+pub const VERSION: &str = include_str!("prost/side/GIT_COMMIT");
 
 pub mod side {
     pub mod btcbridge {

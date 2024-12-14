@@ -3,8 +3,8 @@
 #[cfg(feature = "grpc")]
 pub mod query_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    use tonic::codegen::*;
     #[derive(Debug, Clone)]
     pub struct QueryClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -49,9 +49,8 @@ pub mod query_client {
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
+                Into<StdError> + Send + Sync,
         {
             QueryClient::new(InterceptedService::new(inner, interceptor))
         }
@@ -89,45 +88,34 @@ pub mod query_client {
         pub async fn params(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryParamsRequest>,
-        ) -> core::result::Result<
-            tonic::Response<super::QueryParamsResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        alloc::format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+        ) -> core::result::Result<tonic::Response<super::QueryParamsResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Params");
             let mut req = request.into_request();
-            req.extensions_mut().insert(GrpcMethod::new("side.dlc.Query", "Params"));
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Query", "Params"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn announcements(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryAnnouncementsRequest>,
-        ) -> core::result::Result<
-            tonic::Response<super::QueryAnnouncementsResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        alloc::format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+        ) -> core::result::Result<tonic::Response<super::QueryAnnouncementsResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/side.dlc.Query/Announcements",
-            );
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Announcements");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("side.dlc.Query", "Announcements"));
@@ -136,23 +124,19 @@ pub mod query_client {
         pub async fn price(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryPriceRequest>,
-        ) -> core::result::Result<
-            tonic::Response<super::QueryPriceResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        alloc::format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+        ) -> core::result::Result<tonic::Response<super::QueryPriceResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Price");
             let mut req = request.into_request();
-            req.extensions_mut().insert(GrpcMethod::new("side.dlc.Query", "Price"));
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Query", "Price"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -168,24 +152,15 @@ pub mod query_server {
         async fn params(
             &self,
             request: tonic::Request<super::QueryParamsRequest>,
-        ) -> core::result::Result<
-            tonic::Response<super::QueryParamsResponse>,
-            tonic::Status,
-        >;
+        ) -> core::result::Result<tonic::Response<super::QueryParamsResponse>, tonic::Status>;
         async fn announcements(
             &self,
             request: tonic::Request<super::QueryAnnouncementsRequest>,
-        ) -> core::result::Result<
-            tonic::Response<super::QueryAnnouncementsResponse>,
-            tonic::Status,
-        >;
+        ) -> core::result::Result<tonic::Response<super::QueryAnnouncementsResponse>, tonic::Status>;
         async fn price(
             &self,
             request: tonic::Request<super::QueryPriceRequest>,
-        ) -> core::result::Result<
-            tonic::Response<super::QueryPriceResponse>,
-            tonic::Status,
-        >;
+        ) -> core::result::Result<tonic::Response<super::QueryPriceResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -210,10 +185,7 @@ pub mod query_server {
                 max_encoding_message_size: None,
             }
         }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
             F: tonic::service::Interceptor,
         {
@@ -269,13 +241,9 @@ pub mod query_server {
                 "/side.dlc.Query/Params" => {
                     #[allow(non_camel_case_types)]
                     struct ParamsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryParamsRequest>
-                    for ParamsSvc<T> {
+                    impl<T: Query> tonic::server::UnaryService<super::QueryParamsRequest> for ParamsSvc<T> {
                         type Response = super::QueryParamsResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::QueryParamsRequest>,
@@ -311,23 +279,17 @@ pub mod query_server {
                 "/side.dlc.Query/Announcements" => {
                     #[allow(non_camel_case_types)]
                     struct AnnouncementsSvc<T: Query>(pub Arc<T>);
-                    impl<
-                        T: Query,
-                    > tonic::server::UnaryService<super::QueryAnnouncementsRequest>
-                    for AnnouncementsSvc<T> {
+                    impl<T: Query> tonic::server::UnaryService<super::QueryAnnouncementsRequest>
+                        for AnnouncementsSvc<T>
+                    {
                         type Response = super::QueryAnnouncementsResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::QueryAnnouncementsRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).announcements(request).await
-                            };
+                            let fut = async move { (*inner).announcements(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -357,13 +319,9 @@ pub mod query_server {
                 "/side.dlc.Query/Price" => {
                     #[allow(non_camel_case_types)]
                     struct PriceSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryPriceRequest>
-                    for PriceSvc<T> {
+                    impl<T: Query> tonic::server::UnaryService<super::QueryPriceRequest> for PriceSvc<T> {
                         type Response = super::QueryPriceResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::QueryPriceRequest>,
@@ -396,18 +354,14 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(empty_body())
+                        .unwrap())
+                }),
             }
         }
     }
@@ -441,8 +395,8 @@ pub mod query_server {
 #[cfg(feature = "grpc")]
 pub mod msg_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    use tonic::codegen::*;
     #[derive(Debug, Clone)]
     pub struct MsgClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -474,10 +428,7 @@ pub mod msg_client {
             let inner = tonic::client::Grpc::with_origin(inner, origin);
             Self { inner }
         }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> MsgClient<InterceptedService<T, F>>
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> MsgClient<InterceptedService<T, F>>
         where
             F: tonic::service::Interceptor,
             T::ResponseBody: Default,
@@ -487,9 +438,8 @@ pub mod msg_client {
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
+                Into<StdError> + Send + Sync,
         {
             MsgClient::new(InterceptedService::new(inner, interceptor))
         }
@@ -531,19 +481,15 @@ pub mod msg_client {
             tonic::Response<super::MsgSubmitAnnouncementNonceResponse>,
             tonic::Status,
         > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        alloc::format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/side.dlc.Msg/SubmitAnnouncementNonce",
-            );
+            let path =
+                http::uri::PathAndQuery::from_static("/side.dlc.Msg/SubmitAnnouncementNonce");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("side.dlc.Msg", "SubmitAnnouncementNonce"));
@@ -552,23 +498,16 @@ pub mod msg_client {
         pub async fn submit_attestation(
             &mut self,
             request: impl tonic::IntoRequest<super::MsgSubmitAttestation>,
-        ) -> core::result::Result<
-            tonic::Response<super::MsgSubmitAttestationResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        alloc::format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+        ) -> core::result::Result<tonic::Response<super::MsgSubmitAttestationResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/side.dlc.Msg/SubmitAttestation",
-            );
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/SubmitAttestation");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("side.dlc.Msg", "SubmitAttestation"));
@@ -594,10 +533,7 @@ pub mod msg_server {
         async fn submit_attestation(
             &self,
             request: tonic::Request<super::MsgSubmitAttestation>,
-        ) -> core::result::Result<
-            tonic::Response<super::MsgSubmitAttestationResponse>,
-            tonic::Status,
-        >;
+        ) -> core::result::Result<tonic::Response<super::MsgSubmitAttestationResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct MsgServer<T: Msg> {
@@ -622,10 +558,7 @@ pub mod msg_server {
                 max_encoding_message_size: None,
             }
         }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
             F: tonic::service::Interceptor,
         {
@@ -681,23 +614,18 @@ pub mod msg_server {
                 "/side.dlc.Msg/SubmitAnnouncementNonce" => {
                     #[allow(non_camel_case_types)]
                     struct SubmitAnnouncementNonceSvc<T: Msg>(pub Arc<T>);
-                    impl<
-                        T: Msg,
-                    > tonic::server::UnaryService<super::MsgSubmitAnnouncementNonce>
-                    for SubmitAnnouncementNonceSvc<T> {
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitAnnouncementNonce>
+                        for SubmitAnnouncementNonceSvc<T>
+                    {
                         type Response = super::MsgSubmitAnnouncementNonceResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::MsgSubmitAnnouncementNonce>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).submit_announcement_nonce(request).await
-                            };
+                            let fut =
+                                async move { (*inner).submit_announcement_nonce(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -727,21 +655,15 @@ pub mod msg_server {
                 "/side.dlc.Msg/SubmitAttestation" => {
                     #[allow(non_camel_case_types)]
                     struct SubmitAttestationSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitAttestation>
-                    for SubmitAttestationSvc<T> {
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitAttestation> for SubmitAttestationSvc<T> {
                         type Response = super::MsgSubmitAttestationResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::MsgSubmitAttestation>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).submit_attestation(request).await
-                            };
+                            let fut = async move { (*inner).submit_attestation(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -768,18 +690,14 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(empty_body())
+                        .unwrap())
+                }),
             }
         }
     }

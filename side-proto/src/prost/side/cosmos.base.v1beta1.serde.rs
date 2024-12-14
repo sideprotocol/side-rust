@@ -31,10 +31,7 @@ impl<'de> serde::Deserialize<'de> for Coin {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "denom",
-            "amount",
-        ];
+        const FIELDS: &[&str] = &["denom", "amount"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -42,7 +39,7 @@ impl<'de> serde::Deserialize<'de> for Coin {
             Amount,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -52,7 +49,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -80,24 +80,24 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<Coin, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut denom__ =None;
-                let mut amount__ =None;
+                let mut denom__ = None;
+                let mut amount__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Denom => {
                             if denom__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("denom"));
                             }
-                            denom__ =Some(map_.next_value()?);
+                            denom__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Amount => {
                             if amount__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("amount"));
                             }
-                            amount__ =Some(map_.next_value()?);
+                            amount__ = Some(map_.next_value()?);
                         }
                     }
                 }
@@ -142,10 +142,7 @@ impl<'de> serde::Deserialize<'de> for DecCoin {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "denom",
-            "amount",
-        ];
+        const FIELDS: &[&str] = &["denom", "amount"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
@@ -153,7 +150,7 @@ impl<'de> serde::Deserialize<'de> for DecCoin {
             Amount,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -163,7 +160,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -191,24 +191,24 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<DecCoin, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut denom__ =None;
-                let mut amount__ =None;
+                let mut denom__ = None;
+                let mut amount__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Denom => {
                             if denom__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("denom"));
                             }
-                            denom__ =Some(map_.next_value()?);
+                            denom__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Amount => {
                             if amount__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("amount"));
                             }
-                            amount__ =Some(map_.next_value()?);
+                            amount__ = Some(map_.next_value()?);
                         }
                     }
                 }
@@ -247,16 +247,14 @@ impl<'de> serde::Deserialize<'de> for DecProto {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "dec",
-        ];
+        const FIELDS: &[&str] = &["dec"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Dec,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -266,7 +264,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -293,17 +294,17 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<DecProto, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut dec__ =None;
+                let mut dec__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Dec => {
                             if dec__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("dec"));
                             }
-                            dec__ =Some(map_.next_value()?);
+                            dec__ = Some(map_.next_value()?);
                         }
                     }
                 }
@@ -341,16 +342,14 @@ impl<'de> serde::Deserialize<'de> for IntProto {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "int",
-        ];
+        const FIELDS: &[&str] = &["int"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Int,
         }
         #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for GeneratedField {
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
                 D: serde::Deserializer<'de>,
@@ -360,7 +359,10 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
                 impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
                     type Value = GeneratedField;
 
-                    fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
                         write!(formatter, "expected one of: {:?}", &FIELDS)
                     }
 
@@ -387,17 +389,17 @@ impl<'de> serde::Deserialize<'de> for GeneratedField {
             }
 
             fn visit_map<V>(self, mut map_: V) -> core::result::Result<IntProto, V::Error>
-                where
-                    V: serde::de::MapAccess<'de>,
+            where
+                V: serde::de::MapAccess<'de>,
             {
-                let mut int__ =None;
+                let mut int__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Int => {
                             if int__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("int"));
                             }
-                            int__ =Some(map_.next_value()?);
+                            int__ = Some(map_.next_value()?);
                         }
                     }
                 }

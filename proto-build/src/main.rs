@@ -172,7 +172,7 @@ fn update_submodules() {
 }
 
 fn output_sdk_version(out_dir: &Path) {
-    let path = out_dir.join("COSMOS_SDK_COMMIT");
+    let path = out_dir.join("GIT_COMMIT");
     fs::write(path, COSMOS_SDK_REV).unwrap();
 }
 
@@ -309,44 +309,44 @@ fn copy_and_patch(src: impl AsRef<Path>, dest: impl AsRef<Path>) -> io::Result<(
     fs::write(dest, &contents)
 }
 
-fn patch_file(path: impl AsRef<Path>, pattern: &Regex, replacement: &str) -> io::Result<()> {
-    let mut contents = fs::read_to_string(&path)?;
-    contents = pattern.replace_all(&contents, replacement).to_string();
-    fs::write(path, &contents)
-}
+// fn patch_file(path: impl AsRef<Path>, pattern: &Regex, replacement: &str) -> io::Result<()> {
+//     let mut contents = fs::read_to_string(&path)?;
+//     contents = pattern.replace_all(&contents, replacement).to_string();
+//     fs::write(path, &contents)
+// }
 
 /// Fix clashing type names in prost-generated code. See cosmos/cosmos-rust#154.
-fn apply_patches(proto_dir: &Path) {
-    for (pattern, replacement) in [
-        ("enum Validators", "enum Policy"),
-        (
-            "stake_authorization::Validators",
-            "stake_authorization::Policy",
-        ),
-    ] {
-        patch_file(
-            &proto_dir.join("side/cosmos.staking.v1beta1.rs"),
-            &Regex::new(pattern).unwrap(),
-            replacement,
-        )
-        .expect("error patching cosmos.staking.v1beta1.rs");
-    }
+fn apply_patches(_proto_dir: &Path) {
+    // for (pattern, replacement) in [
+    //     ("enum Validators", "enum Policy"),
+    //     (
+    //         "stake_authorization::Validators",
+    //         "stake_authorization::Policy",
+    //     ),
+    // ] {
+    //     patch_file(
+    //         &proto_dir.join("side/cosmos.staking.v1beta1.rs"),
+    //         &Regex::new(pattern).unwrap(),
+    //         replacement,
+    //     )
+    //     .expect("error patching cosmos.staking.v1beta1.rs");
+    // }
 
-    for (pattern, replacement) in [
-        (
-            "stake_authorization::Validators::AllowList",
-            "stake_authorization::Policy::AllowList",
-        ),
-        (
-            "stake_authorization::Validators::DenyList",
-            "stake_authorization::Policy::DenyList",
-        ),
-    ] {
-        patch_file(
-            &proto_dir.join("side/cosmos.staking.v1beta1.serde.rs"),
-            &Regex::new(pattern).unwrap(),
-            replacement,
-        )
-        .expect("error patching cosmos.staking.v1beta1.serde.rs");
-    }
+    // for (pattern, replacement) in [
+    //     (
+    //         "stake_authorization::Validators::AllowList",
+    //         "stake_authorization::Policy::AllowList",
+    //     ),
+    //     (
+    //         "stake_authorization::Validators::DenyList",
+    //         "stake_authorization::Policy::DenyList",
+    //     ),
+    // ] {
+    //     patch_file(
+    //         &proto_dir.join("side/cosmos.staking.v1beta1.serde.rs"),
+    //         &Regex::new(pattern).unwrap(),
+    //         replacement,
+    //     )
+    //     .expect("error patching cosmos.staking.v1beta1.serde.rs");
+    // }
 }
