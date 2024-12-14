@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = [
+    "proto-build",
+    "side-proto",
+]
+
+[workspace.dependencies]
+cosmrs = "0.21"
+prost = "0.13"
+prost-types = "0.13"
