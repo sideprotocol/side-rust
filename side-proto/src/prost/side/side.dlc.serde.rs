@@ -569,6 +569,9 @@ impl serde::Serialize for DlcNonce {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
+        if self.index != 0 {
+            len += 1;
+        }
         if !self.nonce.is_empty() {
             len += 1;
         }
@@ -579,6 +582,13 @@ impl serde::Serialize for DlcNonce {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.dlc.DLCNonce", len)?;
+        if self.index != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "index",
+                alloc::string::ToString::to_string(&self.index).as_str(),
+            )?;
+        }
         if !self.nonce.is_empty() {
             struct_ser.serialize_field("nonce", &self.nonce)?;
         }
@@ -598,10 +608,11 @@ impl<'de> serde::Deserialize<'de> for DlcNonce {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["nonce", "oracle_pubkey", "oraclePubkey", "time"];
+        const FIELDS: &[&str] = &["index", "nonce", "oracle_pubkey", "oraclePubkey", "time"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
+            Index,
             Nonce,
             OraclePubkey,
             Time,
@@ -630,6 +641,7 @@ impl<'de> serde::Deserialize<'de> for DlcNonce {
                         E: serde::de::Error,
                     {
                         match value {
+                            "index" => Ok(GeneratedField::Index),
                             "nonce" => Ok(GeneratedField::Nonce),
                             "oraclePubkey" | "oracle_pubkey" => Ok(GeneratedField::OraclePubkey),
                             "time" => Ok(GeneratedField::Time),
@@ -652,11 +664,21 @@ impl<'de> serde::Deserialize<'de> for DlcNonce {
             where
                 V: serde::de::MapAccess<'de>,
             {
+                let mut index__ = None;
                 let mut nonce__ = None;
                 let mut oracle_pubkey__ = None;
                 let mut time__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
+                        GeneratedField::Index => {
+                            if index__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("index"));
+                            }
+                            index__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
                         GeneratedField::Nonce => {
                             if nonce__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("nonce"));
@@ -678,6 +700,7 @@ impl<'de> serde::Deserialize<'de> for DlcNonce {
                     }
                 }
                 Ok(DlcNonce {
+                    index: index__.unwrap_or_default(),
                     nonce: nonce__.unwrap_or_default(),
                     oracle_pubkey: oracle_pubkey__.unwrap_or_default(),
                     time: time__,
@@ -2078,10 +2101,23 @@ impl serde::Serialize for QueryCountNoncesResponse {
         if !self.counts.is_empty() {
             len += 1;
         }
+        if !self.indexs.is_empty() {
+            len += 1;
+        }
         let mut struct_ser =
             serializer.serialize_struct("side.dlc.QueryCountNoncesResponse", len)?;
         if !self.counts.is_empty() {
             struct_ser.serialize_field("counts", &self.counts)?;
+        }
+        if !self.indexs.is_empty() {
+            struct_ser.serialize_field(
+                "indexs",
+                &self
+                    .indexs
+                    .iter()
+                    .map(alloc::string::ToString::to_string)
+                    .collect::<alloc::vec::Vec<_>>(),
+            )?;
         }
         struct_ser.end()
     }
@@ -2093,11 +2129,12 @@ impl<'de> serde::Deserialize<'de> for QueryCountNoncesResponse {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["counts"];
+        const FIELDS: &[&str] = &["counts", "indexs"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Counts,
+            Indexs,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -2124,6 +2161,7 @@ impl<'de> serde::Deserialize<'de> for QueryCountNoncesResponse {
                     {
                         match value {
                             "counts" => Ok(GeneratedField::Counts),
+                            "indexs" => Ok(GeneratedField::Indexs),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -2147,6 +2185,7 @@ impl<'de> serde::Deserialize<'de> for QueryCountNoncesResponse {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut counts__ = None;
+                let mut indexs__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Counts => {
@@ -2158,10 +2197,20 @@ impl<'de> serde::Deserialize<'de> for QueryCountNoncesResponse {
                                     .into_iter().map(|x| x.0).collect())
                             ;
                         }
+                        GeneratedField::Indexs => {
+                            if indexs__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("indexs"));
+                            }
+                            indexs__ =
+                                Some(map_.next_value::<alloc::vec::Vec<::pbjson::private::NumberDeserialize<_>>>()?
+                                    .into_iter().map(|x| x.0).collect())
+                            ;
+                        }
                     }
                 }
                 Ok(QueryCountNoncesResponse {
                     counts: counts__.unwrap_or_default(),
+                    indexs: indexs__.unwrap_or_default(),
                 })
             }
         }
