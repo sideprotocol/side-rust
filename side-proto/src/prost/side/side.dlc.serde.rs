@@ -1496,6 +1496,9 @@ impl serde::Serialize for Params {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
+        if self.nonce_queue_size != 0 {
+            len += 1;
+        }
         if !self.price_interval.is_empty() {
             len += 1;
         }
@@ -1503,6 +1506,9 @@ impl serde::Serialize for Params {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.dlc.Params", len)?;
+        if self.nonce_queue_size != 0 {
+            struct_ser.serialize_field("nonceQueueSize", &self.nonce_queue_size)?;
+        }
         if !self.price_interval.is_empty() {
             struct_ser.serialize_field("priceInterval", &self.price_interval)?;
         }
@@ -1520,6 +1526,8 @@ impl<'de> serde::Deserialize<'de> for Params {
         D: serde::Deserializer<'de>,
     {
         const FIELDS: &[&str] = &[
+            "nonce_queue_size",
+            "nonceQueueSize",
             "price_interval",
             "priceInterval",
             "recommended_oracles",
@@ -1528,6 +1536,7 @@ impl<'de> serde::Deserialize<'de> for Params {
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
+            NonceQueueSize,
             PriceInterval,
             RecommendedOracles,
         }
@@ -1555,6 +1564,9 @@ impl<'de> serde::Deserialize<'de> for Params {
                         E: serde::de::Error,
                     {
                         match value {
+                            "nonceQueueSize" | "nonce_queue_size" => {
+                                Ok(GeneratedField::NonceQueueSize)
+                            }
                             "priceInterval" | "price_interval" => Ok(GeneratedField::PriceInterval),
                             "recommendedOracles" | "recommended_oracles" => {
                                 Ok(GeneratedField::RecommendedOracles)
@@ -1578,10 +1590,20 @@ impl<'de> serde::Deserialize<'de> for Params {
             where
                 V: serde::de::MapAccess<'de>,
             {
+                let mut nonce_queue_size__ = None;
                 let mut price_interval__ = None;
                 let mut recommended_oracles__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
+                        GeneratedField::NonceQueueSize => {
+                            if nonce_queue_size__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("nonceQueueSize"));
+                            }
+                            nonce_queue_size__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
                         GeneratedField::PriceInterval => {
                             if price_interval__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("priceInterval"));
@@ -1599,6 +1621,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                     }
                 }
                 Ok(Params {
+                    nonce_queue_size: nonce_queue_size__.unwrap_or_default(),
                     price_interval: price_interval__.unwrap_or_default(),
                     recommended_oracles: recommended_oracles__.unwrap_or_default(),
                 })
@@ -1957,6 +1980,193 @@ impl<'de> serde::Deserialize<'de> for QueryAnnouncementsResponse {
         }
         deserializer.deserialize_struct(
             "side.dlc.QueryAnnouncementsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryCountNoncesRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let len = 0;
+        let struct_ser = serializer.serialize_struct("side.dlc.QueryCountNoncesRequest", len)?;
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryCountNoncesRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {}
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryCountNoncesRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryCountNoncesRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryCountNoncesRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                while map_.next_key::<GeneratedField>()?.is_some() {
+                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                }
+                Ok(QueryCountNoncesRequest {})
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.dlc.QueryCountNoncesRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryCountNoncesResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.counts.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.dlc.QueryCountNoncesResponse", len)?;
+        if !self.counts.is_empty() {
+            struct_ser.serialize_field("counts", &self.counts)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryCountNoncesResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["counts"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Counts,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "counts" => Ok(GeneratedField::Counts),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryCountNoncesResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryCountNoncesResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryCountNoncesResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut counts__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Counts => {
+                            if counts__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("counts"));
+                            }
+                            counts__ =
+                                Some(map_.next_value::<alloc::vec::Vec<::pbjson::private::NumberDeserialize<_>>>()?
+                                    .into_iter().map(|x| x.0).collect())
+                            ;
+                        }
+                    }
+                }
+                Ok(QueryCountNoncesResponse {
+                    counts: counts__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.dlc.QueryCountNoncesResponse",
             FIELDS,
             GeneratedVisitor,
         )

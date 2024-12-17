@@ -123,9 +123,11 @@ impl ::prost::Name for PriceInterval {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
-    #[prost(message, repeated, tag = "1")]
+    #[prost(uint32, tag = "1")]
+    pub nonce_queue_size: u32,
+    #[prost(message, repeated, tag = "2")]
     pub price_interval: ::prost::alloc::vec::Vec<PriceInterval>,
-    #[prost(string, repeated, tag = "2")]
+    #[prost(string, repeated, tag = "3")]
     pub recommended_oracles: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 impl ::prost::Name for Params {
@@ -148,6 +150,31 @@ pub struct GenesisState {
 }
 impl ::prost::Name for GenesisState {
     const NAME: &'static str = "GenesisState";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryCountNoncesRequest {}
+impl ::prost::Name for QueryCountNoncesRequest {
+    const NAME: &'static str = "QueryCountNoncesRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// QueryCountNoncesResponse is response type for the Query/CountNonces RPC method.
+/// counts should use the same order as recommende oracles in Params
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryCountNoncesResponse {
+    #[prost(uint32, repeated, tag = "1")]
+    pub counts: ::prost::alloc::vec::Vec<u32>,
+}
+impl ::prost::Name for QueryCountNoncesResponse {
+    const NAME: &'static str = "QueryCountNoncesResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
