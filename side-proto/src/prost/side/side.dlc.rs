@@ -2,11 +2,13 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DlcNonce {
-    #[prost(string, tag = "1")]
-    pub nonce: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub index: u64,
     #[prost(string, tag = "2")]
+    pub nonce: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
     pub oracle_pubkey: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "3")]
+    #[prost(message, optional, tag = "4")]
     pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
 }
 impl ::prost::Name for DlcNonce {
@@ -172,6 +174,8 @@ impl ::prost::Name for QueryCountNoncesRequest {
 pub struct QueryCountNoncesResponse {
     #[prost(uint32, repeated, tag = "1")]
     pub counts: ::prost::alloc::vec::Vec<u32>,
+    #[prost(uint64, repeated, tag = "2")]
+    pub indexs: ::prost::alloc::vec::Vec<u64>,
 }
 impl ::prost::Name for QueryCountNoncesResponse {
     const NAME: &'static str = "QueryCountNoncesResponse";
