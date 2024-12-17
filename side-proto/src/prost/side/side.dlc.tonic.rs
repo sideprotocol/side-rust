@@ -139,6 +139,24 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.dlc.Query", "Price"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn nonces(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryNoncesRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryNoncesResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Nonces");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Query", "Nonces"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -161,6 +179,10 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryPriceRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryPriceResponse>, tonic::Status>;
+        async fn nonces(
+            &self,
+            request: tonic::Request<super::QueryNoncesRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryNoncesResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -354,6 +376,44 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
+                "/side.dlc.Query/Nonces" => {
+                    #[allow(non_camel_case_types)]
+                    struct NoncesSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryNoncesRequest> for NoncesSvc<T> {
+                        type Response = super::QueryNoncesResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryNoncesRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).nonces(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = NoncesSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 _ => Box::pin(async move {
                     Ok(http::Response::builder()
                         .status(200)
@@ -474,6 +534,24 @@ pub mod msg_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
+        pub async fn submit_nonce(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgSubmitNonce>,
+        ) -> core::result::Result<tonic::Response<super::MsgSubmitNonceResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/SubmitNonce");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Msg", "SubmitNonce"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn submit_announcement_nonce(
             &mut self,
             request: impl tonic::IntoRequest<super::MsgSubmitAnnouncementNonce>,
@@ -523,6 +601,10 @@ pub mod msg_server {
     /// Generated trait containing gRPC methods that should be implemented for use with MsgServer.
     #[async_trait]
     pub trait Msg: Send + Sync + 'static {
+        async fn submit_nonce(
+            &self,
+            request: tonic::Request<super::MsgSubmitNonce>,
+        ) -> core::result::Result<tonic::Response<super::MsgSubmitNonceResponse>, tonic::Status>;
         async fn submit_announcement_nonce(
             &self,
             request: tonic::Request<super::MsgSubmitAnnouncementNonce>,
@@ -611,6 +693,44 @@ pub mod msg_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
+                "/side.dlc.Msg/SubmitNonce" => {
+                    #[allow(non_camel_case_types)]
+                    struct SubmitNonceSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitNonce> for SubmitNonceSvc<T> {
+                        type Response = super::MsgSubmitNonceResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgSubmitNonce>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).submit_nonce(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SubmitNonceSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 "/side.dlc.Msg/SubmitAnnouncementNonce" => {
                     #[allow(non_camel_case_types)]
                     struct SubmitAnnouncementNonceSvc<T: Msg>(pub Arc<T>);

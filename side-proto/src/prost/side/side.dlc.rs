@@ -1,6 +1,23 @@
 // @generated
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DlcNonce {
+    #[prost(string, tag = "1")]
+    pub nonce: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub oracle_pubkey: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+}
+impl ::prost::Name for DlcNonce {
+    const NAME: &'static str = "DLCNonce";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DlcAnnouncement {
     #[prost(uint64, tag = "1")]
     pub id: u64,
@@ -108,6 +125,8 @@ impl ::prost::Name for PriceInterval {
 pub struct Params {
     #[prost(message, repeated, tag = "1")]
     pub price_interval: ::prost::alloc::vec::Vec<PriceInterval>,
+    #[prost(string, repeated, tag = "2")]
+    pub recommended_oracles: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
@@ -129,6 +148,31 @@ pub struct GenesisState {
 }
 impl ::prost::Name for GenesisState {
     const NAME: &'static str = "GenesisState";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryNoncesRequest {}
+impl ::prost::Name for QueryNoncesRequest {
+    const NAME: &'static str = "QueryNoncesRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryNoncesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub nonces: ::prost::alloc::vec::Vec<DlcNonce>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryNoncesResponse {
+    const NAME: &'static str = "QueryNoncesResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -215,6 +259,33 @@ pub struct QueryPriceResponse {
 }
 impl ::prost::Name for QueryPriceResponse {
     const NAME: &'static str = "QueryPriceResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitNonce {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub nonce: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub signature: ::prost::alloc::string::String,
+}
+impl ::prost::Name for MsgSubmitNonce {
+    const NAME: &'static str = "MsgSubmitNonce";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitNonceResponse {}
+impl ::prost::Name for MsgSubmitNonceResponse {
+    const NAME: &'static str = "MsgSubmitNonceResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
