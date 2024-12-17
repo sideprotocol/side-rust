@@ -1,6 +1,33 @@
 // @generated
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DlcOracle {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(string, tag = "2")]
+    pub desc: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, tag = "4")]
+    pub threshold: u32,
+    #[prost(string, tag = "5")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(string, tag = "6")]
+    pub pubkey: ::prost::alloc::string::String,
+    #[prost(enumeration = "DlcOracleStatus", tag = "7")]
+    pub status: i32,
+    #[prost(uint64, tag = "8")]
+    pub nonce_index: u64,
+}
+impl ::prost::Name for DlcOracle {
+    const NAME: &'static str = "DLCOracle";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DlcNonce {
     #[prost(uint64, tag = "1")]
     pub index: u64,
@@ -106,6 +133,35 @@ impl AnnouncementStatus {
         }
     }
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum DlcOracleStatus {
+    OracleStatusPending = 0,
+    OracleStatusEnable = 1,
+    OracleStatusDisable = 2,
+}
+impl DlcOracleStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            DlcOracleStatus::OracleStatusPending => "Oracle_Status_Pending",
+            DlcOracleStatus::OracleStatusEnable => "Oracle_status_Enable",
+            DlcOracleStatus::OracleStatusDisable => "Oracle_status_Disable",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "Oracle_Status_Pending" => Some(Self::OracleStatusPending),
+            "Oracle_status_Enable" => Some(Self::OracleStatusEnable),
+            "Oracle_status_Disable" => Some(Self::OracleStatusDisable),
+            _ => None,
+        }
+    }
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PriceInterval {
@@ -159,6 +215,32 @@ impl ::prost::Name for GenesisState {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryOraclesRequest {
+    #[prost(enumeration = "DlcOracleStatus", tag = "1")]
+    pub status: i32,
+}
+impl ::prost::Name for QueryOraclesRequest {
+    const NAME: &'static str = "QueryOraclesRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryOraclesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub oracles: ::prost::alloc::vec::Vec<DlcOracle>,
+}
+impl ::prost::Name for QueryOraclesResponse {
+    const NAME: &'static str = "QueryOraclesResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryCountNoncesRequest {}
 impl ::prost::Name for QueryCountNoncesRequest {
     const NAME: &'static str = "QueryCountNoncesRequest";
@@ -172,10 +254,9 @@ impl ::prost::Name for QueryCountNoncesRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryCountNoncesResponse {
+    /// qty of nonce in the cache queue
     #[prost(uint32, repeated, tag = "1")]
     pub counts: ::prost::alloc::vec::Vec<u32>,
-    #[prost(uint64, repeated, tag = "2")]
-    pub indexs: ::prost::alloc::vec::Vec<u64>,
 }
 impl ::prost::Name for QueryCountNoncesResponse {
     const NAME: &'static str = "QueryCountNoncesResponse";
@@ -297,12 +378,39 @@ impl ::prost::Name for QueryPriceResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitOraclePubkey {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub signature: ::prost::alloc::string::String,
+}
+impl ::prost::Name for MsgSubmitOraclePubkey {
+    const NAME: &'static str = "MsgSubmitOraclePubkey";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitOraclePubkeyResponse {}
+impl ::prost::Name for MsgSubmitOraclePubkeyResponse {
+    const NAME: &'static str = "MsgSubmitOraclePubkeyResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSubmitNonce {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
+    #[prost(string, tag = "2")]
     pub nonce: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
+    #[prost(string, tag = "3")]
     pub signature: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgSubmitNonce {

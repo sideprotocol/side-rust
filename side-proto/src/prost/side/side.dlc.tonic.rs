@@ -175,6 +175,24 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.dlc.Query", "CountNonces"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn oracles(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryOraclesRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryOraclesResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Oracles");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Query", "Oracles"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -205,6 +223,10 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryCountNoncesRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryCountNoncesResponse>, tonic::Status>;
+        async fn oracles(
+            &self,
+            request: tonic::Request<super::QueryOraclesRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryOraclesResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -474,6 +496,44 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
+                "/side.dlc.Query/Oracles" => {
+                    #[allow(non_camel_case_types)]
+                    struct OraclesSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryOraclesRequest> for OraclesSvc<T> {
+                        type Response = super::QueryOraclesResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryOraclesRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).oracles(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = OraclesSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 _ => Box::pin(async move {
                     Ok(http::Response::builder()
                         .status(200)
@@ -651,6 +711,26 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.dlc.Msg", "SubmitAttestation"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn submit_oracle_pubkey(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgSubmitOraclePubkey>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitOraclePubkeyResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/SubmitOraclePubkey");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Msg", "SubmitOraclePubkey"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -676,6 +756,13 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgSubmitAttestation>,
         ) -> core::result::Result<tonic::Response<super::MsgSubmitAttestationResponse>, tonic::Status>;
+        async fn submit_oracle_pubkey(
+            &self,
+            request: tonic::Request<super::MsgSubmitOraclePubkey>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitOraclePubkeyResponse>,
+            tonic::Status,
+        >;
     }
     #[derive(Debug)]
     pub struct MsgServer<T: Msg> {
@@ -855,6 +942,46 @@ pub mod msg_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = SubmitAttestationSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.dlc.Msg/SubmitOraclePubkey" => {
+                    #[allow(non_camel_case_types)]
+                    struct SubmitOraclePubkeySvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitOraclePubkey>
+                        for SubmitOraclePubkeySvc<T>
+                    {
+                        type Response = super::MsgSubmitOraclePubkeyResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgSubmitOraclePubkey>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).submit_oracle_pubkey(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SubmitOraclePubkeySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
