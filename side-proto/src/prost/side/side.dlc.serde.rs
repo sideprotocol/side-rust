@@ -399,9 +399,6 @@ impl serde::Serialize for DlcEvent {
         if !self.nonce.is_empty() {
             len += 1;
         }
-        if self.index != 0 {
-            len += 1;
-        }
         if !self.descriptor.is_empty() {
             len += 1;
         }
@@ -414,13 +411,6 @@ impl serde::Serialize for DlcEvent {
         }
         if !self.nonce.is_empty() {
             struct_ser.serialize_field("nonce", &self.nonce)?;
-        }
-        if self.index != 0 {
-            #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field(
-                "index",
-                alloc::string::ToString::to_string(&self.index).as_str(),
-            )?;
         }
         if !self.descriptor.is_empty() {
             struct_ser.serialize_field("descriptor", &self.descriptor)?;
@@ -442,7 +432,6 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
             "maturity_epoch",
             "maturityEpoch",
             "nonce",
-            "index",
             "descriptor",
             "pubkey",
         ];
@@ -451,7 +440,6 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
         enum GeneratedField {
             MaturityEpoch,
             Nonce,
-            Index,
             Descriptor,
             Pubkey,
         }
@@ -481,7 +469,6 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
                         match value {
                             "maturityEpoch" | "maturity_epoch" => Ok(GeneratedField::MaturityEpoch),
                             "nonce" => Ok(GeneratedField::Nonce),
-                            "index" => Ok(GeneratedField::Index),
                             "descriptor" => Ok(GeneratedField::Descriptor),
                             "pubkey" => Ok(GeneratedField::Pubkey),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -505,7 +492,6 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
             {
                 let mut maturity_epoch__ = None;
                 let mut nonce__ = None;
-                let mut index__ = None;
                 let mut descriptor__ = None;
                 let mut pubkey__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -525,15 +511,6 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
                             }
                             nonce__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::Index => {
-                            if index__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("index"));
-                            }
-                            index__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
-                        }
                         GeneratedField::Descriptor => {
                             if descriptor__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("descriptor"));
@@ -551,7 +528,6 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
                 Ok(DlcEvent {
                     maturity_epoch: maturity_epoch__.unwrap_or_default(),
                     nonce: nonce__.unwrap_or_default(),
-                    index: index__.unwrap_or_default(),
                     descriptor: descriptor__.unwrap_or_default(),
                     pubkey: pubkey__.unwrap_or_default(),
                 })
@@ -1828,6 +1804,9 @@ impl serde::Serialize for MsgSubmitOraclePubkey {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
+        if !self.oracle_id.is_empty() {
+            len += 1;
+        }
         if !self.sender.is_empty() {
             len += 1;
         }
@@ -1838,6 +1817,9 @@ impl serde::Serialize for MsgSubmitOraclePubkey {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.dlc.MsgSubmitOraclePubkey", len)?;
+        if !self.oracle_id.is_empty() {
+            struct_ser.serialize_field("oracleId", &self.oracle_id)?;
+        }
         if !self.sender.is_empty() {
             struct_ser.serialize_field("sender", &self.sender)?;
         }
@@ -1857,10 +1839,11 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubkey {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["sender", "pubkey", "signature"];
+        const FIELDS: &[&str] = &["oracle_id", "oracleId", "sender", "pubkey", "signature"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
+            OracleId,
             Sender,
             Pubkey,
             Signature,
@@ -1889,6 +1872,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubkey {
                         E: serde::de::Error,
                     {
                         match value {
+                            "oracleId" | "oracle_id" => Ok(GeneratedField::OracleId),
                             "sender" => Ok(GeneratedField::Sender),
                             "pubkey" => Ok(GeneratedField::Pubkey),
                             "signature" => Ok(GeneratedField::Signature),
@@ -1914,11 +1898,18 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubkey {
             where
                 V: serde::de::MapAccess<'de>,
             {
+                let mut oracle_id__ = None;
                 let mut sender__ = None;
                 let mut pubkey__ = None;
                 let mut signature__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
+                        GeneratedField::OracleId => {
+                            if oracle_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("oracleId"));
+                            }
+                            oracle_id__ = Some(map_.next_value()?);
+                        }
                         GeneratedField::Sender => {
                             if sender__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("sender"));
@@ -1940,6 +1931,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubkey {
                     }
                 }
                 Ok(MsgSubmitOraclePubkey {
+                    oracle_id: oracle_id__.unwrap_or_default(),
                     sender: sender__.unwrap_or_default(),
                     pubkey: pubkey__.unwrap_or_default(),
                     signature: signature__.unwrap_or_default(),
@@ -2046,18 +2038,12 @@ impl serde::Serialize for Params {
         if !self.price_interval.is_empty() {
             len += 1;
         }
-        if !self.recommended_oracles.is_empty() {
-            len += 1;
-        }
         let mut struct_ser = serializer.serialize_struct("side.dlc.Params", len)?;
         if self.nonce_queue_size != 0 {
             struct_ser.serialize_field("nonceQueueSize", &self.nonce_queue_size)?;
         }
         if !self.price_interval.is_empty() {
             struct_ser.serialize_field("priceInterval", &self.price_interval)?;
-        }
-        if !self.recommended_oracles.is_empty() {
-            struct_ser.serialize_field("recommendedOracles", &self.recommended_oracles)?;
         }
         struct_ser.end()
     }
@@ -2074,15 +2060,12 @@ impl<'de> serde::Deserialize<'de> for Params {
             "nonceQueueSize",
             "price_interval",
             "priceInterval",
-            "recommended_oracles",
-            "recommendedOracles",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             NonceQueueSize,
             PriceInterval,
-            RecommendedOracles,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -2112,9 +2095,6 @@ impl<'de> serde::Deserialize<'de> for Params {
                                 Ok(GeneratedField::NonceQueueSize)
                             }
                             "priceInterval" | "price_interval" => Ok(GeneratedField::PriceInterval),
-                            "recommendedOracles" | "recommended_oracles" => {
-                                Ok(GeneratedField::RecommendedOracles)
-                            }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -2136,7 +2116,6 @@ impl<'de> serde::Deserialize<'de> for Params {
             {
                 let mut nonce_queue_size__ = None;
                 let mut price_interval__ = None;
-                let mut recommended_oracles__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::NonceQueueSize => {
@@ -2154,20 +2133,11 @@ impl<'de> serde::Deserialize<'de> for Params {
                             }
                             price_interval__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::RecommendedOracles => {
-                            if recommended_oracles__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "recommendedOracles",
-                                ));
-                            }
-                            recommended_oracles__ = Some(map_.next_value()?);
-                        }
                     }
                 }
                 Ok(Params {
                     nonce_queue_size: nonce_queue_size__.unwrap_or_default(),
                     price_interval: price_interval__.unwrap_or_default(),
-                    recommended_oracles: recommended_oracles__.unwrap_or_default(),
                 })
             }
         }

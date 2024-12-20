@@ -90,11 +90,9 @@ pub struct DlcEvent {
     pub maturity_epoch: u32,
     #[prost(string, tag = "2")]
     pub nonce: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "3")]
-    pub index: u64,
-    #[prost(string, tag = "4")]
+    #[prost(string, tag = "3")]
     pub descriptor: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
+    #[prost(string, tag = "4")]
     pub pubkey: ::prost::alloc::string::String,
 }
 impl ::prost::Name for DlcEvent {
@@ -185,8 +183,6 @@ pub struct Params {
     pub nonce_queue_size: u32,
     #[prost(message, repeated, tag = "2")]
     pub price_interval: ::prost::alloc::vec::Vec<PriceInterval>,
-    #[prost(string, repeated, tag = "3")]
-    pub recommended_oracles: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
@@ -380,10 +376,12 @@ impl ::prost::Name for QueryPriceResponse {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSubmitOraclePubkey {
     #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
+    pub oracle_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
-    pub pubkey: ::prost::alloc::string::String,
+    pub sender: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
+    pub pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
     pub signature: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgSubmitOraclePubkey {
