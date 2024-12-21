@@ -1,5 +1,272 @@
 // @generated
 #[cfg(feature = "serde")]
+impl serde::Serialize for Agency {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.id != 0 {
+            len += 1;
+        }
+        if !self.desc.is_empty() {
+            len += 1;
+        }
+        if !self.participants.is_empty() {
+            len += 1;
+        }
+        if self.threshold != 0 {
+            len += 1;
+        }
+        if !self.address.is_empty() {
+            len += 1;
+        }
+        if self.status != 0 {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.dlc.Agency", len)?;
+        if self.id != 0 {
+            struct_ser.serialize_field("id", &self.id)?;
+        }
+        if !self.desc.is_empty() {
+            struct_ser.serialize_field("desc", &self.desc)?;
+        }
+        if !self.participants.is_empty() {
+            struct_ser.serialize_field("participants", &self.participants)?;
+        }
+        if self.threshold != 0 {
+            struct_ser.serialize_field("threshold", &self.threshold)?;
+        }
+        if !self.address.is_empty() {
+            struct_ser.serialize_field("address", &self.address)?;
+        }
+        if self.status != 0 {
+            let v = AgencyStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
+            struct_ser.serialize_field("status", &v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for Agency {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "id",
+            "desc",
+            "participants",
+            "threshold",
+            "address",
+            "status",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+            Desc,
+            Participants,
+            Threshold,
+            Address,
+            Status,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            "desc" => Ok(GeneratedField::Desc),
+                            "participants" => Ok(GeneratedField::Participants),
+                            "threshold" => Ok(GeneratedField::Threshold),
+                            "address" => Ok(GeneratedField::Address),
+                            "status" => Ok(GeneratedField::Status),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = Agency;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.Agency")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<Agency, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                let mut desc__ = None;
+                let mut participants__ = None;
+                let mut threshold__ = None;
+                let mut address__ = None;
+                let mut status__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Desc => {
+                            if desc__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("desc"));
+                            }
+                            desc__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Participants => {
+                            if participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("participants"));
+                            }
+                            participants__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Threshold => {
+                            if threshold__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("threshold"));
+                            }
+                            threshold__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Address => {
+                            if address__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("address"));
+                            }
+                            address__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Status => {
+                            if status__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("status"));
+                            }
+                            status__ = Some(map_.next_value::<AgencyStatus>()? as i32);
+                        }
+                    }
+                }
+                Ok(Agency {
+                    id: id__.unwrap_or_default(),
+                    desc: desc__.unwrap_or_default(),
+                    participants: participants__.unwrap_or_default(),
+                    threshold: threshold__.unwrap_or_default(),
+                    address: address__.unwrap_or_default(),
+                    status: status__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.dlc.Agency", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for AgencyStatus {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let variant = match self {
+            Self::Pending => "Agency_Status_Pending",
+            Self::Enable => "Agency_status_Enable",
+            Self::Disable => "Agency_status_Disable",
+        };
+        serializer.serialize_str(variant)
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for AgencyStatus {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "Agency_Status_Pending",
+            "Agency_status_Enable",
+            "Agency_status_Disable",
+        ];
+
+        struct GeneratedVisitor;
+
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = AgencyStatus;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                write!(formatter, "expected one of: {:?}", &FIELDS)
+            }
+
+            fn visit_i64<E>(self, v: i64) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                i32::try_from(v)
+                    .ok()
+                    .and_then(|x| x.try_into().ok())
+                    .ok_or_else(|| {
+                        serde::de::Error::invalid_value(serde::de::Unexpected::Signed(v), &self)
+                    })
+            }
+
+            fn visit_u64<E>(self, v: u64) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                i32::try_from(v)
+                    .ok()
+                    .and_then(|x| x.try_into().ok())
+                    .ok_or_else(|| {
+                        serde::de::Error::invalid_value(serde::de::Unexpected::Unsigned(v), &self)
+                    })
+            }
+
+            fn visit_str<E>(self, value: &str) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                match value {
+                    "Agency_Status_Pending" => Ok(AgencyStatus::Pending),
+                    "Agency_status_Enable" => Ok(AgencyStatus::Enable),
+                    "Agency_status_Disable" => Ok(AgencyStatus::Disable),
+                    _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
+                }
+            }
+        }
+        deserializer.deserialize_any(GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for AnnouncementStatus {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -1120,6 +1387,234 @@ impl<'de> serde::Deserialize<'de> for GenesisState {
             }
         }
         deserializer.deserialize_struct("side.dlc.GenesisState", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgSubmitAgencyAddress {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.id.is_empty() {
+            len += 1;
+        }
+        if !self.sender.is_empty() {
+            len += 1;
+        }
+        if !self.address.is_empty() {
+            len += 1;
+        }
+        if !self.signature.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.dlc.MsgSubmitAgencyAddress", len)?;
+        if !self.id.is_empty() {
+            struct_ser.serialize_field("id", &self.id)?;
+        }
+        if !self.sender.is_empty() {
+            struct_ser.serialize_field("sender", &self.sender)?;
+        }
+        if !self.address.is_empty() {
+            struct_ser.serialize_field("address", &self.address)?;
+        }
+        if !self.signature.is_empty() {
+            struct_ser.serialize_field("signature", &self.signature)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgSubmitAgencyAddress {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["id", "sender", "address", "signature"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+            Sender,
+            Address,
+            Signature,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            "sender" => Ok(GeneratedField::Sender),
+                            "address" => Ok(GeneratedField::Address),
+                            "signature" => Ok(GeneratedField::Signature),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgSubmitAgencyAddress;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.MsgSubmitAgencyAddress")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgSubmitAgencyAddress, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                let mut sender__ = None;
+                let mut address__ = None;
+                let mut signature__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Sender => {
+                            if sender__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("sender"));
+                            }
+                            sender__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Address => {
+                            if address__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("address"));
+                            }
+                            address__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Signature => {
+                            if signature__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("signature"));
+                            }
+                            signature__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(MsgSubmitAgencyAddress {
+                    id: id__.unwrap_or_default(),
+                    sender: sender__.unwrap_or_default(),
+                    address: address__.unwrap_or_default(),
+                    signature: signature__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.dlc.MsgSubmitAgencyAddress", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgSubmitAgencyAddressResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let len = 0;
+        let struct_ser =
+            serializer.serialize_struct("side.dlc.MsgSubmitAgencyAddressResponse", len)?;
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgSubmitAgencyAddressResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {}
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgSubmitAgencyAddressResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.MsgSubmitAgencyAddressResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgSubmitAgencyAddressResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                while map_.next_key::<GeneratedField>()?.is_some() {
+                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                }
+                Ok(MsgSubmitAgencyAddressResponse {})
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.dlc.MsgSubmitAgencyAddressResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }
 #[cfg(feature = "serde")]
@@ -2256,6 +2751,205 @@ impl<'de> serde::Deserialize<'de> for PriceInterval {
             }
         }
         deserializer.deserialize_struct("side.dlc.PriceInterval", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryAgenciesRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.status != 0 {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.dlc.QueryAgenciesRequest", len)?;
+        if self.status != 0 {
+            let v = AgencyStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
+            struct_ser.serialize_field("status", &v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryAgenciesRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["status"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Status,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "status" => Ok(GeneratedField::Status),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryAgenciesRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryAgenciesRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryAgenciesRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut status__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Status => {
+                            if status__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("status"));
+                            }
+                            status__ = Some(map_.next_value::<AgencyStatus>()? as i32);
+                        }
+                    }
+                }
+                Ok(QueryAgenciesRequest {
+                    status: status__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.dlc.QueryAgenciesRequest", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryAgenciesResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.agencies.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.dlc.QueryAgenciesResponse", len)?;
+        if !self.agencies.is_empty() {
+            struct_ser.serialize_field("agencies", &self.agencies)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryAgenciesResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["agencies"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Agencies,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "agencies" => Ok(GeneratedField::Agencies),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryAgenciesResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryAgenciesResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryAgenciesResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut agencies__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Agencies => {
+                            if agencies__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("agencies"));
+                            }
+                            agencies__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryAgenciesResponse {
+                    agencies: agencies__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.dlc.QueryAgenciesResponse", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]

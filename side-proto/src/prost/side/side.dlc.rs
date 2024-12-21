@@ -28,6 +28,29 @@ impl ::prost::Name for DlcOracle {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Agency {
+    #[prost(uint32, tag = "1")]
+    pub id: u32,
+    #[prost(string, tag = "2")]
+    pub desc: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, tag = "4")]
+    pub threshold: u32,
+    #[prost(string, tag = "5")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(enumeration = "AgencyStatus", tag = "6")]
+    pub status: i32,
+}
+impl ::prost::Name for Agency {
+    const NAME: &'static str = "Agency";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DlcNonce {
     #[prost(uint64, tag = "1")]
     pub index: u64,
@@ -160,6 +183,35 @@ impl DlcOracleStatus {
         }
     }
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum AgencyStatus {
+    Pending = 0,
+    Enable = 1,
+    Disable = 2,
+}
+impl AgencyStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            AgencyStatus::Pending => "Agency_Status_Pending",
+            AgencyStatus::Enable => "Agency_status_Enable",
+            AgencyStatus::Disable => "Agency_status_Disable",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "Agency_Status_Pending" => Some(Self::Pending),
+            "Agency_status_Enable" => Some(Self::Enable),
+            "Agency_status_Disable" => Some(Self::Disable),
+            _ => None,
+        }
+    }
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PriceInterval {
@@ -204,6 +256,32 @@ pub struct GenesisState {
 }
 impl ::prost::Name for GenesisState {
     const NAME: &'static str = "GenesisState";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAgenciesRequest {
+    #[prost(enumeration = "AgencyStatus", tag = "1")]
+    pub status: i32,
+}
+impl ::prost::Name for QueryAgenciesRequest {
+    const NAME: &'static str = "QueryAgenciesRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAgenciesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub agencies: ::prost::alloc::vec::Vec<Agency>,
+}
+impl ::prost::Name for QueryAgenciesResponse {
+    const NAME: &'static str = "QueryAgenciesResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -367,6 +445,35 @@ pub struct QueryPriceResponse {
 }
 impl ::prost::Name for QueryPriceResponse {
     const NAME: &'static str = "QueryPriceResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitAgencyAddress {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub signature: ::prost::alloc::string::String,
+}
+impl ::prost::Name for MsgSubmitAgencyAddress {
+    const NAME: &'static str = "MsgSubmitAgencyAddress";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitAgencyAddressResponse {}
+impl ::prost::Name for MsgSubmitAgencyAddressResponse {
+    const NAME: &'static str = "MsgSubmitAgencyAddressResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)

@@ -193,6 +193,24 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.dlc.Query", "Oracles"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn agencies(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryAgenciesRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryAgenciesResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Agencies");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Query", "Agencies"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -227,6 +245,10 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryOraclesRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryOraclesResponse>, tonic::Status>;
+        async fn agencies(
+            &self,
+            request: tonic::Request<super::QueryAgenciesRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryAgenciesResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -534,6 +556,44 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
+                "/side.dlc.Query/Agencies" => {
+                    #[allow(non_camel_case_types)]
+                    struct AgenciesSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryAgenciesRequest> for AgenciesSvc<T> {
+                        type Response = super::QueryAgenciesResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryAgenciesRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).agencies(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AgenciesSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 _ => Box::pin(async move {
                     Ok(http::Response::builder()
                         .status(200)
@@ -731,6 +791,26 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.dlc.Msg", "SubmitOraclePubkey"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn submit_agency_address(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgSubmitAgencyAddress>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitAgencyAddressResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/SubmitAgencyAddress");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Msg", "SubmitAgencyAddress"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -761,6 +841,13 @@ pub mod msg_server {
             request: tonic::Request<super::MsgSubmitOraclePubkey>,
         ) -> core::result::Result<
             tonic::Response<super::MsgSubmitOraclePubkeyResponse>,
+            tonic::Status,
+        >;
+        async fn submit_agency_address(
+            &self,
+            request: tonic::Request<super::MsgSubmitAgencyAddress>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitAgencyAddressResponse>,
             tonic::Status,
         >;
     }
@@ -982,6 +1069,46 @@ pub mod msg_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = SubmitOraclePubkeySvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.dlc.Msg/SubmitAgencyAddress" => {
+                    #[allow(non_camel_case_types)]
+                    struct SubmitAgencyAddressSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitAgencyAddress>
+                        for SubmitAgencyAddressSvc<T>
+                    {
+                        type Response = super::MsgSubmitAgencyAddressResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgSubmitAgencyAddress>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).submit_agency_address(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SubmitAgencyAddressSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
