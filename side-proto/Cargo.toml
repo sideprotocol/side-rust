@@ -2,6 +2,10 @@
 name = "side-proto"
 version = "0.1.0-dev6"
 edition = "2021"
+description = "Rust Client for Side Chain"
+readme = "README.md"
+repository = "https://github.com/sideprotocol/side-rust"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 prost = { workspace = true}
