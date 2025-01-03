@@ -106,6 +106,7 @@ pub enum BidStatus {
     Bidding = 0,
     Accepted = 1,
     Rejected = 2,
+    Cancelled = 3,
 }
 impl BidStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -117,6 +118,7 @@ impl BidStatus {
             BidStatus::Bidding => "Bidding",
             BidStatus::Accepted => "Accepted",
             BidStatus::Rejected => "Rejected",
+            BidStatus::Cancelled => "Cancelled",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -125,6 +127,7 @@ impl BidStatus {
             "Bidding" => Some(Self::Bidding),
             "Accepted" => Some(Self::Accepted),
             "Rejected" => Some(Self::Rejected),
+            "Cancelled" => Some(Self::Cancelled),
             _ => None,
         }
     }
@@ -192,6 +195,34 @@ impl ::prost::Name for QueryParamsResponse {
         ::prost::alloc::format!("side.auction.{}", Self::NAME)
     }
 }
+/// QueryAuctionRequest is request type for the Query/Auction RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAuctionRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+}
+impl ::prost::Name for QueryAuctionRequest {
+    const NAME: &'static str = "QueryAuctionRequest";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// QueryAuctionResponse is response type for the Query/Auction RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAuctionResponse {
+    #[prost(message, optional, tag = "1")]
+    pub auction: ::core::option::Option<Auction>,
+}
+impl ::prost::Name for QueryAuctionResponse {
+    const NAME: &'static str = "QueryAuctionResponse";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
 /// QueryAuctionsRequest is request type for the Query/Auctions RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -220,6 +251,34 @@ pub struct QueryAuctionsResponse {
 }
 impl ::prost::Name for QueryAuctionsResponse {
     const NAME: &'static str = "QueryAuctionsResponse";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// QueryBidRequest is request type for the Query/Bid RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryBidRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+}
+impl ::prost::Name for QueryBidRequest {
+    const NAME: &'static str = "QueryBidRequest";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// QueryBidResponse is response type for the Query/Bid RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryBidResponse {
+    #[prost(message, optional, tag = "1")]
+    pub bid: ::core::option::Option<Bid>,
+}
+impl ::prost::Name for QueryBidResponse {
+    const NAME: &'static str = "QueryBidResponse";
     const PACKAGE: &'static str = "side.auction";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.auction.{}", Self::NAME)
@@ -283,6 +342,68 @@ impl ::prost::Name for MsgBid {
 pub struct MsgBidResponse {}
 impl ::prost::Name for MsgBidResponse {
     const NAME: &'static str = "MsgBidResponse";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// MsgCancelBid defines the Msg/CancelBid request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCancelBid {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub id: u64,
+}
+impl ::prost::Name for MsgCancelBid {
+    const NAME: &'static str = "MsgCancelBid";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// MsgCancelBidResponse defines the Msg/CancelBid response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCancelBidResponse {}
+impl ::prost::Name for MsgCancelBidResponse {
+    const NAME: &'static str = "MsgCancelBidResponse";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// MsgUpdateParams is the Msg/UpdateParams request type.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgUpdateParams {
+    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
+    #[prost(string, tag = "1")]
+    pub authority: ::prost::alloc::string::String,
+    /// params defines the x/btcbridge parameters to be updated.
+    ///
+    /// NOTE: All parameters must be supplied.
+    #[prost(message, optional, tag = "2")]
+    pub params: ::core::option::Option<Params>,
+}
+impl ::prost::Name for MsgUpdateParams {
+    const NAME: &'static str = "MsgUpdateParams";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgUpdateParamsResponse {}
+impl ::prost::Name for MsgUpdateParamsResponse {
+    const NAME: &'static str = "MsgUpdateParamsResponse";
     const PACKAGE: &'static str = "side.auction";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.auction.{}", Self::NAME)

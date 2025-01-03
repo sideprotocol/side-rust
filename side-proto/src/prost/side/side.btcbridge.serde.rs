@@ -669,7 +669,7 @@ impl serde::Serialize for DkgParticipant {
         if !self.operator_address.is_empty() {
             len += 1;
         }
-        if !self.consensus_address.is_empty() {
+        if !self.consensus_pubkey.is_empty() {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.btcbridge.DKGParticipant", len)?;
@@ -679,8 +679,8 @@ impl serde::Serialize for DkgParticipant {
         if !self.operator_address.is_empty() {
             struct_ser.serialize_field("operatorAddress", &self.operator_address)?;
         }
-        if !self.consensus_address.is_empty() {
-            struct_ser.serialize_field("consensusAddress", &self.consensus_address)?;
+        if !self.consensus_pubkey.is_empty() {
+            struct_ser.serialize_field("consensusPubkey", &self.consensus_pubkey)?;
         }
         struct_ser.end()
     }
@@ -696,15 +696,15 @@ impl<'de> serde::Deserialize<'de> for DkgParticipant {
             "moniker",
             "operator_address",
             "operatorAddress",
-            "consensus_address",
-            "consensusAddress",
+            "consensus_pubkey",
+            "consensusPubkey",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Moniker,
             OperatorAddress,
-            ConsensusAddress,
+            ConsensusPubkey,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -734,8 +734,8 @@ impl<'de> serde::Deserialize<'de> for DkgParticipant {
                             "operatorAddress" | "operator_address" => {
                                 Ok(GeneratedField::OperatorAddress)
                             }
-                            "consensusAddress" | "consensus_address" => {
-                                Ok(GeneratedField::ConsensusAddress)
+                            "consensusPubkey" | "consensus_pubkey" => {
+                                Ok(GeneratedField::ConsensusPubkey)
                             }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -758,7 +758,7 @@ impl<'de> serde::Deserialize<'de> for DkgParticipant {
             {
                 let mut moniker__ = None;
                 let mut operator_address__ = None;
-                let mut consensus_address__ = None;
+                let mut consensus_pubkey__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Moniker => {
@@ -773,18 +773,18 @@ impl<'de> serde::Deserialize<'de> for DkgParticipant {
                             }
                             operator_address__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::ConsensusAddress => {
-                            if consensus_address__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("consensusAddress"));
+                        GeneratedField::ConsensusPubkey => {
+                            if consensus_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("consensusPubkey"));
                             }
-                            consensus_address__ = Some(map_.next_value()?);
+                            consensus_pubkey__ = Some(map_.next_value()?);
                         }
                     }
                 }
                 Ok(DkgParticipant {
                     moniker: moniker__.unwrap_or_default(),
                     operator_address: operator_address__.unwrap_or_default(),
-                    consensus_address: consensus_address__.unwrap_or_default(),
+                    consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
                 })
             }
         }
@@ -4551,6 +4551,9 @@ impl serde::Serialize for Params {
         if self.withdraw_enabled {
             len += 1;
         }
+        if !self.trusted_btc_relayers.is_empty() {
+            len += 1;
+        }
         if !self.trusted_non_btc_relayers.is_empty() {
             len += 1;
         }
@@ -4594,6 +4597,9 @@ impl serde::Serialize for Params {
         }
         if self.withdraw_enabled {
             struct_ser.serialize_field("withdrawEnabled", &self.withdraw_enabled)?;
+        }
+        if !self.trusted_btc_relayers.is_empty() {
+            struct_ser.serialize_field("trustedBtcRelayers", &self.trusted_btc_relayers)?;
         }
         if !self.trusted_non_btc_relayers.is_empty() {
             struct_ser.serialize_field("trustedNonBtcRelayers", &self.trusted_non_btc_relayers)?;
@@ -4643,6 +4649,8 @@ impl<'de> serde::Deserialize<'de> for Params {
             "depositEnabled",
             "withdraw_enabled",
             "withdrawEnabled",
+            "trusted_btc_relayers",
+            "trustedBtcRelayers",
             "trusted_non_btc_relayers",
             "trustedNonBtcRelayers",
             "trusted_oracles",
@@ -4667,6 +4675,7 @@ impl<'de> serde::Deserialize<'de> for Params {
             BtcVoucherDenom,
             DepositEnabled,
             WithdrawEnabled,
+            TrustedBtcRelayers,
             TrustedNonBtcRelayers,
             TrustedOracles,
             FeeRateValidityPeriod,
@@ -4713,6 +4722,9 @@ impl<'de> serde::Deserialize<'de> for Params {
                             "withdrawEnabled" | "withdraw_enabled" => {
                                 Ok(GeneratedField::WithdrawEnabled)
                             }
+                            "trustedBtcRelayers" | "trusted_btc_relayers" => {
+                                Ok(GeneratedField::TrustedBtcRelayers)
+                            }
                             "trustedNonBtcRelayers" | "trusted_non_btc_relayers" => {
                                 Ok(GeneratedField::TrustedNonBtcRelayers)
                             }
@@ -4755,6 +4767,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                 let mut btc_voucher_denom__ = None;
                 let mut deposit_enabled__ = None;
                 let mut withdraw_enabled__ = None;
+                let mut trusted_btc_relayers__ = None;
                 let mut trusted_non_btc_relayers__ = None;
                 let mut trusted_oracles__ = None;
                 let mut fee_rate_validity_period__ = None;
@@ -4802,6 +4815,14 @@ impl<'de> serde::Deserialize<'de> for Params {
                                 return Err(serde::de::Error::duplicate_field("withdrawEnabled"));
                             }
                             withdraw_enabled__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::TrustedBtcRelayers => {
+                            if trusted_btc_relayers__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "trustedBtcRelayers",
+                                ));
+                            }
+                            trusted_btc_relayers__ = Some(map_.next_value()?);
                         }
                         GeneratedField::TrustedNonBtcRelayers => {
                             if trusted_non_btc_relayers__.is_some() {
@@ -4866,6 +4887,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                     btc_voucher_denom: btc_voucher_denom__.unwrap_or_default(),
                     deposit_enabled: deposit_enabled__.unwrap_or_default(),
                     withdraw_enabled: withdraw_enabled__.unwrap_or_default(),
+                    trusted_btc_relayers: trusted_btc_relayers__.unwrap_or_default(),
                     trusted_non_btc_relayers: trusted_non_btc_relayers__.unwrap_or_default(),
                     trusted_oracles: trusted_oracles__.unwrap_or_default(),
                     fee_rate_validity_period: fee_rate_validity_period__.unwrap_or_default(),

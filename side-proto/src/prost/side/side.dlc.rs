@@ -2,8 +2,8 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DlcOracle {
-    #[prost(uint32, tag = "1")]
-    pub id: u32,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
     #[prost(string, tag = "2")]
     pub desc: ::prost::alloc::string::String,
     #[prost(string, repeated, tag = "3")]
@@ -11,13 +11,11 @@ pub struct DlcOracle {
     #[prost(uint32, tag = "4")]
     pub threshold: u32,
     #[prost(string, tag = "5")]
-    pub address: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
     pub pubkey: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "6")]
+    pub nonce_index: u64,
     #[prost(enumeration = "DlcOracleStatus", tag = "7")]
     pub status: i32,
-    #[prost(uint64, tag = "8")]
-    pub nonce_index: u64,
 }
 impl ::prost::Name for DlcOracle {
     const NAME: &'static str = "DLCOracle";
@@ -29,8 +27,8 @@ impl ::prost::Name for DlcOracle {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Agency {
-    #[prost(uint32, tag = "1")]
-    pub id: u32,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
     #[prost(string, tag = "2")]
     pub desc: ::prost::alloc::string::String,
     #[prost(string, repeated, tag = "3")]
@@ -38,7 +36,7 @@ pub struct Agency {
     #[prost(uint32, tag = "4")]
     pub threshold: u32,
     #[prost(string, tag = "5")]
-    pub address: ::prost::alloc::string::String,
+    pub pubkey: ::prost::alloc::string::String,
     #[prost(enumeration = "AgencyStatus", tag = "6")]
     pub status: i32,
 }
@@ -73,17 +71,19 @@ impl ::prost::Name for DlcNonce {
 pub struct DlcPriceEvent {
     #[prost(uint64, tag = "1")]
     pub id: u64,
-    #[prost(uint64, tag = "2")]
-    pub trigger_price: u64,
+    #[prost(string, tag = "2")]
+    pub trigger_price: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
-    pub nonce: ::prost::alloc::string::String,
+    pub price_decimal: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
-    pub pubkey: ::prost::alloc::string::String,
+    pub nonce: ::prost::alloc::string::String,
     #[prost(string, tag = "5")]
+    pub pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "6")]
     pub description: ::prost::alloc::string::String,
-    #[prost(bool, tag = "6")]
+    #[prost(bool, tag = "7")]
     pub has_triggered: bool,
-    #[prost(message, optional, tag = "7")]
+    #[prost(message, optional, tag = "8")]
     pub publish_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
 }
 impl ::prost::Name for DlcPriceEvent {
@@ -96,8 +96,8 @@ impl ::prost::Name for DlcPriceEvent {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DlcAttestation {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
     #[prost(uint64, tag = "2")]
     pub event_id: u64,
     #[prost(message, optional, tag = "3")]
@@ -196,7 +196,7 @@ pub struct Params {
     #[prost(uint32, tag = "1")]
     pub nonce_queue_size: u32,
     #[prost(message, repeated, tag = "2")]
-    pub price_interval: ::prost::alloc::vec::Vec<PriceInterval>,
+    pub price_intervals: ::prost::alloc::vec::Vec<PriceInterval>,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
@@ -212,7 +212,7 @@ pub struct GenesisState {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
     #[prost(message, repeated, tag = "2")]
-    pub announcements: ::prost::alloc::vec::Vec<DlcPriceEvent>,
+    pub events: ::prost::alloc::vec::Vec<DlcPriceEvent>,
     #[prost(message, repeated, tag = "3")]
     pub attestations: ::prost::alloc::vec::Vec<DlcAttestation>,
 }
@@ -225,7 +225,10 @@ impl ::prost::Name for GenesisState {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryAttestationRequest {}
+pub struct QueryAttestationRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+}
 impl ::prost::Name for QueryAttestationRequest {
     const NAME: &'static str = "QueryAttestationRequest";
     const PACKAGE: &'static str = "side.dlc";
@@ -236,8 +239,8 @@ impl ::prost::Name for QueryAttestationRequest {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryAttestationResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub attestations: ::prost::alloc::vec::Vec<DlcAttestation>,
+    #[prost(message, optional, tag = "1")]
+    pub attestation: ::core::option::Option<DlcAttestation>,
 }
 impl ::prost::Name for QueryAttestationResponse {
     const NAME: &'static str = "QueryAttestationResponse";
@@ -248,9 +251,40 @@ impl ::prost::Name for QueryAttestationResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAttestationsRequest {
+    #[prost(message, optional, tag = "1")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryAttestationsRequest {
+    const NAME: &'static str = "QueryAttestationsRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAttestationsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub attestations: ::prost::alloc::vec::Vec<DlcAttestation>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryAttestationsResponse {
+    const NAME: &'static str = "QueryAttestationsResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryAgenciesRequest {
     #[prost(enumeration = "AgencyStatus", tag = "1")]
     pub status: i32,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
 }
 impl ::prost::Name for QueryAgenciesRequest {
     const NAME: &'static str = "QueryAgenciesRequest";
@@ -264,6 +298,9 @@ impl ::prost::Name for QueryAgenciesRequest {
 pub struct QueryAgenciesResponse {
     #[prost(message, repeated, tag = "1")]
     pub agencies: ::prost::alloc::vec::Vec<Agency>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
 }
 impl ::prost::Name for QueryAgenciesResponse {
     const NAME: &'static str = "QueryAgenciesResponse";
@@ -277,6 +314,8 @@ impl ::prost::Name for QueryAgenciesResponse {
 pub struct QueryOraclesRequest {
     #[prost(enumeration = "DlcOracleStatus", tag = "1")]
     pub status: i32,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
 }
 impl ::prost::Name for QueryOraclesRequest {
     const NAME: &'static str = "QueryOraclesRequest";
@@ -290,6 +329,9 @@ impl ::prost::Name for QueryOraclesRequest {
 pub struct QueryOraclesResponse {
     #[prost(message, repeated, tag = "1")]
     pub oracles: ::prost::alloc::vec::Vec<DlcOracle>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
 }
 impl ::prost::Name for QueryOraclesResponse {
     const NAME: &'static str = "QueryOraclesResponse";
@@ -309,7 +351,7 @@ impl ::prost::Name for QueryCountNoncesRequest {
     }
 }
 /// QueryCountNoncesResponse is response type for the Query/CountNonces RPC method.
-/// counts should use the same order as recommende oracles in Params
+/// counts should use the same order as recommended oracles in Params
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryCountNoncesResponse {
@@ -326,7 +368,40 @@ impl ::prost::Name for QueryCountNoncesResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryNoncesRequest {}
+pub struct QueryNonceRequest {
+    #[prost(uint64, tag = "1")]
+    pub oracle_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub index: u64,
+}
+impl ::prost::Name for QueryNonceRequest {
+    const NAME: &'static str = "QueryNonceRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryNonceResponse {
+    #[prost(message, optional, tag = "1")]
+    pub nonce: ::core::option::Option<DlcNonce>,
+}
+impl ::prost::Name for QueryNonceResponse {
+    const NAME: &'static str = "QueryNonceResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryNoncesRequest {
+    #[prost(uint64, tag = "1")]
+    pub oracle_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
 impl ::prost::Name for QueryNoncesRequest {
     const NAME: &'static str = "QueryNoncesRequest";
     const PACKAGE: &'static str = "side.dlc";
@@ -340,10 +415,100 @@ pub struct QueryNoncesResponse {
     #[prost(message, repeated, tag = "1")]
     pub nonces: ::prost::alloc::vec::Vec<DlcNonce>,
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
 }
 impl ::prost::Name for QueryNoncesResponse {
     const NAME: &'static str = "QueryNoncesResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// QueryEventRequest is request type for the Query/Event RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryEventRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+}
+impl ::prost::Name for QueryEventRequest {
+    const NAME: &'static str = "QueryEventRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// QueryEventResponse is response type for the Query/Event RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryEventResponse {
+    #[prost(message, optional, tag = "1")]
+    pub event: ::core::option::Option<DlcPriceEvent>,
+}
+impl ::prost::Name for QueryEventResponse {
+    const NAME: &'static str = "QueryEventResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// QueryEventsRequest is request type for the Query/Events RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryEventsRequest {
+    #[prost(bool, tag = "1")]
+    pub triggered: bool,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryEventsRequest {
+    const NAME: &'static str = "QueryEventsRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// QueryEventsResponse is response type for the Query/Events RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryEventsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub events: ::prost::alloc::vec::Vec<DlcPriceEvent>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryEventsResponse {
+    const NAME: &'static str = "QueryEventsResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// QueryPriceRequest is request type for the Query/Price RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPriceRequest {
+    #[prost(string, tag = "1")]
+    pub symbol: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryPriceRequest {
+    const NAME: &'static str = "QueryPriceRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// QueryPriceResponse is response type for the Query/Price RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPriceResponse {
+    #[prost(uint64, tag = "1")]
+    pub price: u64,
+}
+impl ::prost::Name for QueryPriceResponse {
+    const NAME: &'static str = "QueryPriceResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -374,81 +539,20 @@ impl ::prost::Name for QueryParamsResponse {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
     }
 }
-/// QueryAnnouncementsRequest is request type for the Query/Announcements RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceEventRequest {
-    #[prost(bool, tag = "1")]
-    pub has_triggered: bool,
-    #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
-}
-impl ::prost::Name for QueryPriceEventRequest {
-    const NAME: &'static str = "QueryPriceEventRequest";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-/// QueryAnnouncementsResponse is response type for the Query/Announcements RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceEventResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub events: ::prost::alloc::vec::Vec<DlcPriceEvent>,
-    #[prost(message, optional, tag = "2")]
-    pub pagination:
-        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
-}
-impl ::prost::Name for QueryPriceEventResponse {
-    const NAME: &'static str = "QueryPriceEventResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-/// QueryPriceRequest is request type for the Query/Price RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceRequest {
+pub struct MsgSubmitAgencyPubKey {
     #[prost(string, tag = "1")]
-    pub symbol: ::prost::alloc::string::String,
-}
-impl ::prost::Name for QueryPriceRequest {
-    const NAME: &'static str = "QueryPriceRequest";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-/// QueryPriceResponse is response type for the Query/Price RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceResponse {
-    #[prost(uint32, tag = "1")]
-    pub price: u32,
-}
-impl ::prost::Name for QueryPriceResponse {
-    const NAME: &'static str = "QueryPriceResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitAgencyAddress {
-    #[prost(string, tag = "1")]
-    pub id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
     pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub id: u64,
     #[prost(string, tag = "3")]
-    pub address: ::prost::alloc::string::String,
+    pub pub_key: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
     pub signature: ::prost::alloc::string::String,
 }
-impl ::prost::Name for MsgSubmitAgencyAddress {
-    const NAME: &'static str = "MsgSubmitAgencyAddress";
+impl ::prost::Name for MsgSubmitAgencyPubKey {
+    const NAME: &'static str = "MsgSubmitAgencyPubKey";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -456,9 +560,9 @@ impl ::prost::Name for MsgSubmitAgencyAddress {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitAgencyAddressResponse {}
-impl ::prost::Name for MsgSubmitAgencyAddressResponse {
-    const NAME: &'static str = "MsgSubmitAgencyAddressResponse";
+pub struct MsgSubmitAgencyPubKeyResponse {}
+impl ::prost::Name for MsgSubmitAgencyPubKeyResponse {
+    const NAME: &'static str = "MsgSubmitAgencyPubKeyResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -466,18 +570,18 @@ impl ::prost::Name for MsgSubmitAgencyAddressResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitOraclePubkey {
+pub struct MsgSubmitOraclePubKey {
     #[prost(string, tag = "1")]
-    pub oracle_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
     pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub oracle_id: u64,
     #[prost(string, tag = "3")]
-    pub pubkey: ::prost::alloc::string::String,
+    pub pub_key: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
     pub signature: ::prost::alloc::string::String,
 }
-impl ::prost::Name for MsgSubmitOraclePubkey {
-    const NAME: &'static str = "MsgSubmitOraclePubkey";
+impl ::prost::Name for MsgSubmitOraclePubKey {
+    const NAME: &'static str = "MsgSubmitOraclePubKey";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -485,9 +589,9 @@ impl ::prost::Name for MsgSubmitOraclePubkey {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitOraclePubkeyResponse {}
-impl ::prost::Name for MsgSubmitOraclePubkeyResponse {
-    const NAME: &'static str = "MsgSubmitOraclePubkeyResponse";
+pub struct MsgSubmitOraclePubKeyResponse {}
+impl ::prost::Name for MsgSubmitOraclePubKeyResponse {
+    const NAME: &'static str = "MsgSubmitOraclePubKeyResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -520,24 +624,13 @@ impl ::prost::Name for MsgSubmitNonceResponse {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
     }
 }
-// message MsgSubmitAnnouncementNonce {
-//      option (cosmos.msg.v1.signer) = "sender";
-
-//      string sender = 1;
-//      uint64 announcement_id = 2;
-//      string nonce = 3;
-//      string signature = 4;
-// }
-
-// message MsgSubmitAnnouncementNonceResponse {}
-
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSubmitAttestation {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    pub announcement_id: u64,
+    pub event_id: u64,
     #[prost(string, tag = "3")]
     pub signature: ::prost::alloc::string::String,
 }
@@ -553,6 +646,97 @@ impl ::prost::Name for MsgSubmitAttestation {
 pub struct MsgSubmitAttestationResponse {}
 impl ::prost::Name for MsgSubmitAttestationResponse {
     const NAME: &'static str = "MsgSubmitAttestationResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCreateOracle {
+    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
+    #[prost(string, tag = "1")]
+    pub authority: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, tag = "3")]
+    pub threshold: u32,
+}
+impl ::prost::Name for MsgCreateOracle {
+    const NAME: &'static str = "MsgCreateOracle";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCreateOracleResponse {}
+impl ::prost::Name for MsgCreateOracleResponse {
+    const NAME: &'static str = "MsgCreateOracleResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCreateAgency {
+    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
+    #[prost(string, tag = "1")]
+    pub authority: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, tag = "3")]
+    pub threshold: u32,
+}
+impl ::prost::Name for MsgCreateAgency {
+    const NAME: &'static str = "MsgCreateAgency";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCreateAgencyResponse {}
+impl ::prost::Name for MsgCreateAgencyResponse {
+    const NAME: &'static str = "MsgCreateAgencyResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// MsgUpdateParams is the Msg/UpdateParams request type.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgUpdateParams {
+    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
+    #[prost(string, tag = "1")]
+    pub authority: ::prost::alloc::string::String,
+    /// params defines the x/dlc parameters to be updated.
+    ///
+    /// NOTE: All parameters must be supplied.
+    #[prost(message, optional, tag = "2")]
+    pub params: ::core::option::Option<Params>,
+}
+impl ::prost::Name for MsgUpdateParams {
+    const NAME: &'static str = "MsgUpdateParams";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgUpdateParamsResponse {}
+impl ::prost::Name for MsgUpdateParamsResponse {
+    const NAME: &'static str = "MsgUpdateParamsResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
