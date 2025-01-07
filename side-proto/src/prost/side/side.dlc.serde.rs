@@ -23,6 +23,9 @@ impl serde::Serialize for Agency {
         if !self.pubkey.is_empty() {
             len += 1;
         }
+        if self.time.is_some() {
+            len += 1;
+        }
         if self.status != 0 {
             len += 1;
         }
@@ -43,6 +46,9 @@ impl serde::Serialize for Agency {
         }
         if !self.pubkey.is_empty() {
             struct_ser.serialize_field("pubkey", &self.pubkey)?;
+        }
+        if let Some(v) = self.time.as_ref() {
+            struct_ser.serialize_field("time", v)?;
         }
         if self.status != 0 {
             let v = AgencyStatus::try_from(self.status).map_err(|_| {
@@ -66,6 +72,7 @@ impl<'de> serde::Deserialize<'de> for Agency {
             "participants",
             "threshold",
             "pubkey",
+            "time",
             "status",
         ];
 
@@ -76,6 +83,7 @@ impl<'de> serde::Deserialize<'de> for Agency {
             Participants,
             Threshold,
             Pubkey,
+            Time,
             Status,
         }
         #[cfg(feature = "serde")]
@@ -107,6 +115,7 @@ impl<'de> serde::Deserialize<'de> for Agency {
                             "participants" => Ok(GeneratedField::Participants),
                             "threshold" => Ok(GeneratedField::Threshold),
                             "pubkey" => Ok(GeneratedField::Pubkey),
+                            "time" => Ok(GeneratedField::Time),
                             "status" => Ok(GeneratedField::Status),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -132,6 +141,7 @@ impl<'de> serde::Deserialize<'de> for Agency {
                 let mut participants__ = None;
                 let mut threshold__ = None;
                 let mut pubkey__ = None;
+                let mut time__ = None;
                 let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -171,6 +181,12 @@ impl<'de> serde::Deserialize<'de> for Agency {
                             }
                             pubkey__ = Some(map_.next_value()?);
                         }
+                        GeneratedField::Time => {
+                            if time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("time"));
+                            }
+                            time__ = map_.next_value()?;
+                        }
                         GeneratedField::Status => {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
@@ -185,6 +201,7 @@ impl<'de> serde::Deserialize<'de> for Agency {
                     participants: participants__.unwrap_or_default(),
                     threshold: threshold__.unwrap_or_default(),
                     pubkey: pubkey__.unwrap_or_default(),
+                    time: time__,
                     status: status__.unwrap_or_default(),
                 })
             }
@@ -201,6 +218,8 @@ impl serde::Serialize for AgencyStatus {
     {
         let variant = match self {
             Self::Pending => "Agency_Status_Pending",
+            Self::Failed => "Agency_Status_Failed",
+            Self::Timedout => "Agency_Status_Timedout",
             Self::Enable => "Agency_status_Enable",
             Self::Disable => "Agency_status_Disable",
         };
@@ -216,6 +235,8 @@ impl<'de> serde::Deserialize<'de> for AgencyStatus {
     {
         const FIELDS: &[&str] = &[
             "Agency_Status_Pending",
+            "Agency_Status_Failed",
+            "Agency_Status_Timedout",
             "Agency_status_Enable",
             "Agency_status_Disable",
         ];
@@ -259,6 +280,8 @@ impl<'de> serde::Deserialize<'de> for AgencyStatus {
             {
                 match value {
                     "Agency_Status_Pending" => Ok(AgencyStatus::Pending),
+                    "Agency_Status_Failed" => Ok(AgencyStatus::Failed),
+                    "Agency_Status_Timedout" => Ok(AgencyStatus::Timedout),
                     "Agency_status_Enable" => Ok(AgencyStatus::Enable),
                     "Agency_status_Disable" => Ok(AgencyStatus::Disable),
                     _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
@@ -640,6 +663,9 @@ impl serde::Serialize for DlcOracle {
         if self.nonce_index != 0 {
             len += 1;
         }
+        if self.time.is_some() {
+            len += 1;
+        }
         if self.status != 0 {
             len += 1;
         }
@@ -668,6 +694,9 @@ impl serde::Serialize for DlcOracle {
                 alloc::string::ToString::to_string(&self.nonce_index).as_str(),
             )?;
         }
+        if let Some(v) = self.time.as_ref() {
+            struct_ser.serialize_field("time", v)?;
+        }
         if self.status != 0 {
             let v = DlcOracleStatus::try_from(self.status).map_err(|_| {
                 serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
@@ -692,6 +721,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
             "pubkey",
             "nonce_index",
             "nonceIndex",
+            "time",
             "status",
         ];
 
@@ -703,6 +733,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
             Threshold,
             Pubkey,
             NonceIndex,
+            Time,
             Status,
         }
         #[cfg(feature = "serde")]
@@ -735,6 +766,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
                             "threshold" => Ok(GeneratedField::Threshold),
                             "pubkey" => Ok(GeneratedField::Pubkey),
                             "nonceIndex" | "nonce_index" => Ok(GeneratedField::NonceIndex),
+                            "time" => Ok(GeneratedField::Time),
                             "status" => Ok(GeneratedField::Status),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -761,6 +793,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
                 let mut threshold__ = None;
                 let mut pubkey__ = None;
                 let mut nonce_index__ = None;
+                let mut time__ = None;
                 let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -809,6 +842,12 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
                                     .0,
                             );
                         }
+                        GeneratedField::Time => {
+                            if time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("time"));
+                            }
+                            time__ = map_.next_value()?;
+                        }
                         GeneratedField::Status => {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
@@ -824,6 +863,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
                     threshold: threshold__.unwrap_or_default(),
                     pubkey: pubkey__.unwrap_or_default(),
                     nonce_index: nonce_index__.unwrap_or_default(),
+                    time: time__,
                     status: status__.unwrap_or_default(),
                 })
             }
@@ -840,6 +880,8 @@ impl serde::Serialize for DlcOracleStatus {
     {
         let variant = match self {
             Self::OracleStatusPending => "Oracle_Status_Pending",
+            Self::OracleStatusFailed => "Oracle_Status_Failed",
+            Self::OracleStatusTimedout => "Oracle_Status_Timedout",
             Self::OracleStatusEnable => "Oracle_status_Enable",
             Self::OracleStatusDisable => "Oracle_status_Disable",
         };
@@ -855,6 +897,8 @@ impl<'de> serde::Deserialize<'de> for DlcOracleStatus {
     {
         const FIELDS: &[&str] = &[
             "Oracle_Status_Pending",
+            "Oracle_Status_Failed",
+            "Oracle_Status_Timedout",
             "Oracle_status_Enable",
             "Oracle_status_Disable",
         ];
@@ -898,6 +942,8 @@ impl<'de> serde::Deserialize<'de> for DlcOracleStatus {
             {
                 match value {
                     "Oracle_Status_Pending" => Ok(DlcOracleStatus::OracleStatusPending),
+                    "Oracle_Status_Failed" => Ok(DlcOracleStatus::OracleStatusFailed),
+                    "Oracle_Status_Timedout" => Ok(DlcOracleStatus::OracleStatusTimedout),
                     "Oracle_status_Enable" => Ok(DlcOracleStatus::OracleStatusEnable),
                     "Oracle_status_Disable" => Ok(DlcOracleStatus::OracleStatusDisable),
                     _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
@@ -1693,10 +1739,13 @@ impl serde::Serialize for MsgSubmitAgencyPubKey {
         if !self.sender.is_empty() {
             len += 1;
         }
-        if self.id != 0 {
+        if !self.pub_key.is_empty() {
             len += 1;
         }
-        if !self.pub_key.is_empty() {
+        if self.agency_id != 0 {
+            len += 1;
+        }
+        if !self.agency_pubkey.is_empty() {
             len += 1;
         }
         if !self.signature.is_empty() {
@@ -1706,13 +1755,18 @@ impl serde::Serialize for MsgSubmitAgencyPubKey {
         if !self.sender.is_empty() {
             struct_ser.serialize_field("sender", &self.sender)?;
         }
-        if self.id != 0 {
-            #[allow(clippy::needless_borrow)]
-            struct_ser
-                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
-        }
         if !self.pub_key.is_empty() {
             struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        }
+        if self.agency_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "agencyId",
+                alloc::string::ToString::to_string(&self.agency_id).as_str(),
+            )?;
+        }
+        if !self.agency_pubkey.is_empty() {
+            struct_ser.serialize_field("agencyPubkey", &self.agency_pubkey)?;
         }
         if !self.signature.is_empty() {
             struct_ser.serialize_field("signature", &self.signature)?;
@@ -1727,13 +1781,23 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitAgencyPubKey {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["sender", "id", "pub_key", "pubKey", "signature"];
+        const FIELDS: &[&str] = &[
+            "sender",
+            "pub_key",
+            "pubKey",
+            "agency_id",
+            "agencyId",
+            "agency_pubkey",
+            "agencyPubkey",
+            "signature",
+        ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Sender,
-            Id,
             PubKey,
+            AgencyId,
+            AgencyPubkey,
             Signature,
         }
         #[cfg(feature = "serde")]
@@ -1761,8 +1825,9 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitAgencyPubKey {
                     {
                         match value {
                             "sender" => Ok(GeneratedField::Sender),
-                            "id" => Ok(GeneratedField::Id),
                             "pubKey" | "pub_key" => Ok(GeneratedField::PubKey),
+                            "agencyId" | "agency_id" => Ok(GeneratedField::AgencyId),
+                            "agencyPubkey" | "agency_pubkey" => Ok(GeneratedField::AgencyPubkey),
                             "signature" => Ok(GeneratedField::Signature),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -1787,8 +1852,9 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitAgencyPubKey {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut sender__ = None;
-                let mut id__ = None;
                 let mut pub_key__ = None;
+                let mut agency_id__ = None;
+                let mut agency_pubkey__ = None;
                 let mut signature__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -1798,20 +1864,26 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitAgencyPubKey {
                             }
                             sender__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::Id => {
-                            if id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("id"));
-                            }
-                            id__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
-                        }
                         GeneratedField::PubKey => {
                             if pub_key__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("pubKey"));
                             }
                             pub_key__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::AgencyId => {
+                            if agency_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("agencyId"));
+                            }
+                            agency_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::AgencyPubkey => {
+                            if agency_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("agencyPubkey"));
+                            }
+                            agency_pubkey__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Signature => {
                             if signature__.is_some() {
@@ -1823,8 +1895,9 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitAgencyPubKey {
                 }
                 Ok(MsgSubmitAgencyPubKey {
                     sender: sender__.unwrap_or_default(),
-                    id: id__.unwrap_or_default(),
                     pub_key: pub_key__.unwrap_or_default(),
+                    agency_id: agency_id__.unwrap_or_default(),
+                    agency_pubkey: agency_pubkey__.unwrap_or_default(),
                     signature: signature__.unwrap_or_default(),
                 })
             }
@@ -2148,6 +2221,9 @@ impl serde::Serialize for MsgSubmitNonce {
         if !self.nonce.is_empty() {
             len += 1;
         }
+        if !self.oracle_pubkey.is_empty() {
+            len += 1;
+        }
         if !self.signature.is_empty() {
             len += 1;
         }
@@ -2157,6 +2233,9 @@ impl serde::Serialize for MsgSubmitNonce {
         }
         if !self.nonce.is_empty() {
             struct_ser.serialize_field("nonce", &self.nonce)?;
+        }
+        if !self.oracle_pubkey.is_empty() {
+            struct_ser.serialize_field("oraclePubkey", &self.oracle_pubkey)?;
         }
         if !self.signature.is_empty() {
             struct_ser.serialize_field("signature", &self.signature)?;
@@ -2171,12 +2250,19 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitNonce {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["sender", "nonce", "signature"];
+        const FIELDS: &[&str] = &[
+            "sender",
+            "nonce",
+            "oracle_pubkey",
+            "oraclePubkey",
+            "signature",
+        ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Sender,
             Nonce,
+            OraclePubkey,
             Signature,
         }
         #[cfg(feature = "serde")]
@@ -2205,6 +2291,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitNonce {
                         match value {
                             "sender" => Ok(GeneratedField::Sender),
                             "nonce" => Ok(GeneratedField::Nonce),
+                            "oraclePubkey" | "oracle_pubkey" => Ok(GeneratedField::OraclePubkey),
                             "signature" => Ok(GeneratedField::Signature),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -2227,6 +2314,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitNonce {
             {
                 let mut sender__ = None;
                 let mut nonce__ = None;
+                let mut oracle_pubkey__ = None;
                 let mut signature__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -2242,6 +2330,12 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitNonce {
                             }
                             nonce__ = Some(map_.next_value()?);
                         }
+                        GeneratedField::OraclePubkey => {
+                            if oracle_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("oraclePubkey"));
+                            }
+                            oracle_pubkey__ = Some(map_.next_value()?);
+                        }
                         GeneratedField::Signature => {
                             if signature__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("signature"));
@@ -2253,6 +2347,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitNonce {
                 Ok(MsgSubmitNonce {
                     sender: sender__.unwrap_or_default(),
                     nonce: nonce__.unwrap_or_default(),
+                    oracle_pubkey: oracle_pubkey__.unwrap_or_default(),
                     signature: signature__.unwrap_or_default(),
                 })
             }
@@ -2349,10 +2444,13 @@ impl serde::Serialize for MsgSubmitOraclePubKey {
         if !self.sender.is_empty() {
             len += 1;
         }
+        if !self.pub_key.is_empty() {
+            len += 1;
+        }
         if self.oracle_id != 0 {
             len += 1;
         }
-        if !self.pub_key.is_empty() {
+        if !self.oracle_pubkey.is_empty() {
             len += 1;
         }
         if !self.signature.is_empty() {
@@ -2362,6 +2460,9 @@ impl serde::Serialize for MsgSubmitOraclePubKey {
         if !self.sender.is_empty() {
             struct_ser.serialize_field("sender", &self.sender)?;
         }
+        if !self.pub_key.is_empty() {
+            struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        }
         if self.oracle_id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser.serialize_field(
@@ -2369,8 +2470,8 @@ impl serde::Serialize for MsgSubmitOraclePubKey {
                 alloc::string::ToString::to_string(&self.oracle_id).as_str(),
             )?;
         }
-        if !self.pub_key.is_empty() {
-            struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        if !self.oracle_pubkey.is_empty() {
+            struct_ser.serialize_field("oraclePubkey", &self.oracle_pubkey)?;
         }
         if !self.signature.is_empty() {
             struct_ser.serialize_field("signature", &self.signature)?;
@@ -2387,18 +2488,21 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubKey {
     {
         const FIELDS: &[&str] = &[
             "sender",
-            "oracle_id",
-            "oracleId",
             "pub_key",
             "pubKey",
+            "oracle_id",
+            "oracleId",
+            "oracle_pubkey",
+            "oraclePubkey",
             "signature",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Sender,
-            OracleId,
             PubKey,
+            OracleId,
+            OraclePubkey,
             Signature,
         }
         #[cfg(feature = "serde")]
@@ -2426,8 +2530,9 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubKey {
                     {
                         match value {
                             "sender" => Ok(GeneratedField::Sender),
-                            "oracleId" | "oracle_id" => Ok(GeneratedField::OracleId),
                             "pubKey" | "pub_key" => Ok(GeneratedField::PubKey),
+                            "oracleId" | "oracle_id" => Ok(GeneratedField::OracleId),
+                            "oraclePubkey" | "oracle_pubkey" => Ok(GeneratedField::OraclePubkey),
                             "signature" => Ok(GeneratedField::Signature),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -2452,8 +2557,9 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubKey {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut sender__ = None;
-                let mut oracle_id__ = None;
                 let mut pub_key__ = None;
+                let mut oracle_id__ = None;
+                let mut oracle_pubkey__ = None;
                 let mut signature__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -2462,6 +2568,12 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubKey {
                                 return Err(serde::de::Error::duplicate_field("sender"));
                             }
                             sender__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::PubKey => {
+                            if pub_key__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pubKey"));
+                            }
+                            pub_key__ = Some(map_.next_value()?);
                         }
                         GeneratedField::OracleId => {
                             if oracle_id__.is_some() {
@@ -2472,11 +2584,11 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubKey {
                                     .0,
                             );
                         }
-                        GeneratedField::PubKey => {
-                            if pub_key__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("pubKey"));
+                        GeneratedField::OraclePubkey => {
+                            if oracle_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("oraclePubkey"));
                             }
-                            pub_key__ = Some(map_.next_value()?);
+                            oracle_pubkey__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Signature => {
                             if signature__.is_some() {
@@ -2488,8 +2600,9 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitOraclePubKey {
                 }
                 Ok(MsgSubmitOraclePubKey {
                     sender: sender__.unwrap_or_default(),
-                    oracle_id: oracle_id__.unwrap_or_default(),
                     pub_key: pub_key__.unwrap_or_default(),
+                    oracle_id: oracle_id__.unwrap_or_default(),
+                    oracle_pubkey: oracle_pubkey__.unwrap_or_default(),
                     signature: signature__.unwrap_or_default(),
                 })
             }
@@ -2786,12 +2899,18 @@ impl serde::Serialize for Params {
         if !self.price_intervals.is_empty() {
             len += 1;
         }
+        if self.dkg_timeout_period.is_some() {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("side.dlc.Params", len)?;
         if self.nonce_queue_size != 0 {
             struct_ser.serialize_field("nonceQueueSize", &self.nonce_queue_size)?;
         }
         if !self.price_intervals.is_empty() {
             struct_ser.serialize_field("priceIntervals", &self.price_intervals)?;
+        }
+        if let Some(v) = self.dkg_timeout_period.as_ref() {
+            struct_ser.serialize_field("dkgTimeoutPeriod", v)?;
         }
         struct_ser.end()
     }
@@ -2808,12 +2927,15 @@ impl<'de> serde::Deserialize<'de> for Params {
             "nonceQueueSize",
             "price_intervals",
             "priceIntervals",
+            "dkg_timeout_period",
+            "dkgTimeoutPeriod",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             NonceQueueSize,
             PriceIntervals,
+            DkgTimeoutPeriod,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -2845,6 +2967,9 @@ impl<'de> serde::Deserialize<'de> for Params {
                             "priceIntervals" | "price_intervals" => {
                                 Ok(GeneratedField::PriceIntervals)
                             }
+                            "dkgTimeoutPeriod" | "dkg_timeout_period" => {
+                                Ok(GeneratedField::DkgTimeoutPeriod)
+                            }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -2866,6 +2991,7 @@ impl<'de> serde::Deserialize<'de> for Params {
             {
                 let mut nonce_queue_size__ = None;
                 let mut price_intervals__ = None;
+                let mut dkg_timeout_period__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::NonceQueueSize => {
@@ -2883,11 +3009,18 @@ impl<'de> serde::Deserialize<'de> for Params {
                             }
                             price_intervals__ = Some(map_.next_value()?);
                         }
+                        GeneratedField::DkgTimeoutPeriod => {
+                            if dkg_timeout_period__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dkgTimeoutPeriod"));
+                            }
+                            dkg_timeout_period__ = map_.next_value()?;
+                        }
                     }
                 }
                 Ok(Params {
                     nonce_queue_size: nonce_queue_size__.unwrap_or_default(),
                     price_intervals: price_intervals__.unwrap_or_default(),
+                    dkg_timeout_period: dkg_timeout_period__,
                 })
             }
         }

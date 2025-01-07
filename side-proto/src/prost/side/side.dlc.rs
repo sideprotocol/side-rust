@@ -14,7 +14,9 @@ pub struct DlcOracle {
     pub pubkey: ::prost::alloc::string::String,
     #[prost(uint64, tag = "6")]
     pub nonce_index: u64,
-    #[prost(enumeration = "DlcOracleStatus", tag = "7")]
+    #[prost(message, optional, tag = "7")]
+    pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(enumeration = "DlcOracleStatus", tag = "8")]
     pub status: i32,
 }
 impl ::prost::Name for DlcOracle {
@@ -37,7 +39,9 @@ pub struct Agency {
     pub threshold: u32,
     #[prost(string, tag = "5")]
     pub pubkey: ::prost::alloc::string::String,
-    #[prost(enumeration = "AgencyStatus", tag = "6")]
+    #[prost(message, optional, tag = "6")]
+    pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(enumeration = "AgencyStatus", tag = "7")]
     pub status: i32,
 }
 impl ::prost::Name for Agency {
@@ -120,8 +124,10 @@ impl ::prost::Name for DlcAttestation {
 #[repr(i32)]
 pub enum DlcOracleStatus {
     OracleStatusPending = 0,
-    OracleStatusEnable = 1,
-    OracleStatusDisable = 2,
+    OracleStatusFailed = 1,
+    OracleStatusTimedout = 2,
+    OracleStatusEnable = 3,
+    OracleStatusDisable = 4,
 }
 impl DlcOracleStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -131,6 +137,8 @@ impl DlcOracleStatus {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             DlcOracleStatus::OracleStatusPending => "Oracle_Status_Pending",
+            DlcOracleStatus::OracleStatusFailed => "Oracle_Status_Failed",
+            DlcOracleStatus::OracleStatusTimedout => "Oracle_Status_Timedout",
             DlcOracleStatus::OracleStatusEnable => "Oracle_status_Enable",
             DlcOracleStatus::OracleStatusDisable => "Oracle_status_Disable",
         }
@@ -139,6 +147,8 @@ impl DlcOracleStatus {
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "Oracle_Status_Pending" => Some(Self::OracleStatusPending),
+            "Oracle_Status_Failed" => Some(Self::OracleStatusFailed),
+            "Oracle_Status_Timedout" => Some(Self::OracleStatusTimedout),
             "Oracle_status_Enable" => Some(Self::OracleStatusEnable),
             "Oracle_status_Disable" => Some(Self::OracleStatusDisable),
             _ => None,
@@ -149,8 +159,10 @@ impl DlcOracleStatus {
 #[repr(i32)]
 pub enum AgencyStatus {
     Pending = 0,
-    Enable = 1,
-    Disable = 2,
+    Failed = 1,
+    Timedout = 2,
+    Enable = 3,
+    Disable = 4,
 }
 impl AgencyStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -160,6 +172,8 @@ impl AgencyStatus {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             AgencyStatus::Pending => "Agency_Status_Pending",
+            AgencyStatus::Failed => "Agency_Status_Failed",
+            AgencyStatus::Timedout => "Agency_Status_Timedout",
             AgencyStatus::Enable => "Agency_status_Enable",
             AgencyStatus::Disable => "Agency_status_Disable",
         }
@@ -168,6 +182,8 @@ impl AgencyStatus {
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "Agency_Status_Pending" => Some(Self::Pending),
+            "Agency_Status_Failed" => Some(Self::Failed),
+            "Agency_Status_Timedout" => Some(Self::Timedout),
             "Agency_status_Enable" => Some(Self::Enable),
             "Agency_status_Disable" => Some(Self::Disable),
             _ => None,
@@ -197,6 +213,8 @@ pub struct Params {
     pub nonce_queue_size: u32,
     #[prost(message, repeated, tag = "2")]
     pub price_intervals: ::prost::alloc::vec::Vec<PriceInterval>,
+    #[prost(message, optional, tag = "3")]
+    pub dkg_timeout_period: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
@@ -544,11 +562,13 @@ impl ::prost::Name for QueryParamsResponse {
 pub struct MsgSubmitAgencyPubKey {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    pub id: u64,
-    #[prost(string, tag = "3")]
+    #[prost(string, tag = "2")]
     pub pub_key: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub agency_id: u64,
     #[prost(string, tag = "4")]
+    pub agency_pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
     pub signature: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgSubmitAgencyPubKey {
@@ -573,11 +593,13 @@ impl ::prost::Name for MsgSubmitAgencyPubKeyResponse {
 pub struct MsgSubmitOraclePubKey {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    pub oracle_id: u64,
-    #[prost(string, tag = "3")]
+    #[prost(string, tag = "2")]
     pub pub_key: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub oracle_id: u64,
     #[prost(string, tag = "4")]
+    pub oracle_pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
     pub signature: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgSubmitOraclePubKey {
@@ -605,6 +627,8 @@ pub struct MsgSubmitNonce {
     #[prost(string, tag = "2")]
     pub nonce: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
+    pub oracle_pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
     pub signature: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgSubmitNonce {
