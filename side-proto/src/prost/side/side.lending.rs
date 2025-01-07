@@ -332,7 +332,10 @@ impl ::prost::Name for QueryParamsResponse {
 /// QueryLoanCETRequest is request type for the Query/LoanCET RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryLoanCetRequest {}
+pub struct QueryLoanCetRequest {
+    #[prost(string, tag = "1")]
+    pub loan_id: ::prost::alloc::string::String,
+}
 impl ::prost::Name for QueryLoanCetRequest {
     const NAME: &'static str = "QueryLoanCETRequest";
     const PACKAGE: &'static str = "side.lending";
@@ -343,7 +346,10 @@ impl ::prost::Name for QueryLoanCetRequest {
 /// QueryLoanCETResponse is response type for the Query/LoanCET RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryLoanCetResponse {}
+pub struct QueryLoanCetResponse {
+    #[prost(message, optional, tag = "1")]
+    pub cet: ::core::option::Option<Cet>,
+}
 impl ::prost::Name for QueryLoanCetResponse {
     const NAME: &'static str = "QueryLoanCETResponse";
     const PACKAGE: &'static str = "side.lending";
@@ -411,8 +417,6 @@ pub struct MsgRepay {
     pub borrower: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub loan_id: ::prost::alloc::string::String,
-    /// string claim_tx_id = 4;
-    /// string adaptor_signature = 5;
     #[prost(string, tag = "3")]
     pub adaptor_point: ::prost::alloc::string::String,
 }

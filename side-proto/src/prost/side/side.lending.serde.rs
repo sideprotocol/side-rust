@@ -3742,8 +3742,15 @@ impl serde::Serialize for QueryLoanCetRequest {
         S: serde::Serializer,
     {
         use serde::ser::SerializeStruct;
-        let len = 0;
-        let struct_ser = serializer.serialize_struct("side.lending.QueryLoanCETRequest", len)?;
+        let mut len = 0;
+        if !self.loan_id.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.lending.QueryLoanCETRequest", len)?;
+        if !self.loan_id.is_empty() {
+            struct_ser.serialize_field("loanId", &self.loan_id)?;
+        }
         struct_ser.end()
     }
 }
@@ -3754,10 +3761,12 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCetRequest {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[];
+        const FIELDS: &[&str] = &["loan_id", "loanId"];
 
         #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {}
+        enum GeneratedField {
+            LoanId,
+        }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
@@ -3781,7 +3790,10 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCetRequest {
                     where
                         E: serde::de::Error,
                     {
-                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                        match value {
+                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
                     }
                 }
                 deserializer.deserialize_identifier(GeneratedVisitor)
@@ -3802,10 +3814,20 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCetRequest {
             where
                 V: serde::de::MapAccess<'de>,
             {
-                while map_.next_key::<GeneratedField>()?.is_some() {
-                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                let mut loan_id__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::LoanId => {
+                            if loan_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("loanId"));
+                            }
+                            loan_id__ = Some(map_.next_value()?);
+                        }
+                    }
                 }
-                Ok(QueryLoanCetRequest {})
+                Ok(QueryLoanCetRequest {
+                    loan_id: loan_id__.unwrap_or_default(),
+                })
             }
         }
         deserializer.deserialize_struct(
@@ -3823,8 +3845,15 @@ impl serde::Serialize for QueryLoanCetResponse {
         S: serde::Serializer,
     {
         use serde::ser::SerializeStruct;
-        let len = 0;
-        let struct_ser = serializer.serialize_struct("side.lending.QueryLoanCETResponse", len)?;
+        let mut len = 0;
+        if self.cet.is_some() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.lending.QueryLoanCETResponse", len)?;
+        if let Some(v) = self.cet.as_ref() {
+            struct_ser.serialize_field("cet", v)?;
+        }
         struct_ser.end()
     }
 }
@@ -3835,10 +3864,12 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCetResponse {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[];
+        const FIELDS: &[&str] = &["cet"];
 
         #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {}
+        enum GeneratedField {
+            Cet,
+        }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
             fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
@@ -3862,7 +3893,10 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCetResponse {
                     where
                         E: serde::de::Error,
                     {
-                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                        match value {
+                            "cet" => Ok(GeneratedField::Cet),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
                     }
                 }
                 deserializer.deserialize_identifier(GeneratedVisitor)
@@ -3883,10 +3917,18 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCetResponse {
             where
                 V: serde::de::MapAccess<'de>,
             {
-                while map_.next_key::<GeneratedField>()?.is_some() {
-                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                let mut cet__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Cet => {
+                            if cet__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("cet"));
+                            }
+                            cet__ = map_.next_value()?;
+                        }
+                    }
                 }
-                Ok(QueryLoanCetResponse {})
+                Ok(QueryLoanCetResponse { cet: cet__ })
             }
         }
         deserializer.deserialize_struct(
