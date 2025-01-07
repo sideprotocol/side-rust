@@ -34,4 +34,7 @@ pub mod side {
     pub mod dlc {
         include!("prost/side/side.dlc.rs");
     }
+    pub mod lending {
+        include!("prost/side/side.lending.rs");
+    }
 }
