@@ -144,10 +144,10 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.lending.Query", "LiquidationEvent"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn loan_cet(
+        pub async fn loan_ce_ts(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryLoanCetRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryLoanCetResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::QueryLoanCeTsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryLoanCeTsResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -156,10 +156,10 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LoanCET");
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LoanCETs");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.lending.Query", "LoanCET"));
+                .insert(GrpcMethod::new("side.lending.Query", "LoanCETs"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn unsigned_payment_tx(
@@ -209,10 +209,10 @@ pub mod query_server {
             tonic::Response<super::QueryLiquidationEventResponse>,
             tonic::Status,
         >;
-        async fn loan_cet(
+        async fn loan_ce_ts(
             &self,
-            request: tonic::Request<super::QueryLoanCetRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryLoanCetResponse>, tonic::Status>;
+            request: tonic::Request<super::QueryLoanCeTsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryLoanCeTsResponse>, tonic::Status>;
         async fn unsigned_payment_tx(
             &self,
             request: tonic::Request<super::QueryRepaymentTxRequest>,
@@ -412,18 +412,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.lending.Query/LoanCET" => {
+                "/side.lending.Query/LoanCETs" => {
                     #[allow(non_camel_case_types)]
-                    struct LoanCETSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanCetRequest> for LoanCETSvc<T> {
-                        type Response = super::QueryLoanCetResponse;
+                    struct LoanCETsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanCeTsRequest> for LoanCETsSvc<T> {
+                        type Response = super::QueryLoanCeTsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryLoanCetRequest>,
+                            request: tonic::Request<super::QueryLoanCeTsRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).loan_cet(request).await };
+                            let fut = async move { (*inner).loan_ce_ts(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -434,7 +434,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = LoanCETSvc(inner);
+                        let method = LoanCETsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -734,6 +734,30 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.lending.Msg", "Repay"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn submit_repayment_adaptor_signature(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgSubmitRepaymentAdaptorSignature>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitRepaymentAdaptorSignatureResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.lending.Msg/SubmitRepaymentAdaptorSignature",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.lending.Msg",
+                "SubmitRepaymentAdaptorSignature",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn close(
             &mut self,
             request: impl tonic::IntoRequest<super::MsgClose>,
@@ -789,6 +813,13 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgRepay>,
         ) -> core::result::Result<tonic::Response<super::MsgRepayResponse>, tonic::Status>;
+        async fn submit_repayment_adaptor_signature(
+            &self,
+            request: tonic::Request<super::MsgSubmitRepaymentAdaptorSignature>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitRepaymentAdaptorSignatureResponse>,
+            tonic::Status,
+        >;
         async fn close(
             &self,
             request: tonic::Request<super::MsgClose>,
@@ -1121,6 +1152,49 @@ pub mod msg_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = RepaySvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Msg/SubmitRepaymentAdaptorSignature" => {
+                    #[allow(non_camel_case_types)]
+                    struct SubmitRepaymentAdaptorSignatureSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg>
+                        tonic::server::UnaryService<super::MsgSubmitRepaymentAdaptorSignature>
+                        for SubmitRepaymentAdaptorSignatureSvc<T>
+                    {
+                        type Response = super::MsgSubmitRepaymentAdaptorSignatureResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgSubmitRepaymentAdaptorSignature>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).submit_repayment_adaptor_signature(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SubmitRepaymentAdaptorSignatureSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
