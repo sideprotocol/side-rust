@@ -144,7 +144,7 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.lending.Query", "LiquidationEvent"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn loan_ce_ts(
+        pub async fn loan_cets(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryLoanCetsRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryLoanCetsResponse>, tonic::Status>
@@ -156,10 +156,10 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LoanCETs");
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LoanCets");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.lending.Query", "LoanCETs"));
+                .insert(GrpcMethod::new("side.lending.Query", "LoanCets"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn unsigned_payment_tx(
@@ -209,7 +209,7 @@ pub mod query_server {
             tonic::Response<super::QueryLiquidationEventResponse>,
             tonic::Status,
         >;
-        async fn loan_ce_ts(
+        async fn loan_cets(
             &self,
             request: tonic::Request<super::QueryLoanCetsRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryLoanCetsResponse>, tonic::Status>;
@@ -412,10 +412,10 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.lending.Query/LoanCETs" => {
+                "/side.lending.Query/LoanCets" => {
                     #[allow(non_camel_case_types)]
-                    struct LoanCETsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanCetsRequest> for LoanCETsSvc<T> {
+                    struct LoanCetsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanCetsRequest> for LoanCetsSvc<T> {
                         type Response = super::QueryLoanCetsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
@@ -423,7 +423,7 @@ pub mod query_server {
                             request: tonic::Request<super::QueryLoanCetsRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).loan_ce_ts(request).await };
+                            let fut = async move { (*inner).loan_cets(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -434,7 +434,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = LoanCETsSvc(inner);
+                        let method = LoanCetsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
