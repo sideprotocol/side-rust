@@ -94,7 +94,7 @@ impl ::prost::Name for Loan {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CeTs {
+pub struct Cets {
     #[prost(string, tag = "1")]
     pub loan_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -108,8 +108,8 @@ pub struct CeTs {
     #[prost(string, tag = "6")]
     pub liquidation_borrower_signature: ::prost::alloc::string::String,
 }
-impl ::prost::Name for CeTs {
-    const NAME: &'static str = "CETs";
+impl ::prost::Name for Cets {
+    const NAME: &'static str = "Cets";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -341,29 +341,29 @@ impl ::prost::Name for QueryParamsResponse {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
     }
 }
-/// QueryLoanCETsRequest is request type for the Query/LoanCETs RPC method.
+/// QueryLoanCetsRequest is request type for the Query/LoanCets RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryLoanCeTsRequest {
+pub struct QueryLoanCetsRequest {
     #[prost(string, tag = "1")]
     pub loan_id: ::prost::alloc::string::String,
 }
-impl ::prost::Name for QueryLoanCeTsRequest {
-    const NAME: &'static str = "QueryLoanCETsRequest";
+impl ::prost::Name for QueryLoanCetsRequest {
+    const NAME: &'static str = "QueryLoanCetsRequest";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
     }
 }
-/// QueryLoanCETsResponse is response type for the Query/LoanCETs RPC method.
+/// QueryLoanCetsResponse is response type for the Query/LoanCets RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryLoanCeTsResponse {
+pub struct QueryLoanCetsResponse {
     #[prost(message, optional, tag = "1")]
-    pub cets: ::core::option::Option<CeTs>,
+    pub cets: ::core::option::Option<Cets>,
 }
-impl ::prost::Name for QueryLoanCeTsResponse {
-    const NAME: &'static str = "QueryLoanCETsResponse";
+impl ::prost::Name for QueryLoanCetsResponse {
+    const NAME: &'static str = "QueryLoanCetsResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -556,7 +556,7 @@ pub struct MsgApply {
     #[prost(uint64, tag = "9")]
     pub agency_id: u64,
     #[prost(message, optional, tag = "10")]
-    pub cets: ::core::option::Option<CeTs>,
+    pub cets: ::core::option::Option<Cets>,
     #[prost(string, tag = "11")]
     pub deposit_tx: ::prost::alloc::string::String,
 }

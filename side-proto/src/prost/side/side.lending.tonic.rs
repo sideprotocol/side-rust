@@ -146,8 +146,8 @@ pub mod query_client {
         }
         pub async fn loan_ce_ts(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryLoanCeTsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryLoanCeTsResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::QueryLoanCetsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryLoanCetsResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -211,8 +211,8 @@ pub mod query_server {
         >;
         async fn loan_ce_ts(
             &self,
-            request: tonic::Request<super::QueryLoanCeTsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryLoanCeTsResponse>, tonic::Status>;
+            request: tonic::Request<super::QueryLoanCetsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryLoanCetsResponse>, tonic::Status>;
         async fn unsigned_payment_tx(
             &self,
             request: tonic::Request<super::QueryRepaymentTxRequest>,
@@ -415,12 +415,12 @@ pub mod query_server {
                 "/side.lending.Query/LoanCETs" => {
                     #[allow(non_camel_case_types)]
                     struct LoanCETsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanCeTsRequest> for LoanCETsSvc<T> {
-                        type Response = super::QueryLoanCeTsResponse;
+                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanCetsRequest> for LoanCETsSvc<T> {
+                        type Response = super::QueryLoanCetsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryLoanCeTsRequest>,
+                            request: tonic::Request<super::QueryLoanCetsRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move { (*inner).loan_ce_ts(request).await };

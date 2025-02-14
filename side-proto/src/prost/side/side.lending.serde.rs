@@ -1,6 +1,6 @@
 // @generated
 #[cfg(feature = "serde")]
-impl serde::Serialize for CeTs {
+impl serde::Serialize for Cets {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -26,7 +26,7 @@ impl serde::Serialize for CeTs {
         if !self.liquidation_borrower_signature.is_empty() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.lending.CETs", len)?;
+        let mut struct_ser = serializer.serialize_struct("side.lending.Cets", len)?;
         if !self.loan_id.is_empty() {
             struct_ser.serialize_field("loanId", &self.loan_id)?;
         }
@@ -55,7 +55,7 @@ impl serde::Serialize for CeTs {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for CeTs {
+impl<'de> serde::Deserialize<'de> for Cets {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -127,13 +127,13 @@ impl<'de> serde::Deserialize<'de> for CeTs {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = CeTs;
+            type Value = Cets;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.CETs")
+                formatter.write_str("struct side.lending.Cets")
             }
 
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<CeTs, V::Error>
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<Cets, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -187,7 +187,7 @@ impl<'de> serde::Deserialize<'de> for CeTs {
                         }
                     }
                 }
-                Ok(CeTs {
+                Ok(Cets {
                     loan_id: loan_id__.unwrap_or_default(),
                     liquidate: liquidate__.unwrap_or_default(),
                     force_repay: force_repay__.unwrap_or_default(),
@@ -199,7 +199,7 @@ impl<'de> serde::Deserialize<'de> for CeTs {
                 })
             }
         }
-        deserializer.deserialize_struct("side.lending.CETs", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct("side.lending.Cets", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
@@ -4126,7 +4126,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationEventResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryLoanCeTsRequest {
+impl serde::Serialize for QueryLoanCetsRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -4138,7 +4138,7 @@ impl serde::Serialize for QueryLoanCeTsRequest {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.lending.QueryLoanCETsRequest", len)?;
+            serializer.serialize_struct("side.lending.QueryLoanCetsRequest", len)?;
         if !self.loan_id.is_empty() {
             struct_ser.serialize_field("loanId", &self.loan_id)?;
         }
@@ -4146,7 +4146,7 @@ impl serde::Serialize for QueryLoanCeTsRequest {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryLoanCeTsRequest {
+impl<'de> serde::Deserialize<'de> for QueryLoanCetsRequest {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -4192,16 +4192,16 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCeTsRequest {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryLoanCeTsRequest;
+            type Value = QueryLoanCetsRequest;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.QueryLoanCETsRequest")
+                formatter.write_str("struct side.lending.QueryLoanCetsRequest")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryLoanCeTsRequest, V::Error>
+            ) -> core::result::Result<QueryLoanCetsRequest, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -4216,20 +4216,20 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCeTsRequest {
                         }
                     }
                 }
-                Ok(QueryLoanCeTsRequest {
+                Ok(QueryLoanCetsRequest {
                     loan_id: loan_id__.unwrap_or_default(),
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.QueryLoanCETsRequest",
+            "side.lending.QueryLoanCetsRequest",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryLoanCeTsResponse {
+impl serde::Serialize for QueryLoanCetsResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -4241,7 +4241,7 @@ impl serde::Serialize for QueryLoanCeTsResponse {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.lending.QueryLoanCETsResponse", len)?;
+            serializer.serialize_struct("side.lending.QueryLoanCetsResponse", len)?;
         if let Some(v) = self.cets.as_ref() {
             struct_ser.serialize_field("cets", v)?;
         }
@@ -4249,7 +4249,7 @@ impl serde::Serialize for QueryLoanCeTsResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryLoanCeTsResponse {
+impl<'de> serde::Deserialize<'de> for QueryLoanCetsResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -4295,16 +4295,16 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCeTsResponse {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryLoanCeTsResponse;
+            type Value = QueryLoanCetsResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.QueryLoanCETsResponse")
+                formatter.write_str("struct side.lending.QueryLoanCetsResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryLoanCeTsResponse, V::Error>
+            ) -> core::result::Result<QueryLoanCetsResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -4319,11 +4319,11 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCeTsResponse {
                         }
                     }
                 }
-                Ok(QueryLoanCeTsResponse { cets: cets__ })
+                Ok(QueryLoanCetsResponse { cets: cets__ })
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.QueryLoanCETsResponse",
+            "side.lending.QueryLoanCetsResponse",
             FIELDS,
             GeneratedVisitor,
         )
