@@ -155,8 +155,8 @@ pub struct Repayment {
     pub tx: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
     pub repay_adaptor_point: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub dca_adaptor_signature: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "5")]
+    pub dca_adaptor_signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, tag = "6")]
     pub borrower_signature: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "7")]
@@ -779,16 +779,16 @@ impl ::prost::Name for MsgApproveResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitRepaymentAdaptorSignature {
+pub struct MsgSubmitRepaymentAdaptorSignatures {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub loan_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub adaptor_signature: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub adaptor_signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-impl ::prost::Name for MsgSubmitRepaymentAdaptorSignature {
-    const NAME: &'static str = "MsgSubmitRepaymentAdaptorSignature";
+impl ::prost::Name for MsgSubmitRepaymentAdaptorSignatures {
+    const NAME: &'static str = "MsgSubmitRepaymentAdaptorSignatures";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -796,9 +796,9 @@ impl ::prost::Name for MsgSubmitRepaymentAdaptorSignature {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitRepaymentAdaptorSignatureResponse {}
-impl ::prost::Name for MsgSubmitRepaymentAdaptorSignatureResponse {
-    const NAME: &'static str = "MsgSubmitRepaymentAdaptorSignatureResponse";
+pub struct MsgSubmitRepaymentAdaptorSignaturesResponse {}
+impl ::prost::Name for MsgSubmitRepaymentAdaptorSignaturesResponse {
+    const NAME: &'static str = "MsgSubmitRepaymentAdaptorSignaturesResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)

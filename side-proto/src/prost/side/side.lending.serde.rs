@@ -3607,7 +3607,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitPriceResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitRepaymentAdaptorSignature {
+impl serde::Serialize for MsgSubmitRepaymentAdaptorSignatures {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3621,25 +3621,25 @@ impl serde::Serialize for MsgSubmitRepaymentAdaptorSignature {
         if !self.loan_id.is_empty() {
             len += 1;
         }
-        if !self.adaptor_signature.is_empty() {
+        if !self.adaptor_signatures.is_empty() {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.lending.MsgSubmitRepaymentAdaptorSignature", len)?;
+            serializer.serialize_struct("side.lending.MsgSubmitRepaymentAdaptorSignatures", len)?;
         if !self.sender.is_empty() {
             struct_ser.serialize_field("sender", &self.sender)?;
         }
         if !self.loan_id.is_empty() {
             struct_ser.serialize_field("loanId", &self.loan_id)?;
         }
-        if !self.adaptor_signature.is_empty() {
-            struct_ser.serialize_field("adaptorSignature", &self.adaptor_signature)?;
+        if !self.adaptor_signatures.is_empty() {
+            struct_ser.serialize_field("adaptorSignatures", &self.adaptor_signatures)?;
         }
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignature {
+impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignatures {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3649,15 +3649,15 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignature {
             "sender",
             "loan_id",
             "loanId",
-            "adaptor_signature",
-            "adaptorSignature",
+            "adaptor_signatures",
+            "adaptorSignatures",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Sender,
             LoanId,
-            AdaptorSignature,
+            AdaptorSignatures,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -3685,8 +3685,8 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignature {
                         match value {
                             "sender" => Ok(GeneratedField::Sender),
                             "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "adaptorSignature" | "adaptor_signature" => {
-                                Ok(GeneratedField::AdaptorSignature)
+                            "adaptorSignatures" | "adaptor_signatures" => {
+                                Ok(GeneratedField::AdaptorSignatures)
                             }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -3697,22 +3697,22 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignature {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitRepaymentAdaptorSignature;
+            type Value = MsgSubmitRepaymentAdaptorSignatures;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitRepaymentAdaptorSignature")
+                formatter.write_str("struct side.lending.MsgSubmitRepaymentAdaptorSignatures")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgSubmitRepaymentAdaptorSignature, V::Error>
+            ) -> core::result::Result<MsgSubmitRepaymentAdaptorSignatures, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 let mut sender__ = None;
                 let mut loan_id__ = None;
-                let mut adaptor_signature__ = None;
+                let mut adaptor_signatures__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Sender => {
@@ -3727,30 +3727,30 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignature {
                             }
                             loan_id__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::AdaptorSignature => {
-                            if adaptor_signature__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("adaptorSignature"));
+                        GeneratedField::AdaptorSignatures => {
+                            if adaptor_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("adaptorSignatures"));
                             }
-                            adaptor_signature__ = Some(map_.next_value()?);
+                            adaptor_signatures__ = Some(map_.next_value()?);
                         }
                     }
                 }
-                Ok(MsgSubmitRepaymentAdaptorSignature {
+                Ok(MsgSubmitRepaymentAdaptorSignatures {
                     sender: sender__.unwrap_or_default(),
                     loan_id: loan_id__.unwrap_or_default(),
-                    adaptor_signature: adaptor_signature__.unwrap_or_default(),
+                    adaptor_signatures: adaptor_signatures__.unwrap_or_default(),
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.MsgSubmitRepaymentAdaptorSignature",
+            "side.lending.MsgSubmitRepaymentAdaptorSignatures",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitRepaymentAdaptorSignatureResponse {
+impl serde::Serialize for MsgSubmitRepaymentAdaptorSignaturesResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3759,14 +3759,14 @@ impl serde::Serialize for MsgSubmitRepaymentAdaptorSignatureResponse {
         use serde::ser::SerializeStruct;
         let len = 0;
         let struct_ser = serializer.serialize_struct(
-            "side.lending.MsgSubmitRepaymentAdaptorSignatureResponse",
+            "side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse",
             len,
         )?;
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignatureResponse {
+impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignaturesResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3807,28 +3807,28 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignatureResponse
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitRepaymentAdaptorSignatureResponse;
+            type Value = MsgSubmitRepaymentAdaptorSignaturesResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
                 formatter
-                    .write_str("struct side.lending.MsgSubmitRepaymentAdaptorSignatureResponse")
+                    .write_str("struct side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgSubmitRepaymentAdaptorSignatureResponse, V::Error>
+            ) -> core::result::Result<MsgSubmitRepaymentAdaptorSignaturesResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 while map_.next_key::<GeneratedField>()?.is_some() {
                     let _ = map_.next_value::<serde::de::IgnoredAny>()?;
                 }
-                Ok(MsgSubmitRepaymentAdaptorSignatureResponse {})
+                Ok(MsgSubmitRepaymentAdaptorSignaturesResponse {})
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.MsgSubmitRepaymentAdaptorSignatureResponse",
+            "side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -6593,7 +6593,7 @@ impl serde::Serialize for Repayment {
         if !self.repay_adaptor_point.is_empty() {
             len += 1;
         }
-        if !self.dca_adaptor_signature.is_empty() {
+        if !self.dca_adaptor_signatures.is_empty() {
             len += 1;
         }
         if !self.borrower_signature.is_empty() {
@@ -6615,8 +6615,8 @@ impl serde::Serialize for Repayment {
         if !self.repay_adaptor_point.is_empty() {
             struct_ser.serialize_field("repayAdaptorPoint", &self.repay_adaptor_point)?;
         }
-        if !self.dca_adaptor_signature.is_empty() {
-            struct_ser.serialize_field("dcaAdaptorSignature", &self.dca_adaptor_signature)?;
+        if !self.dca_adaptor_signatures.is_empty() {
+            struct_ser.serialize_field("dcaAdaptorSignatures", &self.dca_adaptor_signatures)?;
         }
         if !self.borrower_signature.is_empty() {
             struct_ser.serialize_field("borrowerSignature", &self.borrower_signature)?;
@@ -6641,8 +6641,8 @@ impl<'de> serde::Deserialize<'de> for Repayment {
             "tx",
             "repay_adaptor_point",
             "repayAdaptorPoint",
-            "dca_adaptor_signature",
-            "dcaAdaptorSignature",
+            "dca_adaptor_signatures",
+            "dcaAdaptorSignatures",
             "borrower_signature",
             "borrowerSignature",
             "create_at",
@@ -6655,7 +6655,7 @@ impl<'de> serde::Deserialize<'de> for Repayment {
             Txid,
             Tx,
             RepayAdaptorPoint,
-            DcaAdaptorSignature,
+            DcaAdaptorSignatures,
             BorrowerSignature,
             CreateAt,
         }
@@ -6689,8 +6689,8 @@ impl<'de> serde::Deserialize<'de> for Repayment {
                             "repayAdaptorPoint" | "repay_adaptor_point" => {
                                 Ok(GeneratedField::RepayAdaptorPoint)
                             }
-                            "dcaAdaptorSignature" | "dca_adaptor_signature" => {
-                                Ok(GeneratedField::DcaAdaptorSignature)
+                            "dcaAdaptorSignatures" | "dca_adaptor_signatures" => {
+                                Ok(GeneratedField::DcaAdaptorSignatures)
                             }
                             "borrowerSignature" | "borrower_signature" => {
                                 Ok(GeneratedField::BorrowerSignature)
@@ -6719,7 +6719,7 @@ impl<'de> serde::Deserialize<'de> for Repayment {
                 let mut txid__ = None;
                 let mut tx__ = None;
                 let mut repay_adaptor_point__ = None;
-                let mut dca_adaptor_signature__ = None;
+                let mut dca_adaptor_signatures__ = None;
                 let mut borrower_signature__ = None;
                 let mut create_at__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -6748,13 +6748,13 @@ impl<'de> serde::Deserialize<'de> for Repayment {
                             }
                             repay_adaptor_point__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::DcaAdaptorSignature => {
-                            if dca_adaptor_signature__.is_some() {
+                        GeneratedField::DcaAdaptorSignatures => {
+                            if dca_adaptor_signatures__.is_some() {
                                 return Err(serde::de::Error::duplicate_field(
-                                    "dcaAdaptorSignature",
+                                    "dcaAdaptorSignatures",
                                 ));
                             }
-                            dca_adaptor_signature__ = Some(map_.next_value()?);
+                            dca_adaptor_signatures__ = Some(map_.next_value()?);
                         }
                         GeneratedField::BorrowerSignature => {
                             if borrower_signature__.is_some() {
@@ -6775,7 +6775,7 @@ impl<'de> serde::Deserialize<'de> for Repayment {
                     txid: txid__.unwrap_or_default(),
                     tx: tx__.unwrap_or_default(),
                     repay_adaptor_point: repay_adaptor_point__.unwrap_or_default(),
-                    dca_adaptor_signature: dca_adaptor_signature__.unwrap_or_default(),
+                    dca_adaptor_signatures: dca_adaptor_signatures__.unwrap_or_default(),
                     borrower_signature: borrower_signature__.unwrap_or_default(),
                     create_at: create_at__,
                 })
