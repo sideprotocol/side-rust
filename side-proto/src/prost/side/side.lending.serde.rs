@@ -4613,6 +4613,9 @@ impl serde::Serialize for QueryLiquidationCetRequest {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
+        if !self.loan_id.is_empty() {
+            len += 1;
+        }
         if !self.borrower_pubkey.is_empty() {
             len += 1;
         }
@@ -4621,6 +4624,9 @@ impl serde::Serialize for QueryLiquidationCetRequest {
         }
         let mut struct_ser =
             serializer.serialize_struct("side.lending.QueryLiquidationCetRequest", len)?;
+        if !self.loan_id.is_empty() {
+            struct_ser.serialize_field("loanId", &self.loan_id)?;
+        }
         if !self.borrower_pubkey.is_empty() {
             struct_ser.serialize_field("borrowerPubkey", &self.borrower_pubkey)?;
         }
@@ -4638,6 +4644,8 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
         D: serde::Deserializer<'de>,
     {
         const FIELDS: &[&str] = &[
+            "loan_id",
+            "loanId",
             "borrower_pubkey",
             "borrowerPubkey",
             "agency_pubkey",
@@ -4646,6 +4654,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
+            LoanId,
             BorrowerPubkey,
             AgencyPubkey,
         }
@@ -4673,6 +4682,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
                         E: serde::de::Error,
                     {
                         match value {
+                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
                             "borrowerPubkey" | "borrower_pubkey" => {
                                 Ok(GeneratedField::BorrowerPubkey)
                             }
@@ -4699,10 +4709,17 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
             where
                 V: serde::de::MapAccess<'de>,
             {
+                let mut loan_id__ = None;
                 let mut borrower_pubkey__ = None;
                 let mut agency_pubkey__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
+                        GeneratedField::LoanId => {
+                            if loan_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("loanId"));
+                            }
+                            loan_id__ = Some(map_.next_value()?);
+                        }
                         GeneratedField::BorrowerPubkey => {
                             if borrower_pubkey__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("borrowerPubkey"));
@@ -4718,6 +4735,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
                     }
                 }
                 Ok(QueryLiquidationCetRequest {
+                    loan_id: loan_id__.unwrap_or_default(),
                     borrower_pubkey: borrower_pubkey__.unwrap_or_default(),
                     agency_pubkey: agency_pubkey__.unwrap_or_default(),
                 })
@@ -4739,13 +4757,19 @@ impl serde::Serialize for QueryLiquidationCetResponse {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if !self.liquidation_cet_script.is_empty() {
+        if !self.script.is_empty() {
+            len += 1;
+        }
+        if !self.sig_hashes.is_empty() {
             len += 1;
         }
         let mut struct_ser =
             serializer.serialize_struct("side.lending.QueryLiquidationCetResponse", len)?;
-        if !self.liquidation_cet_script.is_empty() {
-            struct_ser.serialize_field("liquidationCetScript", &self.liquidation_cet_script)?;
+        if !self.script.is_empty() {
+            struct_ser.serialize_field("script", &self.script)?;
+        }
+        if !self.sig_hashes.is_empty() {
+            struct_ser.serialize_field("sigHashes", &self.sig_hashes)?;
         }
         struct_ser.end()
     }
@@ -4757,11 +4781,12 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetResponse {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["liquidation_cet_script", "liquidationCetScript"];
+        const FIELDS: &[&str] = &["script", "sig_hashes", "sigHashes"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            LiquidationCetScript,
+            Script,
+            SigHashes,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -4787,9 +4812,8 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetResponse {
                         E: serde::de::Error,
                     {
                         match value {
-                            "liquidationCetScript" | "liquidation_cet_script" => {
-                                Ok(GeneratedField::LiquidationCetScript)
-                            }
+                            "script" => Ok(GeneratedField::Script),
+                            "sigHashes" | "sig_hashes" => Ok(GeneratedField::SigHashes),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -4812,21 +4836,27 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetResponse {
             where
                 V: serde::de::MapAccess<'de>,
             {
-                let mut liquidation_cet_script__ = None;
+                let mut script__ = None;
+                let mut sig_hashes__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
-                        GeneratedField::LiquidationCetScript => {
-                            if liquidation_cet_script__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "liquidationCetScript",
-                                ));
+                        GeneratedField::Script => {
+                            if script__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("script"));
                             }
-                            liquidation_cet_script__ = Some(map_.next_value()?);
+                            script__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::SigHashes => {
+                            if sig_hashes__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("sigHashes"));
+                            }
+                            sig_hashes__ = Some(map_.next_value()?);
                         }
                     }
                 }
                 Ok(QueryLiquidationCetResponse {
-                    liquidation_cet_script: liquidation_cet_script__.unwrap_or_default(),
+                    script: script__.unwrap_or_default(),
+                    sig_hashes: sig_hashes__.unwrap_or_default(),
                 })
             }
         }
@@ -5940,6 +5970,400 @@ impl<'de> serde::Deserialize<'de> for QueryParamsResponse {
             FIELDS,
             GeneratedVisitor,
         )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryPoolRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.id.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.lending.QueryPoolRequest", len)?;
+        if !self.id.is_empty() {
+            struct_ser.serialize_field("id", &self.id)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryPoolRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["id"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryPoolRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.QueryPoolRequest")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryPoolRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryPoolRequest {
+                    id: id__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.lending.QueryPoolRequest", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryPoolResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.pool.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.lending.QueryPoolResponse", len)?;
+        if let Some(v) = self.pool.as_ref() {
+            struct_ser.serialize_field("pool", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryPoolResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["pool"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Pool,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "pool" => Ok(GeneratedField::Pool),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryPoolResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.QueryPoolResponse")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryPoolResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut pool__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Pool => {
+                            if pool__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pool"));
+                            }
+                            pool__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryPoolResponse { pool: pool__ })
+            }
+        }
+        deserializer.deserialize_struct("side.lending.QueryPoolResponse", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryPoolsRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.pagination.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.lending.QueryPoolsRequest", len)?;
+        if let Some(v) = self.pagination.as_ref() {
+            struct_ser.serialize_field("pagination", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryPoolsRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["pagination"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Pagination,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "pagination" => Ok(GeneratedField::Pagination),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryPoolsRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.QueryPoolsRequest")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryPoolsRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut pagination__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Pagination => {
+                            if pagination__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pagination"));
+                            }
+                            pagination__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryPoolsRequest {
+                    pagination: pagination__,
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.lending.QueryPoolsRequest", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryPoolsResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.pools.is_empty() {
+            len += 1;
+        }
+        if self.pagination.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.lending.QueryPoolsResponse", len)?;
+        if !self.pools.is_empty() {
+            struct_ser.serialize_field("pools", &self.pools)?;
+        }
+        if let Some(v) = self.pagination.as_ref() {
+            struct_ser.serialize_field("pagination", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryPoolsResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["pools", "pagination"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Pools,
+            Pagination,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "pools" => Ok(GeneratedField::Pools),
+                            "pagination" => Ok(GeneratedField::Pagination),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryPoolsResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.QueryPoolsResponse")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryPoolsResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut pools__ = None;
+                let mut pagination__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Pools => {
+                            if pools__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pools"));
+                            }
+                            pools__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Pagination => {
+                            if pagination__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pagination"));
+                            }
+                            pagination__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryPoolsResponse {
+                    pools: pools__.unwrap_or_default(),
+                    pagination: pagination__,
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.lending.QueryPoolsResponse", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]

@@ -260,6 +260,65 @@ impl ::prost::Name for GenesisState {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
     }
 }
+/// QueryPoolRequest is request type for the Query/Pool RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPoolRequest {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryPoolRequest {
+    const NAME: &'static str = "QueryPoolRequest";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// QueryPoolResponse is response type for the Query/Pool RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPoolResponse {
+    #[prost(message, optional, tag = "1")]
+    pub pool: ::core::option::Option<LendingPool>,
+}
+impl ::prost::Name for QueryPoolResponse {
+    const NAME: &'static str = "QueryPoolResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// QueryPoolsRequest is request type for the Query/Pools RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPoolsRequest {
+    #[prost(message, optional, tag = "1")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryPoolsRequest {
+    const NAME: &'static str = "QueryPoolsRequest";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// QueryPoolsResponse is response type for the Query/Pools RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPoolsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub pools: ::prost::alloc::vec::Vec<LendingPool>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryPoolsResponse {
+    const NAME: &'static str = "QueryPoolsResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryLiquidationEventRequest {
@@ -300,8 +359,10 @@ impl ::prost::Name for QueryLiquidationEventResponse {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryLiquidationCetRequest {
     #[prost(string, tag = "1")]
-    pub borrower_pubkey: ::prost::alloc::string::String,
+    pub loan_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
+    pub borrower_pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
     pub agency_pubkey: ::prost::alloc::string::String,
 }
 impl ::prost::Name for QueryLiquidationCetRequest {
@@ -315,7 +376,9 @@ impl ::prost::Name for QueryLiquidationCetRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryLiquidationCetResponse {
     #[prost(string, tag = "1")]
-    pub liquidation_cet_script: ::prost::alloc::string::String,
+    pub script: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub sig_hashes: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 impl ::prost::Name for QueryLiquidationCetResponse {
     const NAME: &'static str = "QueryLiquidationCetResponse";

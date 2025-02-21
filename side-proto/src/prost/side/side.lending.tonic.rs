@@ -103,6 +103,42 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.lending.Query", "Params"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn pool(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryPoolRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryPoolResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/Pool");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Query", "Pool"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn pools(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryPoolsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryPoolsResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/Pools");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Query", "Pools"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn collateral_address(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryCollateralAddressRequest>,
@@ -248,6 +284,14 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryParamsRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryParamsResponse>, tonic::Status>;
+        async fn pool(
+            &self,
+            request: tonic::Request<super::QueryPoolRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryPoolResponse>, tonic::Status>;
+        async fn pools(
+            &self,
+            request: tonic::Request<super::QueryPoolsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryPoolsResponse>, tonic::Status>;
         async fn collateral_address(
             &self,
             request: tonic::Request<super::QueryCollateralAddressRequest>,
@@ -382,6 +426,82 @@ pub mod query_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = ParamsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Query/Pool" => {
+                    #[allow(non_camel_case_types)]
+                    struct PoolSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryPoolRequest> for PoolSvc<T> {
+                        type Response = super::QueryPoolResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryPoolRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).pool(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = PoolSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Query/Pools" => {
+                    #[allow(non_camel_case_types)]
+                    struct PoolsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryPoolsRequest> for PoolsSvc<T> {
+                        type Response = super::QueryPoolsResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryPoolsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).pools(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = PoolsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
