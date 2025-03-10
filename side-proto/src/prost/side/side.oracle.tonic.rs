@@ -97,16 +97,16 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.auction.Query/Params");
+            let path = http::uri::PathAndQuery::from_static("/side.oracle.Query/Params");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.auction.Query", "Params"));
+                .insert(GrpcMethod::new("side.oracle.Query", "Params"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn auction(
+        pub async fn list_prices(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryAuctionRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAuctionResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::QueryListPricesRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryListPricesResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -115,16 +115,36 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.auction.Query/Auction");
+            let path = http::uri::PathAndQuery::from_static("/side.oracle.Query/ListPrices");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.auction.Query", "Auction"));
+                .insert(GrpcMethod::new("side.oracle.Query", "ListPrices"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn auctions(
+        pub async fn get_price_by_symbol(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryAuctionsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAuctionsResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::QueryGetPriceBySymbolRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryGetPriceBySymbolResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.oracle.Query/GetPriceBySymbol");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.oracle.Query", "GetPriceBySymbol"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn query_chain_tip(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryChainTipRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryChainTipResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -133,16 +153,19 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.auction.Query/Auctions");
+            let path = http::uri::PathAndQuery::from_static("/side.oracle.Query/QueryChainTip");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.auction.Query", "Auctions"));
+                .insert(GrpcMethod::new("side.oracle.Query", "QueryChainTip"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn bid(
+        pub async fn query_block_header_by_height(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryBidRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryBidResponse>, tonic::Status> {
+            request: impl tonic::IntoRequest<super::QueryBlockHeaderByHeightRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryBlockHeaderByHeightResponse>,
+            tonic::Status,
+        > {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -150,16 +173,42 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.auction.Query/Bid");
+            let path =
+                http::uri::PathAndQuery::from_static("/side.oracle.Query/QueryBlockHeaderByHeight");
             let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.auction.Query", "Bid"));
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.oracle.Query",
+                "QueryBlockHeaderByHeight",
+            ));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn bids(
+        pub async fn query_block_header_by_hash(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryBidsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryBidsResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::QueryBlockHeaderByHashRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryBlockHeaderByHashResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path =
+                http::uri::PathAndQuery::from_static("/side.oracle.Query/QueryBlockHeaderByHash");
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.oracle.Query",
+                "QueryBlockHeaderByHash",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn query_best_block_header(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryBestBlockHeaderRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryBestBlockHeaderResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -168,10 +217,11 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.auction.Query/Bids");
+            let path =
+                http::uri::PathAndQuery::from_static("/side.oracle.Query/QueryBestBlockHeader");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.auction.Query", "Bids"));
+                .insert(GrpcMethod::new("side.oracle.Query", "QueryBestBlockHeader"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -188,22 +238,39 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryParamsRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryParamsResponse>, tonic::Status>;
-        async fn auction(
+        async fn list_prices(
             &self,
-            request: tonic::Request<super::QueryAuctionRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAuctionResponse>, tonic::Status>;
-        async fn auctions(
+            request: tonic::Request<super::QueryListPricesRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryListPricesResponse>, tonic::Status>;
+        async fn get_price_by_symbol(
             &self,
-            request: tonic::Request<super::QueryAuctionsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAuctionsResponse>, tonic::Status>;
-        async fn bid(
+            request: tonic::Request<super::QueryGetPriceBySymbolRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryGetPriceBySymbolResponse>,
+            tonic::Status,
+        >;
+        async fn query_chain_tip(
             &self,
-            request: tonic::Request<super::QueryBidRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryBidResponse>, tonic::Status>;
-        async fn bids(
+            request: tonic::Request<super::QueryChainTipRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryChainTipResponse>, tonic::Status>;
+        async fn query_block_header_by_height(
             &self,
-            request: tonic::Request<super::QueryBidsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryBidsResponse>, tonic::Status>;
+            request: tonic::Request<super::QueryBlockHeaderByHeightRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryBlockHeaderByHeightResponse>,
+            tonic::Status,
+        >;
+        async fn query_block_header_by_hash(
+            &self,
+            request: tonic::Request<super::QueryBlockHeaderByHashRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryBlockHeaderByHashResponse>,
+            tonic::Status,
+        >;
+        async fn query_best_block_header(
+            &self,
+            request: tonic::Request<super::QueryBestBlockHeaderRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryBestBlockHeaderResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -281,7 +348,7 @@ pub mod query_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/side.auction.Query/Params" => {
+                "/side.oracle.Query/Params" => {
                     #[allow(non_camel_case_types)]
                     struct ParamsSvc<T: Query>(pub Arc<T>);
                     impl<T: Query> tonic::server::UnaryService<super::QueryParamsRequest> for ParamsSvc<T> {
@@ -319,18 +386,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.auction.Query/Auction" => {
+                "/side.oracle.Query/ListPrices" => {
                     #[allow(non_camel_case_types)]
-                    struct AuctionSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryAuctionRequest> for AuctionSvc<T> {
-                        type Response = super::QueryAuctionResponse;
+                    struct ListPricesSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryListPricesRequest> for ListPricesSvc<T> {
+                        type Response = super::QueryListPricesResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryAuctionRequest>,
+                            request: tonic::Request<super::QueryListPricesRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).auction(request).await };
+                            let fut = async move { (*inner).list_prices(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -341,7 +408,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = AuctionSvc(inner);
+                        let method = ListPricesSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -357,18 +424,20 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.auction.Query/Auctions" => {
+                "/side.oracle.Query/GetPriceBySymbol" => {
                     #[allow(non_camel_case_types)]
-                    struct AuctionsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryAuctionsRequest> for AuctionsSvc<T> {
-                        type Response = super::QueryAuctionsResponse;
+                    struct GetPriceBySymbolSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryGetPriceBySymbolRequest>
+                        for GetPriceBySymbolSvc<T>
+                    {
+                        type Response = super::QueryGetPriceBySymbolResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryAuctionsRequest>,
+                            request: tonic::Request<super::QueryGetPriceBySymbolRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).auctions(request).await };
+                            let fut = async move { (*inner).get_price_by_symbol(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -379,7 +448,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = AuctionsSvc(inner);
+                        let method = GetPriceBySymbolSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -395,18 +464,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.auction.Query/Bid" => {
+                "/side.oracle.Query/QueryChainTip" => {
                     #[allow(non_camel_case_types)]
-                    struct BidSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryBidRequest> for BidSvc<T> {
-                        type Response = super::QueryBidResponse;
+                    struct QueryChainTipSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryChainTipRequest> for QueryChainTipSvc<T> {
+                        type Response = super::QueryChainTipResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryBidRequest>,
+                            request: tonic::Request<super::QueryChainTipRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).bid(request).await };
+                            let fut = async move { (*inner).query_chain_tip(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -417,7 +486,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = BidSvc(inner);
+                        let method = QueryChainTipSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -433,18 +502,22 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.auction.Query/Bids" => {
+                "/side.oracle.Query/QueryBlockHeaderByHeight" => {
                     #[allow(non_camel_case_types)]
-                    struct BidsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryBidsRequest> for BidsSvc<T> {
-                        type Response = super::QueryBidsResponse;
+                    struct QueryBlockHeaderByHeightSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query>
+                        tonic::server::UnaryService<super::QueryBlockHeaderByHeightRequest>
+                        for QueryBlockHeaderByHeightSvc<T>
+                    {
+                        type Response = super::QueryBlockHeaderByHeightResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryBidsRequest>,
+                            request: tonic::Request<super::QueryBlockHeaderByHeightRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).bids(request).await };
+                            let fut =
+                                async move { (*inner).query_block_header_by_height(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -455,7 +528,89 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = BidsSvc(inner);
+                        let method = QueryBlockHeaderByHeightSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.oracle.Query/QueryBlockHeaderByHash" => {
+                    #[allow(non_camel_case_types)]
+                    struct QueryBlockHeaderByHashSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryBlockHeaderByHashRequest>
+                        for QueryBlockHeaderByHashSvc<T>
+                    {
+                        type Response = super::QueryBlockHeaderByHashResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryBlockHeaderByHashRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut =
+                                async move { (*inner).query_block_header_by_hash(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = QueryBlockHeaderByHashSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.oracle.Query/QueryBestBlockHeader" => {
+                    #[allow(non_camel_case_types)]
+                    struct QueryBestBlockHeaderSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryBestBlockHeaderRequest>
+                        for QueryBestBlockHeaderSvc<T>
+                    {
+                        type Response = super::QueryBestBlockHeaderResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryBestBlockHeaderRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut =
+                                async move { (*inner).query_best_block_header(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = QueryBestBlockHeaderSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -505,7 +660,7 @@ pub mod query_server {
         }
     }
     impl<T: Query> tonic::server::NamedService for QueryServer<T> {
-        const NAME: &'static str = "side.auction.Query";
+        const NAME: &'static str = "side.oracle.Query";
     }
 }
 /// Generated client implementations.
@@ -591,65 +746,6 @@ pub mod msg_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        pub async fn bid(
-            &mut self,
-            request: impl tonic::IntoRequest<super::MsgBid>,
-        ) -> core::result::Result<tonic::Response<super::MsgBidResponse>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.auction.Msg/Bid");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.auction.Msg", "Bid"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn cancel_bid(
-            &mut self,
-            request: impl tonic::IntoRequest<super::MsgCancelBid>,
-        ) -> core::result::Result<tonic::Response<super::MsgCancelBidResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.auction.Msg/CancelBid");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.auction.Msg", "CancelBid"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn submit_payment_transaction_signatures(
-            &mut self,
-            request: impl tonic::IntoRequest<super::MsgSubmitPaymentTransactionSignatures>,
-        ) -> core::result::Result<
-            tonic::Response<super::MsgSubmitPaymentTransactionSignaturesResponse>,
-            tonic::Status,
-        > {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/side.auction.Msg/SubmitPaymentTransactionSignatures",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut().insert(GrpcMethod::new(
-                "side.auction.Msg",
-                "SubmitPaymentTransactionSignatures",
-            ));
-            self.inner.unary(req, path, codec).await
-        }
         pub async fn update_params(
             &mut self,
             request: impl tonic::IntoRequest<super::MsgUpdateParams>,
@@ -662,10 +758,10 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.auction.Msg/UpdateParams");
+            let path = http::uri::PathAndQuery::from_static("/side.oracle.Msg/UpdateParams");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.auction.Msg", "UpdateParams"));
+                .insert(GrpcMethod::new("side.oracle.Msg", "UpdateParams"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -678,21 +774,6 @@ pub mod msg_server {
     /// Generated trait containing gRPC methods that should be implemented for use with MsgServer.
     #[async_trait]
     pub trait Msg: Send + Sync + 'static {
-        async fn bid(
-            &self,
-            request: tonic::Request<super::MsgBid>,
-        ) -> core::result::Result<tonic::Response<super::MsgBidResponse>, tonic::Status>;
-        async fn cancel_bid(
-            &self,
-            request: tonic::Request<super::MsgCancelBid>,
-        ) -> core::result::Result<tonic::Response<super::MsgCancelBidResponse>, tonic::Status>;
-        async fn submit_payment_transaction_signatures(
-            &self,
-            request: tonic::Request<super::MsgSubmitPaymentTransactionSignatures>,
-        ) -> core::result::Result<
-            tonic::Response<super::MsgSubmitPaymentTransactionSignaturesResponse>,
-            tonic::Status,
-        >;
         async fn update_params(
             &self,
             request: tonic::Request<super::MsgUpdateParams>,
@@ -774,125 +855,7 @@ pub mod msg_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/side.auction.Msg/Bid" => {
-                    #[allow(non_camel_case_types)]
-                    struct BidSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgBid> for BidSvc<T> {
-                        type Response = super::MsgBidResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(&mut self, request: tonic::Request<super::MsgBid>) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).bid(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = BidSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.auction.Msg/CancelBid" => {
-                    #[allow(non_camel_case_types)]
-                    struct CancelBidSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgCancelBid> for CancelBidSvc<T> {
-                        type Response = super::MsgCancelBidResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::MsgCancelBid>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).cancel_bid(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CancelBidSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.auction.Msg/SubmitPaymentTransactionSignatures" => {
-                    #[allow(non_camel_case_types)]
-                    struct SubmitPaymentTransactionSignaturesSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg>
-                        tonic::server::UnaryService<super::MsgSubmitPaymentTransactionSignatures>
-                        for SubmitPaymentTransactionSignaturesSvc<T>
-                    {
-                        type Response = super::MsgSubmitPaymentTransactionSignaturesResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::MsgSubmitPaymentTransactionSignatures>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner)
-                                    .submit_payment_transaction_signatures(request)
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = SubmitPaymentTransactionSignaturesSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.auction.Msg/UpdateParams" => {
+                "/side.oracle.Msg/UpdateParams" => {
                     #[allow(non_camel_case_types)]
                     struct UpdateParamsSvc<T: Msg>(pub Arc<T>);
                     impl<T: Msg> tonic::server::UnaryService<super::MsgUpdateParams> for UpdateParamsSvc<T> {
@@ -964,6 +927,6 @@ pub mod msg_server {
         }
     }
     impl<T: Msg> tonic::server::NamedService for MsgServer<T> {
-        const NAME: &'static str = "side.auction.Msg";
+        const NAME: &'static str = "side.oracle.Msg";
     }
 }

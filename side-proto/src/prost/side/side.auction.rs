@@ -12,7 +12,9 @@ pub struct Bid {
     pub bid_price: i64,
     #[prost(message, optional, tag = "5")]
     pub bid_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(enumeration = "BidStatus", tag = "6")]
+    #[prost(message, optional, tag = "6")]
+    pub bidded_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(enumeration = "BidStatus", tag = "7")]
     pub status: i32,
 }
 impl ::prost::Name for Bid {
@@ -27,21 +29,31 @@ impl ::prost::Name for Bid {
 pub struct Auction {
     #[prost(uint64, tag = "1")]
     pub id: u64,
-    #[prost(message, optional, tag = "2")]
-    pub deposited_asset: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "2")]
+    pub loan_id: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub borrower: ::prost::alloc::string::String,
-    #[prost(int64, tag = "4")]
-    pub liquidated_price: i64,
+    #[prost(string, tag = "4")]
+    pub agency: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "5")]
-    pub liquidated_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    pub deposited_asset: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(int64, tag = "6")]
+    pub liquidated_price: i64,
+    #[prost(message, optional, tag = "7")]
+    pub liquidated_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(int64, tag = "8")]
     pub expected_value: i64,
-    #[prost(int64, tag = "7")]
+    #[prost(int64, tag = "9")]
     pub bidded_value: i64,
-    #[prost(string, tag = "8")]
+    #[prost(int64, tag = "10")]
+    pub bidded_amount: i64,
+    #[prost(string, tag = "11")]
+    pub liquidation_cet: ::prost::alloc::string::String,
+    #[prost(string, tag = "12")]
+    pub payment_tx: ::prost::alloc::string::String,
+    #[prost(string, tag = "13")]
     pub payment_tx_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "AuctionStatus", tag = "9")]
+    #[prost(enumeration = "AuctionStatus", tag = "14")]
     pub status: i32,
 }
 impl ::prost::Name for Auction {
@@ -63,13 +75,13 @@ impl AssetType {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            AssetType::Bitcoin => "Bitcoin",
+            AssetType::Bitcoin => "ASSET_TYPE_BITCOIN",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "Bitcoin" => Some(Self::Bitcoin),
+            "ASSET_TYPE_BITCOIN" => Some(Self::Bitcoin),
             _ => None,
         }
     }
@@ -77,8 +89,10 @@ impl AssetType {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum AuctionStatus {
-    AuctionOpen = 0,
-    AuctionClose = 1,
+    Unspecified = 0,
+    Open = 1,
+    Closed = 2,
+    Settled = 3,
 }
 impl AuctionStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -87,15 +101,19 @@ impl AuctionStatus {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            AuctionStatus::AuctionOpen => "AuctionOpen",
-            AuctionStatus::AuctionClose => "AuctionClose",
+            AuctionStatus::Unspecified => "AUCTION_STATUS_UNSPECIFIED",
+            AuctionStatus::Open => "AUCTION_STATUS_OPEN",
+            AuctionStatus::Closed => "AUCTION_STATUS_CLOSED",
+            AuctionStatus::Settled => "AUCTION_STATUS_SETTLED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "AuctionOpen" => Some(Self::AuctionOpen),
-            "AuctionClose" => Some(Self::AuctionClose),
+            "AUCTION_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "AUCTION_STATUS_OPEN" => Some(Self::Open),
+            "AUCTION_STATUS_CLOSED" => Some(Self::Closed),
+            "AUCTION_STATUS_SETTLED" => Some(Self::Settled),
             _ => None,
         }
     }
@@ -103,10 +121,11 @@ impl AuctionStatus {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum BidStatus {
-    Bidding = 0,
-    Accepted = 1,
-    Rejected = 2,
-    Cancelled = 3,
+    Unspecified = 0,
+    Bidding = 1,
+    Accepted = 2,
+    Rejected = 3,
+    Cancelled = 4,
 }
 impl BidStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -115,19 +134,21 @@ impl BidStatus {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            BidStatus::Bidding => "Bidding",
-            BidStatus::Accepted => "Accepted",
-            BidStatus::Rejected => "Rejected",
-            BidStatus::Cancelled => "Cancelled",
+            BidStatus::Unspecified => "BID_STATUS_UNSPECIFIED",
+            BidStatus::Bidding => "BID_STATUS_BIDDING",
+            BidStatus::Accepted => "BID_STATUS_ACCEPTED",
+            BidStatus::Rejected => "BID_STATUS_REJECTED",
+            BidStatus::Cancelled => "BID_STATUS_CANCELLED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "Bidding" => Some(Self::Bidding),
-            "Accepted" => Some(Self::Accepted),
-            "Rejected" => Some(Self::Rejected),
-            "Cancelled" => Some(Self::Cancelled),
+            "BID_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "BID_STATUS_BIDDING" => Some(Self::Bidding),
+            "BID_STATUS_ACCEPTED" => Some(Self::Accepted),
+            "BID_STATUS_REJECTED" => Some(Self::Rejected),
+            "BID_STATUS_CANCELLED" => Some(Self::Cancelled),
             _ => None,
         }
     }
@@ -288,9 +309,11 @@ impl ::prost::Name for QueryBidResponse {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryBidsRequest {
-    #[prost(enumeration = "BidStatus", tag = "1")]
+    #[prost(uint64, tag = "1")]
+    pub auction_id: u64,
+    #[prost(enumeration = "BidStatus", tag = "2")]
     pub status: i32,
-    #[prost(message, optional, tag = "2")]
+    #[prost(message, optional, tag = "3")]
     pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
 }
 impl ::prost::Name for QueryBidsRequest {
@@ -307,7 +330,8 @@ pub struct QueryBidsResponse {
     #[prost(message, repeated, tag = "1")]
     pub bids: ::prost::alloc::vec::Vec<Bid>,
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
 }
 impl ::prost::Name for QueryBidsResponse {
     const NAME: &'static str = "QueryBidsResponse";
@@ -369,6 +393,35 @@ impl ::prost::Name for MsgCancelBid {
 pub struct MsgCancelBidResponse {}
 impl ::prost::Name for MsgCancelBidResponse {
     const NAME: &'static str = "MsgCancelBidResponse";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// MsgSubmitPaymentTransactionSignatures defines the Msg/SubmitPaymentTransactionSignatures request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitPaymentTransactionSignatures {
+    #[prost(string, tag = "1")]
+    pub relayer: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub auction_id: u64,
+    #[prost(string, repeated, tag = "3")]
+    pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for MsgSubmitPaymentTransactionSignatures {
+    const NAME: &'static str = "MsgSubmitPaymentTransactionSignatures";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// MsgSubmitPaymentTransactionSignaturesResponse defines the Msg/SubmitPaymentTransactionSignatures response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitPaymentTransactionSignaturesResponse {}
+impl ::prost::Name for MsgSubmitPaymentTransactionSignaturesResponse {
+    const NAME: &'static str = "MsgSubmitPaymentTransactionSignaturesResponse";
     const PACKAGE: &'static str = "side.auction";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.auction.{}", Self::NAME)

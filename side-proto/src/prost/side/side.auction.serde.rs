@@ -7,7 +7,7 @@ impl serde::Serialize for AssetType {
         S: serde::Serializer,
     {
         let variant = match self {
-            Self::Bitcoin => "Bitcoin",
+            Self::Bitcoin => "ASSET_TYPE_BITCOIN",
         };
         serializer.serialize_str(variant)
     }
@@ -19,7 +19,7 @@ impl<'de> serde::Deserialize<'de> for AssetType {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["Bitcoin"];
+        const FIELDS: &[&str] = &["ASSET_TYPE_BITCOIN"];
 
         struct GeneratedVisitor;
 
@@ -59,7 +59,7 @@ impl<'de> serde::Deserialize<'de> for AssetType {
                 E: serde::de::Error,
             {
                 match value {
-                    "Bitcoin" => Ok(AssetType::Bitcoin),
+                    "ASSET_TYPE_BITCOIN" => Ok(AssetType::Bitcoin),
                     _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
                 }
             }
@@ -79,10 +79,16 @@ impl serde::Serialize for Auction {
         if self.id != 0 {
             len += 1;
         }
-        if self.deposited_asset.is_some() {
+        if !self.loan_id.is_empty() {
             len += 1;
         }
         if !self.borrower.is_empty() {
+            len += 1;
+        }
+        if !self.agency.is_empty() {
+            len += 1;
+        }
+        if self.deposited_asset.is_some() {
             len += 1;
         }
         if self.liquidated_price != 0 {
@@ -97,6 +103,15 @@ impl serde::Serialize for Auction {
         if self.bidded_value != 0 {
             len += 1;
         }
+        if self.bidded_amount != 0 {
+            len += 1;
+        }
+        if !self.liquidation_cet.is_empty() {
+            len += 1;
+        }
+        if !self.payment_tx.is_empty() {
+            len += 1;
+        }
         if !self.payment_tx_id.is_empty() {
             len += 1;
         }
@@ -109,11 +124,17 @@ impl serde::Serialize for Auction {
             struct_ser
                 .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
         }
-        if let Some(v) = self.deposited_asset.as_ref() {
-            struct_ser.serialize_field("depositedAsset", v)?;
+        if !self.loan_id.is_empty() {
+            struct_ser.serialize_field("loanId", &self.loan_id)?;
         }
         if !self.borrower.is_empty() {
             struct_ser.serialize_field("borrower", &self.borrower)?;
+        }
+        if !self.agency.is_empty() {
+            struct_ser.serialize_field("agency", &self.agency)?;
+        }
+        if let Some(v) = self.deposited_asset.as_ref() {
+            struct_ser.serialize_field("depositedAsset", v)?;
         }
         if self.liquidated_price != 0 {
             #[allow(clippy::needless_borrow)]
@@ -139,6 +160,19 @@ impl serde::Serialize for Auction {
                 alloc::string::ToString::to_string(&self.bidded_value).as_str(),
             )?;
         }
+        if self.bidded_amount != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "biddedAmount",
+                alloc::string::ToString::to_string(&self.bidded_amount).as_str(),
+            )?;
+        }
+        if !self.liquidation_cet.is_empty() {
+            struct_ser.serialize_field("liquidationCet", &self.liquidation_cet)?;
+        }
+        if !self.payment_tx.is_empty() {
+            struct_ser.serialize_field("paymentTx", &self.payment_tx)?;
+        }
         if !self.payment_tx_id.is_empty() {
             struct_ser.serialize_field("paymentTxId", &self.payment_tx_id)?;
         }
@@ -160,9 +194,12 @@ impl<'de> serde::Deserialize<'de> for Auction {
     {
         const FIELDS: &[&str] = &[
             "id",
+            "loan_id",
+            "loanId",
+            "borrower",
+            "agency",
             "deposited_asset",
             "depositedAsset",
-            "borrower",
             "liquidated_price",
             "liquidatedPrice",
             "liquidated_time",
@@ -171,6 +208,12 @@ impl<'de> serde::Deserialize<'de> for Auction {
             "expectedValue",
             "bidded_value",
             "biddedValue",
+            "bidded_amount",
+            "biddedAmount",
+            "liquidation_cet",
+            "liquidationCet",
+            "payment_tx",
+            "paymentTx",
             "payment_tx_id",
             "paymentTxId",
             "status",
@@ -179,12 +222,17 @@ impl<'de> serde::Deserialize<'de> for Auction {
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Id,
-            DepositedAsset,
+            LoanId,
             Borrower,
+            Agency,
+            DepositedAsset,
             LiquidatedPrice,
             LiquidatedTime,
             ExpectedValue,
             BiddedValue,
+            BiddedAmount,
+            LiquidationCet,
+            PaymentTx,
             PaymentTxId,
             Status,
         }
@@ -213,10 +261,12 @@ impl<'de> serde::Deserialize<'de> for Auction {
                     {
                         match value {
                             "id" => Ok(GeneratedField::Id),
+                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
+                            "borrower" => Ok(GeneratedField::Borrower),
+                            "agency" => Ok(GeneratedField::Agency),
                             "depositedAsset" | "deposited_asset" => {
                                 Ok(GeneratedField::DepositedAsset)
                             }
-                            "borrower" => Ok(GeneratedField::Borrower),
                             "liquidatedPrice" | "liquidated_price" => {
                                 Ok(GeneratedField::LiquidatedPrice)
                             }
@@ -225,6 +275,11 @@ impl<'de> serde::Deserialize<'de> for Auction {
                             }
                             "expectedValue" | "expected_value" => Ok(GeneratedField::ExpectedValue),
                             "biddedValue" | "bidded_value" => Ok(GeneratedField::BiddedValue),
+                            "biddedAmount" | "bidded_amount" => Ok(GeneratedField::BiddedAmount),
+                            "liquidationCet" | "liquidation_cet" => {
+                                Ok(GeneratedField::LiquidationCet)
+                            }
+                            "paymentTx" | "payment_tx" => Ok(GeneratedField::PaymentTx),
                             "paymentTxId" | "payment_tx_id" => Ok(GeneratedField::PaymentTxId),
                             "status" => Ok(GeneratedField::Status),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -247,12 +302,17 @@ impl<'de> serde::Deserialize<'de> for Auction {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut id__ = None;
-                let mut deposited_asset__ = None;
+                let mut loan_id__ = None;
                 let mut borrower__ = None;
+                let mut agency__ = None;
+                let mut deposited_asset__ = None;
                 let mut liquidated_price__ = None;
                 let mut liquidated_time__ = None;
                 let mut expected_value__ = None;
                 let mut bidded_value__ = None;
+                let mut bidded_amount__ = None;
+                let mut liquidation_cet__ = None;
+                let mut payment_tx__ = None;
                 let mut payment_tx_id__ = None;
                 let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -266,17 +326,29 @@ impl<'de> serde::Deserialize<'de> for Auction {
                                     .0,
                             );
                         }
-                        GeneratedField::DepositedAsset => {
-                            if deposited_asset__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("depositedAsset"));
+                        GeneratedField::LoanId => {
+                            if loan_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("loanId"));
                             }
-                            deposited_asset__ = map_.next_value()?;
+                            loan_id__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Borrower => {
                             if borrower__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("borrower"));
                             }
                             borrower__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Agency => {
+                            if agency__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("agency"));
+                            }
+                            agency__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::DepositedAsset => {
+                            if deposited_asset__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("depositedAsset"));
+                            }
+                            deposited_asset__ = map_.next_value()?;
                         }
                         GeneratedField::LiquidatedPrice => {
                             if liquidated_price__.is_some() {
@@ -311,6 +383,27 @@ impl<'de> serde::Deserialize<'de> for Auction {
                                     .0,
                             );
                         }
+                        GeneratedField::BiddedAmount => {
+                            if bidded_amount__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("biddedAmount"));
+                            }
+                            bidded_amount__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::LiquidationCet => {
+                            if liquidation_cet__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("liquidationCet"));
+                            }
+                            liquidation_cet__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::PaymentTx => {
+                            if payment_tx__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("paymentTx"));
+                            }
+                            payment_tx__ = Some(map_.next_value()?);
+                        }
                         GeneratedField::PaymentTxId => {
                             if payment_tx_id__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("paymentTxId"));
@@ -327,12 +420,17 @@ impl<'de> serde::Deserialize<'de> for Auction {
                 }
                 Ok(Auction {
                     id: id__.unwrap_or_default(),
-                    deposited_asset: deposited_asset__,
+                    loan_id: loan_id__.unwrap_or_default(),
                     borrower: borrower__.unwrap_or_default(),
+                    agency: agency__.unwrap_or_default(),
+                    deposited_asset: deposited_asset__,
                     liquidated_price: liquidated_price__.unwrap_or_default(),
                     liquidated_time: liquidated_time__,
                     expected_value: expected_value__.unwrap_or_default(),
                     bidded_value: bidded_value__.unwrap_or_default(),
+                    bidded_amount: bidded_amount__.unwrap_or_default(),
+                    liquidation_cet: liquidation_cet__.unwrap_or_default(),
+                    payment_tx: payment_tx__.unwrap_or_default(),
                     payment_tx_id: payment_tx_id__.unwrap_or_default(),
                     status: status__.unwrap_or_default(),
                 })
@@ -349,8 +447,10 @@ impl serde::Serialize for AuctionStatus {
         S: serde::Serializer,
     {
         let variant = match self {
-            Self::AuctionOpen => "AuctionOpen",
-            Self::AuctionClose => "AuctionClose",
+            Self::Unspecified => "AUCTION_STATUS_UNSPECIFIED",
+            Self::Open => "AUCTION_STATUS_OPEN",
+            Self::Closed => "AUCTION_STATUS_CLOSED",
+            Self::Settled => "AUCTION_STATUS_SETTLED",
         };
         serializer.serialize_str(variant)
     }
@@ -362,7 +462,12 @@ impl<'de> serde::Deserialize<'de> for AuctionStatus {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["AuctionOpen", "AuctionClose"];
+        const FIELDS: &[&str] = &[
+            "AUCTION_STATUS_UNSPECIFIED",
+            "AUCTION_STATUS_OPEN",
+            "AUCTION_STATUS_CLOSED",
+            "AUCTION_STATUS_SETTLED",
+        ];
 
         struct GeneratedVisitor;
 
@@ -402,8 +507,10 @@ impl<'de> serde::Deserialize<'de> for AuctionStatus {
                 E: serde::de::Error,
             {
                 match value {
-                    "AuctionOpen" => Ok(AuctionStatus::AuctionOpen),
-                    "AuctionClose" => Ok(AuctionStatus::AuctionClose),
+                    "AUCTION_STATUS_UNSPECIFIED" => Ok(AuctionStatus::Unspecified),
+                    "AUCTION_STATUS_OPEN" => Ok(AuctionStatus::Open),
+                    "AUCTION_STATUS_CLOSED" => Ok(AuctionStatus::Closed),
+                    "AUCTION_STATUS_SETTLED" => Ok(AuctionStatus::Settled),
                     _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
                 }
             }
@@ -435,6 +542,9 @@ impl serde::Serialize for Bid {
         if self.bid_amount.is_some() {
             len += 1;
         }
+        if self.bidded_amount.is_some() {
+            len += 1;
+        }
         if self.status != 0 {
             len += 1;
         }
@@ -464,6 +574,9 @@ impl serde::Serialize for Bid {
         if let Some(v) = self.bid_amount.as_ref() {
             struct_ser.serialize_field("bidAmount", v)?;
         }
+        if let Some(v) = self.bidded_amount.as_ref() {
+            struct_ser.serialize_field("biddedAmount", v)?;
+        }
         if self.status != 0 {
             let v = BidStatus::try_from(self.status).map_err(|_| {
                 serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
@@ -489,6 +602,8 @@ impl<'de> serde::Deserialize<'de> for Bid {
             "bidPrice",
             "bid_amount",
             "bidAmount",
+            "bidded_amount",
+            "biddedAmount",
             "status",
         ];
 
@@ -499,6 +614,7 @@ impl<'de> serde::Deserialize<'de> for Bid {
             Bidder,
             BidPrice,
             BidAmount,
+            BiddedAmount,
             Status,
         }
         #[cfg(feature = "serde")]
@@ -530,6 +646,7 @@ impl<'de> serde::Deserialize<'de> for Bid {
                             "bidder" => Ok(GeneratedField::Bidder),
                             "bidPrice" | "bid_price" => Ok(GeneratedField::BidPrice),
                             "bidAmount" | "bid_amount" => Ok(GeneratedField::BidAmount),
+                            "biddedAmount" | "bidded_amount" => Ok(GeneratedField::BiddedAmount),
                             "status" => Ok(GeneratedField::Status),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -555,6 +672,7 @@ impl<'de> serde::Deserialize<'de> for Bid {
                 let mut bidder__ = None;
                 let mut bid_price__ = None;
                 let mut bid_amount__ = None;
+                let mut bidded_amount__ = None;
                 let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -597,6 +715,12 @@ impl<'de> serde::Deserialize<'de> for Bid {
                             }
                             bid_amount__ = map_.next_value()?;
                         }
+                        GeneratedField::BiddedAmount => {
+                            if bidded_amount__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("biddedAmount"));
+                            }
+                            bidded_amount__ = map_.next_value()?;
+                        }
                         GeneratedField::Status => {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
@@ -611,6 +735,7 @@ impl<'de> serde::Deserialize<'de> for Bid {
                     bidder: bidder__.unwrap_or_default(),
                     bid_price: bid_price__.unwrap_or_default(),
                     bid_amount: bid_amount__,
+                    bidded_amount: bidded_amount__,
                     status: status__.unwrap_or_default(),
                 })
             }
@@ -626,10 +751,11 @@ impl serde::Serialize for BidStatus {
         S: serde::Serializer,
     {
         let variant = match self {
-            Self::Bidding => "Bidding",
-            Self::Accepted => "Accepted",
-            Self::Rejected => "Rejected",
-            Self::Cancelled => "Cancelled",
+            Self::Unspecified => "BID_STATUS_UNSPECIFIED",
+            Self::Bidding => "BID_STATUS_BIDDING",
+            Self::Accepted => "BID_STATUS_ACCEPTED",
+            Self::Rejected => "BID_STATUS_REJECTED",
+            Self::Cancelled => "BID_STATUS_CANCELLED",
         };
         serializer.serialize_str(variant)
     }
@@ -641,7 +767,13 @@ impl<'de> serde::Deserialize<'de> for BidStatus {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["Bidding", "Accepted", "Rejected", "Cancelled"];
+        const FIELDS: &[&str] = &[
+            "BID_STATUS_UNSPECIFIED",
+            "BID_STATUS_BIDDING",
+            "BID_STATUS_ACCEPTED",
+            "BID_STATUS_REJECTED",
+            "BID_STATUS_CANCELLED",
+        ];
 
         struct GeneratedVisitor;
 
@@ -681,10 +813,11 @@ impl<'de> serde::Deserialize<'de> for BidStatus {
                 E: serde::de::Error,
             {
                 match value {
-                    "Bidding" => Ok(BidStatus::Bidding),
-                    "Accepted" => Ok(BidStatus::Accepted),
-                    "Rejected" => Ok(BidStatus::Rejected),
-                    "Cancelled" => Ok(BidStatus::Cancelled),
+                    "BID_STATUS_UNSPECIFIED" => Ok(BidStatus::Unspecified),
+                    "BID_STATUS_BIDDING" => Ok(BidStatus::Bidding),
+                    "BID_STATUS_ACCEPTED" => Ok(BidStatus::Accepted),
+                    "BID_STATUS_REJECTED" => Ok(BidStatus::Rejected),
+                    "BID_STATUS_CANCELLED" => Ok(BidStatus::Cancelled),
                     _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
                 }
             }
@@ -1242,6 +1375,233 @@ impl<'de> serde::Deserialize<'de> for MsgCancelBidResponse {
         }
         deserializer.deserialize_struct(
             "side.auction.MsgCancelBidResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgSubmitPaymentTransactionSignatures {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.relayer.is_empty() {
+            len += 1;
+        }
+        if self.auction_id != 0 {
+            len += 1;
+        }
+        if !self.signatures.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer
+            .serialize_struct("side.auction.MsgSubmitPaymentTransactionSignatures", len)?;
+        if !self.relayer.is_empty() {
+            struct_ser.serialize_field("relayer", &self.relayer)?;
+        }
+        if self.auction_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "auctionId",
+                alloc::string::ToString::to_string(&self.auction_id).as_str(),
+            )?;
+        }
+        if !self.signatures.is_empty() {
+            struct_ser.serialize_field("signatures", &self.signatures)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentTransactionSignatures {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["relayer", "auction_id", "auctionId", "signatures"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Relayer,
+            AuctionId,
+            Signatures,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "relayer" => Ok(GeneratedField::Relayer),
+                            "auctionId" | "auction_id" => Ok(GeneratedField::AuctionId),
+                            "signatures" => Ok(GeneratedField::Signatures),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgSubmitPaymentTransactionSignatures;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.auction.MsgSubmitPaymentTransactionSignatures")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgSubmitPaymentTransactionSignatures, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut relayer__ = None;
+                let mut auction_id__ = None;
+                let mut signatures__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Relayer => {
+                            if relayer__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("relayer"));
+                            }
+                            relayer__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::AuctionId => {
+                            if auction_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("auctionId"));
+                            }
+                            auction_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Signatures => {
+                            if signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("signatures"));
+                            }
+                            signatures__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(MsgSubmitPaymentTransactionSignatures {
+                    relayer: relayer__.unwrap_or_default(),
+                    auction_id: auction_id__.unwrap_or_default(),
+                    signatures: signatures__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.auction.MsgSubmitPaymentTransactionSignatures",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgSubmitPaymentTransactionSignaturesResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let len = 0;
+        let struct_ser = serializer.serialize_struct(
+            "side.auction.MsgSubmitPaymentTransactionSignaturesResponse",
+            len,
+        )?;
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentTransactionSignaturesResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {}
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgSubmitPaymentTransactionSignaturesResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter
+                    .write_str("struct side.auction.MsgSubmitPaymentTransactionSignaturesResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgSubmitPaymentTransactionSignaturesResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                while map_.next_key::<GeneratedField>()?.is_some() {
+                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                }
+                Ok(MsgSubmitPaymentTransactionSignaturesResponse {})
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.auction.MsgSubmitPaymentTransactionSignaturesResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -2261,6 +2621,9 @@ impl serde::Serialize for QueryBidsRequest {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
+        if self.auction_id != 0 {
+            len += 1;
+        }
         if self.status != 0 {
             len += 1;
         }
@@ -2268,6 +2631,13 @@ impl serde::Serialize for QueryBidsRequest {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.auction.QueryBidsRequest", len)?;
+        if self.auction_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "auctionId",
+                alloc::string::ToString::to_string(&self.auction_id).as_str(),
+            )?;
+        }
         if self.status != 0 {
             let v = BidStatus::try_from(self.status).map_err(|_| {
                 serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
@@ -2287,10 +2657,11 @@ impl<'de> serde::Deserialize<'de> for QueryBidsRequest {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["status", "pagination"];
+        const FIELDS: &[&str] = &["auction_id", "auctionId", "status", "pagination"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
+            AuctionId,
             Status,
             Pagination,
         }
@@ -2318,6 +2689,7 @@ impl<'de> serde::Deserialize<'de> for QueryBidsRequest {
                         E: serde::de::Error,
                     {
                         match value {
+                            "auctionId" | "auction_id" => Ok(GeneratedField::AuctionId),
                             "status" => Ok(GeneratedField::Status),
                             "pagination" => Ok(GeneratedField::Pagination),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -2339,10 +2711,20 @@ impl<'de> serde::Deserialize<'de> for QueryBidsRequest {
             where
                 V: serde::de::MapAccess<'de>,
             {
+                let mut auction_id__ = None;
                 let mut status__ = None;
                 let mut pagination__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
+                        GeneratedField::AuctionId => {
+                            if auction_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("auctionId"));
+                            }
+                            auction_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
                         GeneratedField::Status => {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
@@ -2358,6 +2740,7 @@ impl<'de> serde::Deserialize<'de> for QueryBidsRequest {
                     }
                 }
                 Ok(QueryBidsRequest {
+                    auction_id: auction_id__.unwrap_or_default(),
                     status: status__.unwrap_or_default(),
                     pagination: pagination__,
                 })

@@ -79,13 +79,15 @@ pub struct Loan {
     #[prost(string, tag = "15")]
     pub collateral_amount: ::prost::alloc::string::String,
     #[prost(string, tag = "16")]
-    pub loan_secret: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "17")]
-    pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "LoanStatus", tag = "18")]
-    pub status: i32,
-    #[prost(string, tag = "19")]
     pub pool_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "17")]
+    pub auction_id: u64,
+    #[prost(string, tag = "18")]
+    pub loan_secret: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "19")]
+    pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(enumeration = "LoanStatus", tag = "20")]
+    pub status: i32,
 }
 impl ::prost::Name for Loan {
     const NAME: &'static str = "Loan";
@@ -196,23 +198,26 @@ impl PoolStatus {
         }
     }
 }
+/// Loan Status
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum LoanStatus {
-    /// Loan Application
-    Apply = 0,
-    /// Loan Approval
-    Approve = 1,
-    /// Loan Disbursement
-    Disburse = 2,
-    /// Loan Repayment
-    Repay = 3,
-    /// Loan Default/Delinquency
-    Default = 4,
-    /// Loan Liquidation
-    Liquidate = 5,
-    /// Loan Closure
-    Close = 6,
+    /// Unspecified
+    Unspecified = 0,
+    /// Loan Requested
+    Requested = 1,
+    /// Loan Approved
+    Approved = 2,
+    /// Loan Open
+    Open = 3,
+    /// Loan Repaid
+    Repaid = 4,
+    /// Loan Defaulted
+    Defaulted = 5,
+    /// Loan Liquidated
+    Liquidated = 6,
+    /// Loan Closed
+    Closed = 7,
 }
 impl LoanStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -221,25 +226,27 @@ impl LoanStatus {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            LoanStatus::Apply => "Apply",
-            LoanStatus::Approve => "Approve",
-            LoanStatus::Disburse => "Disburse",
-            LoanStatus::Repay => "Repay",
-            LoanStatus::Default => "Default",
-            LoanStatus::Liquidate => "Liquidate",
-            LoanStatus::Close => "Close",
+            LoanStatus::Unspecified => "Unspecified",
+            LoanStatus::Requested => "Requested",
+            LoanStatus::Approved => "Approved",
+            LoanStatus::Open => "Open",
+            LoanStatus::Repaid => "Repaid",
+            LoanStatus::Defaulted => "Defaulted",
+            LoanStatus::Liquidated => "Liquidated",
+            LoanStatus::Closed => "Closed",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "Apply" => Some(Self::Apply),
-            "Approve" => Some(Self::Approve),
-            "Disburse" => Some(Self::Disburse),
-            "Repay" => Some(Self::Repay),
-            "Default" => Some(Self::Default),
-            "Liquidate" => Some(Self::Liquidate),
-            "Close" => Some(Self::Close),
+            "Unspecified" => Some(Self::Unspecified),
+            "Requested" => Some(Self::Requested),
+            "Approved" => Some(Self::Approved),
+            "Open" => Some(Self::Open),
+            "Repaid" => Some(Self::Repaid),
+            "Defaulted" => Some(Self::Defaulted),
+            "Liquidated" => Some(Self::Liquidated),
+            "Closed" => Some(Self::Closed),
             _ => None,
         }
     }
@@ -322,10 +329,10 @@ impl ::prost::Name for QueryPoolsResponse {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryLiquidationEventRequest {
-    #[prost(message, optional, tag = "1")]
-    pub borrow_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(message, optional, tag = "2")]
-    pub collateral_acmount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "1")]
+    pub collateral_amount: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub borrow_amount: ::prost::alloc::string::String,
 }
 impl ::prost::Name for QueryLiquidationEventRequest {
     const NAME: &'static str = "QueryLiquidationEventRequest";
@@ -502,6 +509,41 @@ pub struct QueryLoansResponse {
 }
 impl ::prost::Name for QueryLoansResponse {
     const NAME: &'static str = "QueryLoansResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// QueryLoansByAddressRequest is request type for the Query/LoansByAddress RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryLoansByAddressRequest {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(enumeration = "LoanStatus", tag = "2")]
+    pub status: i32,
+    #[prost(message, optional, tag = "3")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryLoansByAddressRequest {
+    const NAME: &'static str = "QueryLoansByAddressRequest";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// QueryLoansByAddressResponse is response type for the Query/LoansByAddress RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryLoansByAddressResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub loans: ::prost::alloc::vec::Vec<Loan>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryLoansByAddressResponse {
+    const NAME: &'static str = "QueryLoansByAddressResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -718,15 +760,7 @@ pub struct MsgApply {
     #[prost(message, optional, tag = "7")]
     pub borrow_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(uint64, tag = "8")]
-    pub event_id: u64,
-    #[prost(uint64, tag = "9")]
     pub agency_id: u64,
-    #[prost(string, tag = "10")]
-    pub deposit_tx: ::prost::alloc::string::String,
-    #[prost(string, tag = "11")]
-    pub liquidation_cet: ::prost::alloc::string::String,
-    #[prost(string, tag = "12")]
-    pub liquidation_adaptor_signature: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgApply {
     const NAME: &'static str = "MsgApply";
@@ -743,6 +777,39 @@ pub struct MsgApplyResponse {
 }
 impl ::prost::Name for MsgApplyResponse {
     const NAME: &'static str = "MsgApplyResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitLiquidationCet {
+    #[prost(string, tag = "1")]
+    pub borrower: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub loan_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub event_id: u64,
+    #[prost(string, tag = "4")]
+    pub deposit_tx: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub liquidation_cet: ::prost::alloc::string::String,
+    #[prost(string, tag = "6")]
+    pub liquidation_adaptor_signature: ::prost::alloc::string::String,
+}
+impl ::prost::Name for MsgSubmitLiquidationCet {
+    const NAME: &'static str = "MsgSubmitLiquidationCet";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitLiquidationCetResponse {}
+impl ::prost::Name for MsgSubmitLiquidationCetResponse {
+    const NAME: &'static str = "MsgSubmitLiquidationCetResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
