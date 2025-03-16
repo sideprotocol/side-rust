@@ -1272,7 +1272,7 @@ dependencies = [
 
 [[package]]
 name = "side-proto"
-version = "0.1.0-dev12"
+version = "2.0.0-alpha.1"
 dependencies = [
  "cosmos-sdk-proto",
  "cosmrs",

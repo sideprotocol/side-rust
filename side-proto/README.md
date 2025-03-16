@@ -1,1 +1,1 @@
-# Side Rust Client
+# Sidechain Rust Client
