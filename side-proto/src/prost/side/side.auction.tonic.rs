@@ -174,6 +174,24 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.auction.Query", "Bids"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn auction_price(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryAuctionPriceRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryAuctionPriceResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.auction.Query/AuctionPrice");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.auction.Query", "AuctionPrice"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -204,6 +222,10 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryBidsRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryBidsResponse>, tonic::Status>;
+        async fn auction_price(
+            &self,
+            request: tonic::Request<super::QueryAuctionPriceRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryAuctionPriceResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -471,6 +493,44 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
+                "/side.auction.Query/AuctionPrice" => {
+                    #[allow(non_camel_case_types)]
+                    struct AuctionPriceSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryAuctionPriceRequest> for AuctionPriceSvc<T> {
+                        type Response = super::QueryAuctionPriceResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryAuctionPriceRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).auction_price(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AuctionPriceSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 _ => Box::pin(async move {
                     Ok(http::Response::builder()
                         .status(200)
@@ -626,11 +686,11 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.auction.Msg", "CancelBid"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn submit_payment_transaction_signatures(
+        pub async fn submit_payment_signatures(
             &mut self,
-            request: impl tonic::IntoRequest<super::MsgSubmitPaymentTransactionSignatures>,
+            request: impl tonic::IntoRequest<super::MsgSubmitPaymentSignatures>,
         ) -> core::result::Result<
-            tonic::Response<super::MsgSubmitPaymentTransactionSignaturesResponse>,
+            tonic::Response<super::MsgSubmitPaymentSignaturesResponse>,
             tonic::Status,
         > {
             self.inner.ready().await.map_err(|e| {
@@ -640,13 +700,12 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/side.auction.Msg/SubmitPaymentTransactionSignatures",
-            );
+            let path =
+                http::uri::PathAndQuery::from_static("/side.auction.Msg/SubmitPaymentSignatures");
             let mut req = request.into_request();
             req.extensions_mut().insert(GrpcMethod::new(
                 "side.auction.Msg",
-                "SubmitPaymentTransactionSignatures",
+                "SubmitPaymentSignatures",
             ));
             self.inner.unary(req, path, codec).await
         }
@@ -686,11 +745,11 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgCancelBid>,
         ) -> core::result::Result<tonic::Response<super::MsgCancelBidResponse>, tonic::Status>;
-        async fn submit_payment_transaction_signatures(
+        async fn submit_payment_signatures(
             &self,
-            request: tonic::Request<super::MsgSubmitPaymentTransactionSignatures>,
+            request: tonic::Request<super::MsgSubmitPaymentSignatures>,
         ) -> core::result::Result<
-            tonic::Response<super::MsgSubmitPaymentTransactionSignaturesResponse>,
+            tonic::Response<super::MsgSubmitPaymentSignaturesResponse>,
             tonic::Status,
         >;
         async fn update_params(
@@ -847,25 +906,21 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.auction.Msg/SubmitPaymentTransactionSignatures" => {
+                "/side.auction.Msg/SubmitPaymentSignatures" => {
                     #[allow(non_camel_case_types)]
-                    struct SubmitPaymentTransactionSignaturesSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg>
-                        tonic::server::UnaryService<super::MsgSubmitPaymentTransactionSignatures>
-                        for SubmitPaymentTransactionSignaturesSvc<T>
+                    struct SubmitPaymentSignaturesSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitPaymentSignatures>
+                        for SubmitPaymentSignaturesSvc<T>
                     {
-                        type Response = super::MsgSubmitPaymentTransactionSignaturesResponse;
+                        type Response = super::MsgSubmitPaymentSignaturesResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MsgSubmitPaymentTransactionSignatures>,
+                            request: tonic::Request<super::MsgSubmitPaymentSignatures>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner)
-                                    .submit_payment_transaction_signatures(request)
-                                    .await
-                            };
+                            let fut =
+                                async move { (*inner).submit_payment_signatures(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -876,7 +931,7 @@ pub mod msg_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = SubmitPaymentTransactionSignaturesSvc(inner);
+                        let method = SubmitPaymentSignaturesSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

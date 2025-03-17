@@ -41,10 +41,10 @@ pub struct Auction {
     pub liquidated_price: i64,
     #[prost(message, optional, tag = "7")]
     pub liquidated_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(int64, tag = "8")]
-    pub expected_value: i64,
-    #[prost(int64, tag = "9")]
-    pub bidded_value: i64,
+    #[prost(message, optional, tag = "8")]
+    pub expected_value: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "9")]
+    pub bidded_value: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(int64, tag = "10")]
     pub bidded_amount: i64,
     #[prost(string, tag = "11")]
@@ -340,6 +340,34 @@ impl ::prost::Name for QueryBidsResponse {
         ::prost::alloc::format!("side.auction.{}", Self::NAME)
     }
 }
+/// QueryAuctionPriceRequest is request type for the Query/AuctionPrice RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAuctionPriceRequest {
+    #[prost(uint64, tag = "1")]
+    pub auction_id: u64,
+}
+impl ::prost::Name for QueryAuctionPriceRequest {
+    const NAME: &'static str = "QueryAuctionPriceRequest";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
+/// QueryAuctionPriceResponse is response type for the Query/AuctionPrice RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAuctionPriceResponse {
+    #[prost(string, tag = "1")]
+    pub price: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryAuctionPriceResponse {
+    const NAME: &'static str = "QueryAuctionPriceResponse";
+    const PACKAGE: &'static str = "side.auction";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.auction.{}", Self::NAME)
+    }
+}
 /// MsgBid defines the Msg/Bid request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -398,30 +426,30 @@ impl ::prost::Name for MsgCancelBidResponse {
         ::prost::alloc::format!("side.auction.{}", Self::NAME)
     }
 }
-/// MsgSubmitPaymentTransactionSignatures defines the Msg/SubmitPaymentTransactionSignatures request type.
+/// MsgSubmitPaymentSignatures defines the Msg/SubmitPaymentSignatures request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitPaymentTransactionSignatures {
+pub struct MsgSubmitPaymentSignatures {
     #[prost(string, tag = "1")]
-    pub relayer: ::prost::alloc::string::String,
+    pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
     pub auction_id: u64,
     #[prost(string, repeated, tag = "3")]
     pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-impl ::prost::Name for MsgSubmitPaymentTransactionSignatures {
-    const NAME: &'static str = "MsgSubmitPaymentTransactionSignatures";
+impl ::prost::Name for MsgSubmitPaymentSignatures {
+    const NAME: &'static str = "MsgSubmitPaymentSignatures";
     const PACKAGE: &'static str = "side.auction";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.auction.{}", Self::NAME)
     }
 }
-/// MsgSubmitPaymentTransactionSignaturesResponse defines the Msg/SubmitPaymentTransactionSignatures response type.
+/// MsgSubmitPaymentSignaturesResponse defines the Msg/SubmitPaymentSignatures response type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitPaymentTransactionSignaturesResponse {}
-impl ::prost::Name for MsgSubmitPaymentTransactionSignaturesResponse {
-    const NAME: &'static str = "MsgSubmitPaymentTransactionSignaturesResponse";
+pub struct MsgSubmitPaymentSignaturesResponse {}
+impl ::prost::Name for MsgSubmitPaymentSignaturesResponse {
+    const NAME: &'static str = "MsgSubmitPaymentSignaturesResponse";
     const PACKAGE: &'static str = "side.auction";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.auction.{}", Self::NAME)

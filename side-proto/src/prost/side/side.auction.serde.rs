@@ -97,10 +97,10 @@ impl serde::Serialize for Auction {
         if self.liquidated_time.is_some() {
             len += 1;
         }
-        if self.expected_value != 0 {
+        if self.expected_value.is_some() {
             len += 1;
         }
-        if self.bidded_value != 0 {
+        if self.bidded_value.is_some() {
             len += 1;
         }
         if self.bidded_amount != 0 {
@@ -146,19 +146,11 @@ impl serde::Serialize for Auction {
         if let Some(v) = self.liquidated_time.as_ref() {
             struct_ser.serialize_field("liquidatedTime", v)?;
         }
-        if self.expected_value != 0 {
-            #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field(
-                "expectedValue",
-                alloc::string::ToString::to_string(&self.expected_value).as_str(),
-            )?;
+        if let Some(v) = self.expected_value.as_ref() {
+            struct_ser.serialize_field("expectedValue", v)?;
         }
-        if self.bidded_value != 0 {
-            #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field(
-                "biddedValue",
-                alloc::string::ToString::to_string(&self.bidded_value).as_str(),
-            )?;
+        if let Some(v) = self.bidded_value.as_ref() {
+            struct_ser.serialize_field("biddedValue", v)?;
         }
         if self.bidded_amount != 0 {
             #[allow(clippy::needless_borrow)]
@@ -369,19 +361,13 @@ impl<'de> serde::Deserialize<'de> for Auction {
                             if expected_value__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("expectedValue"));
                             }
-                            expected_value__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            expected_value__ = map_.next_value()?;
                         }
                         GeneratedField::BiddedValue => {
                             if bidded_value__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("biddedValue"));
                             }
-                            bidded_value__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            bidded_value__ = map_.next_value()?;
                         }
                         GeneratedField::BiddedAmount => {
                             if bidded_amount__.is_some() {
@@ -426,8 +412,8 @@ impl<'de> serde::Deserialize<'de> for Auction {
                     deposited_asset: deposited_asset__,
                     liquidated_price: liquidated_price__.unwrap_or_default(),
                     liquidated_time: liquidated_time__,
-                    expected_value: expected_value__.unwrap_or_default(),
-                    bidded_value: bidded_value__.unwrap_or_default(),
+                    expected_value: expected_value__,
+                    bidded_value: bidded_value__,
                     bidded_amount: bidded_amount__.unwrap_or_default(),
                     liquidation_cet: liquidation_cet__.unwrap_or_default(),
                     payment_tx: payment_tx__.unwrap_or_default(),
@@ -1381,7 +1367,7 @@ impl<'de> serde::Deserialize<'de> for MsgCancelBidResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitPaymentTransactionSignatures {
+impl serde::Serialize for MsgSubmitPaymentSignatures {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -1389,7 +1375,7 @@ impl serde::Serialize for MsgSubmitPaymentTransactionSignatures {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if !self.relayer.is_empty() {
+        if !self.sender.is_empty() {
             len += 1;
         }
         if self.auction_id != 0 {
@@ -1398,10 +1384,10 @@ impl serde::Serialize for MsgSubmitPaymentTransactionSignatures {
         if !self.signatures.is_empty() {
             len += 1;
         }
-        let mut struct_ser = serializer
-            .serialize_struct("side.auction.MsgSubmitPaymentTransactionSignatures", len)?;
-        if !self.relayer.is_empty() {
-            struct_ser.serialize_field("relayer", &self.relayer)?;
+        let mut struct_ser =
+            serializer.serialize_struct("side.auction.MsgSubmitPaymentSignatures", len)?;
+        if !self.sender.is_empty() {
+            struct_ser.serialize_field("sender", &self.sender)?;
         }
         if self.auction_id != 0 {
             #[allow(clippy::needless_borrow)]
@@ -1417,17 +1403,17 @@ impl serde::Serialize for MsgSubmitPaymentTransactionSignatures {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentTransactionSignatures {
+impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentSignatures {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["relayer", "auction_id", "auctionId", "signatures"];
+        const FIELDS: &[&str] = &["sender", "auction_id", "auctionId", "signatures"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            Relayer,
+            Sender,
             AuctionId,
             Signatures,
         }
@@ -1455,7 +1441,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentTransactionSignatures {
                         E: serde::de::Error,
                     {
                         match value {
-                            "relayer" => Ok(GeneratedField::Relayer),
+                            "sender" => Ok(GeneratedField::Sender),
                             "auctionId" | "auction_id" => Ok(GeneratedField::AuctionId),
                             "signatures" => Ok(GeneratedField::Signatures),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -1467,29 +1453,29 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentTransactionSignatures {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitPaymentTransactionSignatures;
+            type Value = MsgSubmitPaymentSignatures;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.auction.MsgSubmitPaymentTransactionSignatures")
+                formatter.write_str("struct side.auction.MsgSubmitPaymentSignatures")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgSubmitPaymentTransactionSignatures, V::Error>
+            ) -> core::result::Result<MsgSubmitPaymentSignatures, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
-                let mut relayer__ = None;
+                let mut sender__ = None;
                 let mut auction_id__ = None;
                 let mut signatures__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
-                        GeneratedField::Relayer => {
-                            if relayer__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("relayer"));
+                        GeneratedField::Sender => {
+                            if sender__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("sender"));
                             }
-                            relayer__ = Some(map_.next_value()?);
+                            sender__ = Some(map_.next_value()?);
                         }
                         GeneratedField::AuctionId => {
                             if auction_id__.is_some() {
@@ -1508,22 +1494,22 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentTransactionSignatures {
                         }
                     }
                 }
-                Ok(MsgSubmitPaymentTransactionSignatures {
-                    relayer: relayer__.unwrap_or_default(),
+                Ok(MsgSubmitPaymentSignatures {
+                    sender: sender__.unwrap_or_default(),
                     auction_id: auction_id__.unwrap_or_default(),
                     signatures: signatures__.unwrap_or_default(),
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.auction.MsgSubmitPaymentTransactionSignatures",
+            "side.auction.MsgSubmitPaymentSignatures",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitPaymentTransactionSignaturesResponse {
+impl serde::Serialize for MsgSubmitPaymentSignaturesResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -1531,15 +1517,13 @@ impl serde::Serialize for MsgSubmitPaymentTransactionSignaturesResponse {
     {
         use serde::ser::SerializeStruct;
         let len = 0;
-        let struct_ser = serializer.serialize_struct(
-            "side.auction.MsgSubmitPaymentTransactionSignaturesResponse",
-            len,
-        )?;
+        let struct_ser =
+            serializer.serialize_struct("side.auction.MsgSubmitPaymentSignaturesResponse", len)?;
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentTransactionSignaturesResponse {
+impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentSignaturesResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -1580,28 +1564,27 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitPaymentTransactionSignaturesRespo
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitPaymentTransactionSignaturesResponse;
+            type Value = MsgSubmitPaymentSignaturesResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter
-                    .write_str("struct side.auction.MsgSubmitPaymentTransactionSignaturesResponse")
+                formatter.write_str("struct side.auction.MsgSubmitPaymentSignaturesResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgSubmitPaymentTransactionSignaturesResponse, V::Error>
+            ) -> core::result::Result<MsgSubmitPaymentSignaturesResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 while map_.next_key::<GeneratedField>()?.is_some() {
                     let _ = map_.next_value::<serde::de::IgnoredAny>()?;
                 }
-                Ok(MsgSubmitPaymentTransactionSignaturesResponse {})
+                Ok(MsgSubmitPaymentSignaturesResponse {})
             }
         }
         deserializer.deserialize_struct(
-            "side.auction.MsgSubmitPaymentTransactionSignaturesResponse",
+            "side.auction.MsgSubmitPaymentSignaturesResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -1967,6 +1950,219 @@ impl<'de> serde::Deserialize<'de> for Params {
             }
         }
         deserializer.deserialize_struct("side.auction.Params", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryAuctionPriceRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.auction_id != 0 {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.auction.QueryAuctionPriceRequest", len)?;
+        if self.auction_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "auctionId",
+                alloc::string::ToString::to_string(&self.auction_id).as_str(),
+            )?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryAuctionPriceRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["auction_id", "auctionId"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            AuctionId,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "auctionId" | "auction_id" => Ok(GeneratedField::AuctionId),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryAuctionPriceRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.auction.QueryAuctionPriceRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryAuctionPriceRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut auction_id__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::AuctionId => {
+                            if auction_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("auctionId"));
+                            }
+                            auction_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(QueryAuctionPriceRequest {
+                    auction_id: auction_id__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.auction.QueryAuctionPriceRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryAuctionPriceResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.price.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.auction.QueryAuctionPriceResponse", len)?;
+        if !self.price.is_empty() {
+            struct_ser.serialize_field("price", &self.price)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryAuctionPriceResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["price"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Price,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "price" => Ok(GeneratedField::Price),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryAuctionPriceResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.auction.QueryAuctionPriceResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryAuctionPriceResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut price__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Price => {
+                            if price__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("price"));
+                            }
+                            price__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryAuctionPriceResponse {
+                    price: price__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.auction.QueryAuctionPriceResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }
 #[cfg(feature = "serde")]
