@@ -360,6 +360,8 @@ impl ::prost::Name for QueryAuctionPriceRequest {
 pub struct QueryAuctionPriceResponse {
     #[prost(string, tag = "1")]
     pub price: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub discount: u32,
 }
 impl ::prost::Name for QueryAuctionPriceResponse {
     const NAME: &'static str = "QueryAuctionPriceResponse";
