@@ -185,6 +185,241 @@ impl<'de> serde::Deserialize<'de> for Cancellation {
     }
 }
 #[cfg(feature = "serde")]
+impl serde::Serialize for CetInfo {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.event_id != 0 {
+            len += 1;
+        }
+        if self.outcome_index != 0 {
+            len += 1;
+        }
+        if !self.signature_point.is_empty() {
+            len += 1;
+        }
+        if !self.script.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.lending.CetInfo", len)?;
+        if self.event_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "eventId",
+                alloc::string::ToString::to_string(&self.event_id).as_str(),
+            )?;
+        }
+        if self.outcome_index != 0 {
+            struct_ser.serialize_field("outcomeIndex", &self.outcome_index)?;
+        }
+        if !self.signature_point.is_empty() {
+            struct_ser.serialize_field("signaturePoint", &self.signature_point)?;
+        }
+        if !self.script.is_empty() {
+            struct_ser.serialize_field("script", &self.script)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for CetInfo {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "event_id",
+            "eventId",
+            "outcome_index",
+            "outcomeIndex",
+            "signature_point",
+            "signaturePoint",
+            "script",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            EventId,
+            OutcomeIndex,
+            SignaturePoint,
+            Script,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "eventId" | "event_id" => Ok(GeneratedField::EventId),
+                            "outcomeIndex" | "outcome_index" => Ok(GeneratedField::OutcomeIndex),
+                            "signaturePoint" | "signature_point" => {
+                                Ok(GeneratedField::SignaturePoint)
+                            }
+                            "script" => Ok(GeneratedField::Script),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = CetInfo;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.CetInfo")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<CetInfo, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut event_id__ = None;
+                let mut outcome_index__ = None;
+                let mut signature_point__ = None;
+                let mut script__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::EventId => {
+                            if event_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("eventId"));
+                            }
+                            event_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::OutcomeIndex => {
+                            if outcome_index__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("outcomeIndex"));
+                            }
+                            outcome_index__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::SignaturePoint => {
+                            if signature_point__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("signaturePoint"));
+                            }
+                            signature_point__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Script => {
+                            if script__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("script"));
+                            }
+                            script__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(CetInfo {
+                    event_id: event_id__.unwrap_or_default(),
+                    outcome_index: outcome_index__.unwrap_or_default(),
+                    signature_point: signature_point__.unwrap_or_default(),
+                    script: script__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.lending.CetInfo", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for CetType {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let variant = match self {
+            Self::Liquidation => "LIQUIDATION",
+            Self::DefaultLiquidation => "DEFAULT_LIQUIDATION",
+            Self::Repayment => "REPAYMENT",
+        };
+        serializer.serialize_str(variant)
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for CetType {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["LIQUIDATION", "DEFAULT_LIQUIDATION", "REPAYMENT"];
+
+        struct GeneratedVisitor;
+
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = CetType;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                write!(formatter, "expected one of: {:?}", &FIELDS)
+            }
+
+            fn visit_i64<E>(self, v: i64) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                i32::try_from(v)
+                    .ok()
+                    .and_then(|x| x.try_into().ok())
+                    .ok_or_else(|| {
+                        serde::de::Error::invalid_value(serde::de::Unexpected::Signed(v), &self)
+                    })
+            }
+
+            fn visit_u64<E>(self, v: u64) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                i32::try_from(v)
+                    .ok()
+                    .and_then(|x| x.try_into().ok())
+                    .ok_or_else(|| {
+                        serde::de::Error::invalid_value(serde::de::Unexpected::Unsigned(v), &self)
+                    })
+            }
+
+            fn visit_str<E>(self, value: &str) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                match value {
+                    "LIQUIDATION" => Ok(CetType::Liquidation),
+                    "DEFAULT_LIQUIDATION" => Ok(CetType::DefaultLiquidation),
+                    "REPAYMENT" => Ok(CetType::Repayment),
+                    _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
+                }
+            }
+        }
+        deserializer.deserialize_any(GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for DlcMeta {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -193,79 +428,45 @@ impl serde::Serialize for DlcMeta {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if !self.liquidation_cet.is_empty() {
+        if self.liquidation_cet.is_some() {
             len += 1;
         }
-        if !self.signed_liquidation_cet_hex.is_empty() {
+        if self.default_liquidation_cet.is_some() {
             len += 1;
         }
-        if !self.liquidation_adaptor_signatures.is_empty() {
+        if self.repayment_cet.is_some() {
             len += 1;
         }
-        if !self.liquidation_adapted_signatures.is_empty() {
-            len += 1;
-        }
-        if !self.liquidation_agency_signatures.is_empty() {
-            len += 1;
-        }
-        if self.vault_utxo.is_some() {
+        if !self.vault_utxos.is_empty() {
             len += 1;
         }
         if !self.internal_key.is_empty() {
             len += 1;
         }
-        if !self.liquidation_cet_script.is_empty() {
-            len += 1;
-        }
-        if !self.repayment_script.is_empty() {
-            len += 1;
-        }
-        if !self.forced_repayment_script.is_empty() {
+        if !self.multisig_script.is_empty() {
             len += 1;
         }
         if !self.timeout_refund_script.is_empty() {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.lending.DLCMeta", len)?;
-        if !self.liquidation_cet.is_empty() {
-            struct_ser.serialize_field("liquidationCet", &self.liquidation_cet)?;
+        if let Some(v) = self.liquidation_cet.as_ref() {
+            struct_ser.serialize_field("liquidationCet", v)?;
         }
-        if !self.signed_liquidation_cet_hex.is_empty() {
-            struct_ser
-                .serialize_field("signedLiquidationCetHex", &self.signed_liquidation_cet_hex)?;
+        if let Some(v) = self.default_liquidation_cet.as_ref() {
+            struct_ser.serialize_field("defaultLiquidationCet", v)?;
         }
-        if !self.liquidation_adaptor_signatures.is_empty() {
-            struct_ser.serialize_field(
-                "liquidationAdaptorSignatures",
-                &self.liquidation_adaptor_signatures,
-            )?;
+        if let Some(v) = self.repayment_cet.as_ref() {
+            struct_ser.serialize_field("repaymentCet", v)?;
         }
-        if !self.liquidation_adapted_signatures.is_empty() {
-            struct_ser.serialize_field(
-                "liquidationAdaptedSignatures",
-                &self.liquidation_adapted_signatures,
-            )?;
-        }
-        if !self.liquidation_agency_signatures.is_empty() {
-            struct_ser.serialize_field(
-                "liquidationAgencySignatures",
-                &self.liquidation_agency_signatures,
-            )?;
-        }
-        if let Some(v) = self.vault_utxo.as_ref() {
-            struct_ser.serialize_field("vaultUtxo", v)?;
+        if !self.vault_utxos.is_empty() {
+            struct_ser.serialize_field("vaultUtxos", &self.vault_utxos)?;
         }
         if !self.internal_key.is_empty() {
             struct_ser.serialize_field("internalKey", &self.internal_key)?;
         }
-        if !self.liquidation_cet_script.is_empty() {
-            struct_ser.serialize_field("liquidationCetScript", &self.liquidation_cet_script)?;
-        }
-        if !self.repayment_script.is_empty() {
-            struct_ser.serialize_field("repaymentScript", &self.repayment_script)?;
-        }
-        if !self.forced_repayment_script.is_empty() {
-            struct_ser.serialize_field("forcedRepaymentScript", &self.forced_repayment_script)?;
+        if !self.multisig_script.is_empty() {
+            struct_ser.serialize_field("multisigScript", &self.multisig_script)?;
         }
         if !self.timeout_refund_script.is_empty() {
             struct_ser.serialize_field("timeoutRefundScript", &self.timeout_refund_script)?;
@@ -283,24 +484,16 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
         const FIELDS: &[&str] = &[
             "liquidation_cet",
             "liquidationCet",
-            "signed_liquidation_cet_hex",
-            "signedLiquidationCetHex",
-            "liquidation_adaptor_signatures",
-            "liquidationAdaptorSignatures",
-            "liquidation_adapted_signatures",
-            "liquidationAdaptedSignatures",
-            "liquidation_agency_signatures",
-            "liquidationAgencySignatures",
-            "vault_utxo",
-            "vaultUtxo",
+            "default_liquidation_cet",
+            "defaultLiquidationCet",
+            "repayment_cet",
+            "repaymentCet",
+            "vault_utxos",
+            "vaultUtxos",
             "internal_key",
             "internalKey",
-            "liquidation_cet_script",
-            "liquidationCetScript",
-            "repayment_script",
-            "repaymentScript",
-            "forced_repayment_script",
-            "forcedRepaymentScript",
+            "multisig_script",
+            "multisigScript",
             "timeout_refund_script",
             "timeoutRefundScript",
         ];
@@ -308,15 +501,11 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             LiquidationCet,
-            SignedLiquidationCetHex,
-            LiquidationAdaptorSignatures,
-            LiquidationAdaptedSignatures,
-            LiquidationAgencySignatures,
-            VaultUtxo,
+            DefaultLiquidationCet,
+            RepaymentCet,
+            VaultUtxos,
             InternalKey,
-            LiquidationCetScript,
-            RepaymentScript,
-            ForcedRepaymentScript,
+            MultisigScript,
             TimeoutRefundScript,
         }
         #[cfg(feature = "serde")]
@@ -346,28 +535,14 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                             "liquidationCet" | "liquidation_cet" => {
                                 Ok(GeneratedField::LiquidationCet)
                             }
-                            "signedLiquidationCetHex" | "signed_liquidation_cet_hex" => {
-                                Ok(GeneratedField::SignedLiquidationCetHex)
+                            "defaultLiquidationCet" | "default_liquidation_cet" => {
+                                Ok(GeneratedField::DefaultLiquidationCet)
                             }
-                            "liquidationAdaptorSignatures" | "liquidation_adaptor_signatures" => {
-                                Ok(GeneratedField::LiquidationAdaptorSignatures)
-                            }
-                            "liquidationAdaptedSignatures" | "liquidation_adapted_signatures" => {
-                                Ok(GeneratedField::LiquidationAdaptedSignatures)
-                            }
-                            "liquidationAgencySignatures" | "liquidation_agency_signatures" => {
-                                Ok(GeneratedField::LiquidationAgencySignatures)
-                            }
-                            "vaultUtxo" | "vault_utxo" => Ok(GeneratedField::VaultUtxo),
+                            "repaymentCet" | "repayment_cet" => Ok(GeneratedField::RepaymentCet),
+                            "vaultUtxos" | "vault_utxos" => Ok(GeneratedField::VaultUtxos),
                             "internalKey" | "internal_key" => Ok(GeneratedField::InternalKey),
-                            "liquidationCetScript" | "liquidation_cet_script" => {
-                                Ok(GeneratedField::LiquidationCetScript)
-                            }
-                            "repaymentScript" | "repayment_script" => {
-                                Ok(GeneratedField::RepaymentScript)
-                            }
-                            "forcedRepaymentScript" | "forced_repayment_script" => {
-                                Ok(GeneratedField::ForcedRepaymentScript)
+                            "multisigScript" | "multisig_script" => {
+                                Ok(GeneratedField::MultisigScript)
                             }
                             "timeoutRefundScript" | "timeout_refund_script" => {
                                 Ok(GeneratedField::TimeoutRefundScript)
@@ -392,15 +567,11 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut liquidation_cet__ = None;
-                let mut signed_liquidation_cet_hex__ = None;
-                let mut liquidation_adaptor_signatures__ = None;
-                let mut liquidation_adapted_signatures__ = None;
-                let mut liquidation_agency_signatures__ = None;
-                let mut vault_utxo__ = None;
+                let mut default_liquidation_cet__ = None;
+                let mut repayment_cet__ = None;
+                let mut vault_utxos__ = None;
                 let mut internal_key__ = None;
-                let mut liquidation_cet_script__ = None;
-                let mut repayment_script__ = None;
-                let mut forced_repayment_script__ = None;
+                let mut multisig_script__ = None;
                 let mut timeout_refund_script__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -408,45 +579,27 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                             if liquidation_cet__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("liquidationCet"));
                             }
-                            liquidation_cet__ = Some(map_.next_value()?);
+                            liquidation_cet__ = map_.next_value()?;
                         }
-                        GeneratedField::SignedLiquidationCetHex => {
-                            if signed_liquidation_cet_hex__.is_some() {
+                        GeneratedField::DefaultLiquidationCet => {
+                            if default_liquidation_cet__.is_some() {
                                 return Err(serde::de::Error::duplicate_field(
-                                    "signedLiquidationCetHex",
+                                    "defaultLiquidationCet",
                                 ));
                             }
-                            signed_liquidation_cet_hex__ = Some(map_.next_value()?);
+                            default_liquidation_cet__ = map_.next_value()?;
                         }
-                        GeneratedField::LiquidationAdaptorSignatures => {
-                            if liquidation_adaptor_signatures__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "liquidationAdaptorSignatures",
-                                ));
+                        GeneratedField::RepaymentCet => {
+                            if repayment_cet__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("repaymentCet"));
                             }
-                            liquidation_adaptor_signatures__ = Some(map_.next_value()?);
+                            repayment_cet__ = map_.next_value()?;
                         }
-                        GeneratedField::LiquidationAdaptedSignatures => {
-                            if liquidation_adapted_signatures__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "liquidationAdaptedSignatures",
-                                ));
+                        GeneratedField::VaultUtxos => {
+                            if vault_utxos__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("vaultUtxos"));
                             }
-                            liquidation_adapted_signatures__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::LiquidationAgencySignatures => {
-                            if liquidation_agency_signatures__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "liquidationAgencySignatures",
-                                ));
-                            }
-                            liquidation_agency_signatures__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::VaultUtxo => {
-                            if vault_utxo__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("vaultUtxo"));
-                            }
-                            vault_utxo__ = map_.next_value()?;
+                            vault_utxos__ = Some(map_.next_value()?);
                         }
                         GeneratedField::InternalKey => {
                             if internal_key__.is_some() {
@@ -454,27 +607,11 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                             }
                             internal_key__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::LiquidationCetScript => {
-                            if liquidation_cet_script__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "liquidationCetScript",
-                                ));
+                        GeneratedField::MultisigScript => {
+                            if multisig_script__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("multisigScript"));
                             }
-                            liquidation_cet_script__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::RepaymentScript => {
-                            if repayment_script__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("repaymentScript"));
-                            }
-                            repayment_script__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::ForcedRepaymentScript => {
-                            if forced_repayment_script__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "forcedRepaymentScript",
-                                ));
-                            }
-                            forced_repayment_script__ = Some(map_.next_value()?);
+                            multisig_script__ = Some(map_.next_value()?);
                         }
                         GeneratedField::TimeoutRefundScript => {
                             if timeout_refund_script__.is_some() {
@@ -487,19 +624,12 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                     }
                 }
                 Ok(DlcMeta {
-                    liquidation_cet: liquidation_cet__.unwrap_or_default(),
-                    signed_liquidation_cet_hex: signed_liquidation_cet_hex__.unwrap_or_default(),
-                    liquidation_adaptor_signatures: liquidation_adaptor_signatures__
-                        .unwrap_or_default(),
-                    liquidation_adapted_signatures: liquidation_adapted_signatures__
-                        .unwrap_or_default(),
-                    liquidation_agency_signatures: liquidation_agency_signatures__
-                        .unwrap_or_default(),
-                    vault_utxo: vault_utxo__,
+                    liquidation_cet: liquidation_cet__,
+                    default_liquidation_cet: default_liquidation_cet__,
+                    repayment_cet: repayment_cet__,
+                    vault_utxos: vault_utxos__.unwrap_or_default(),
                     internal_key: internal_key__.unwrap_or_default(),
-                    liquidation_cet_script: liquidation_cet_script__.unwrap_or_default(),
-                    repayment_script: repayment_script__.unwrap_or_default(),
-                    forced_repayment_script: forced_repayment_script__.unwrap_or_default(),
+                    multisig_script: multisig_script__.unwrap_or_default(),
                     timeout_refund_script: timeout_refund_script__.unwrap_or_default(),
                 })
             }
@@ -769,10 +899,13 @@ impl serde::Serialize for LendingPool {
         if !self.available_amount.is_empty() {
             len += 1;
         }
-        if !self.borrowed_amount.is_empty() {
+        if !self.total_borrowed.is_empty() {
             len += 1;
         }
-        if !self.total_shares.is_empty() {
+        if !self.total_reserves.is_empty() {
+            len += 1;
+        }
+        if self.total_stokens.is_some() {
             len += 1;
         }
         if self.config.is_some() {
@@ -791,11 +924,14 @@ impl serde::Serialize for LendingPool {
         if !self.available_amount.is_empty() {
             struct_ser.serialize_field("availableAmount", &self.available_amount)?;
         }
-        if !self.borrowed_amount.is_empty() {
-            struct_ser.serialize_field("borrowedAmount", &self.borrowed_amount)?;
+        if !self.total_borrowed.is_empty() {
+            struct_ser.serialize_field("totalBorrowed", &self.total_borrowed)?;
         }
-        if !self.total_shares.is_empty() {
-            struct_ser.serialize_field("totalShares", &self.total_shares)?;
+        if !self.total_reserves.is_empty() {
+            struct_ser.serialize_field("totalReserves", &self.total_reserves)?;
+        }
+        if let Some(v) = self.total_stokens.as_ref() {
+            struct_ser.serialize_field("totalStokens", v)?;
         }
         if let Some(v) = self.config.as_ref() {
             struct_ser.serialize_field("config", v)?;
@@ -821,10 +957,12 @@ impl<'de> serde::Deserialize<'de> for LendingPool {
             "supply",
             "available_amount",
             "availableAmount",
-            "borrowed_amount",
-            "borrowedAmount",
-            "total_shares",
-            "totalShares",
+            "total_borrowed",
+            "totalBorrowed",
+            "total_reserves",
+            "totalReserves",
+            "total_stokens",
+            "totalStokens",
             "config",
             "status",
         ];
@@ -834,8 +972,9 @@ impl<'de> serde::Deserialize<'de> for LendingPool {
             Id,
             Supply,
             AvailableAmount,
-            BorrowedAmount,
-            TotalShares,
+            TotalBorrowed,
+            TotalReserves,
+            TotalStokens,
             Config,
             Status,
         }
@@ -868,10 +1007,9 @@ impl<'de> serde::Deserialize<'de> for LendingPool {
                             "availableAmount" | "available_amount" => {
                                 Ok(GeneratedField::AvailableAmount)
                             }
-                            "borrowedAmount" | "borrowed_amount" => {
-                                Ok(GeneratedField::BorrowedAmount)
-                            }
-                            "totalShares" | "total_shares" => Ok(GeneratedField::TotalShares),
+                            "totalBorrowed" | "total_borrowed" => Ok(GeneratedField::TotalBorrowed),
+                            "totalReserves" | "total_reserves" => Ok(GeneratedField::TotalReserves),
+                            "totalStokens" | "total_stokens" => Ok(GeneratedField::TotalStokens),
                             "config" => Ok(GeneratedField::Config),
                             "status" => Ok(GeneratedField::Status),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -896,8 +1034,9 @@ impl<'de> serde::Deserialize<'de> for LendingPool {
                 let mut id__ = None;
                 let mut supply__ = None;
                 let mut available_amount__ = None;
-                let mut borrowed_amount__ = None;
-                let mut total_shares__ = None;
+                let mut total_borrowed__ = None;
+                let mut total_reserves__ = None;
+                let mut total_stokens__ = None;
                 let mut config__ = None;
                 let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -920,17 +1059,23 @@ impl<'de> serde::Deserialize<'de> for LendingPool {
                             }
                             available_amount__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::BorrowedAmount => {
-                            if borrowed_amount__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("borrowedAmount"));
+                        GeneratedField::TotalBorrowed => {
+                            if total_borrowed__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("totalBorrowed"));
                             }
-                            borrowed_amount__ = Some(map_.next_value()?);
+                            total_borrowed__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::TotalShares => {
-                            if total_shares__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("totalShares"));
+                        GeneratedField::TotalReserves => {
+                            if total_reserves__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("totalReserves"));
                             }
-                            total_shares__ = Some(map_.next_value()?);
+                            total_reserves__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::TotalStokens => {
+                            if total_stokens__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("totalStokens"));
+                            }
+                            total_stokens__ = map_.next_value()?;
                         }
                         GeneratedField::Config => {
                             if config__.is_some() {
@@ -950,14 +1095,198 @@ impl<'de> serde::Deserialize<'de> for LendingPool {
                     id: id__.unwrap_or_default(),
                     supply: supply__,
                     available_amount: available_amount__.unwrap_or_default(),
-                    borrowed_amount: borrowed_amount__.unwrap_or_default(),
-                    total_shares: total_shares__.unwrap_or_default(),
+                    total_borrowed: total_borrowed__.unwrap_or_default(),
+                    total_reserves: total_reserves__.unwrap_or_default(),
+                    total_stokens: total_stokens__,
                     config: config__,
                     status: status__.unwrap_or_default(),
                 })
             }
         }
         deserializer.deserialize_struct("side.lending.LendingPool", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for LiquidationCet {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.tx.is_empty() {
+            len += 1;
+        }
+        if !self.borrower_adaptor_signatures.is_empty() {
+            len += 1;
+        }
+        if !self.borrower_adapted_signatures.is_empty() {
+            len += 1;
+        }
+        if !self.dcm_signatures.is_empty() {
+            len += 1;
+        }
+        if !self.signed_tx_hex.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.lending.LiquidationCet", len)?;
+        if !self.tx.is_empty() {
+            struct_ser.serialize_field("tx", &self.tx)?;
+        }
+        if !self.borrower_adaptor_signatures.is_empty() {
+            struct_ser.serialize_field(
+                "borrowerAdaptorSignatures",
+                &self.borrower_adaptor_signatures,
+            )?;
+        }
+        if !self.borrower_adapted_signatures.is_empty() {
+            struct_ser.serialize_field(
+                "borrowerAdaptedSignatures",
+                &self.borrower_adapted_signatures,
+            )?;
+        }
+        if !self.dcm_signatures.is_empty() {
+            struct_ser.serialize_field("dcmSignatures", &self.dcm_signatures)?;
+        }
+        if !self.signed_tx_hex.is_empty() {
+            struct_ser.serialize_field("signedTxHex", &self.signed_tx_hex)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for LiquidationCet {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "tx",
+            "borrower_adaptor_signatures",
+            "borrowerAdaptorSignatures",
+            "borrower_adapted_signatures",
+            "borrowerAdaptedSignatures",
+            "dcm_signatures",
+            "dcmSignatures",
+            "signed_tx_hex",
+            "signedTxHex",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Tx,
+            BorrowerAdaptorSignatures,
+            BorrowerAdaptedSignatures,
+            DcmSignatures,
+            SignedTxHex,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "tx" => Ok(GeneratedField::Tx),
+                            "borrowerAdaptorSignatures" | "borrower_adaptor_signatures" => {
+                                Ok(GeneratedField::BorrowerAdaptorSignatures)
+                            }
+                            "borrowerAdaptedSignatures" | "borrower_adapted_signatures" => {
+                                Ok(GeneratedField::BorrowerAdaptedSignatures)
+                            }
+                            "dcmSignatures" | "dcm_signatures" => Ok(GeneratedField::DcmSignatures),
+                            "signedTxHex" | "signed_tx_hex" => Ok(GeneratedField::SignedTxHex),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = LiquidationCet;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.LiquidationCet")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<LiquidationCet, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut tx__ = None;
+                let mut borrower_adaptor_signatures__ = None;
+                let mut borrower_adapted_signatures__ = None;
+                let mut dcm_signatures__ = None;
+                let mut signed_tx_hex__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Tx => {
+                            if tx__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("tx"));
+                            }
+                            tx__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::BorrowerAdaptorSignatures => {
+                            if borrower_adaptor_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "borrowerAdaptorSignatures",
+                                ));
+                            }
+                            borrower_adaptor_signatures__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::BorrowerAdaptedSignatures => {
+                            if borrower_adapted_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "borrowerAdaptedSignatures",
+                                ));
+                            }
+                            borrower_adapted_signatures__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::DcmSignatures => {
+                            if dcm_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dcmSignatures"));
+                            }
+                            dcm_signatures__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::SignedTxHex => {
+                            if signed_tx_hex__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("signedTxHex"));
+                            }
+                            signed_tx_hex__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(LiquidationCet {
+                    tx: tx__.unwrap_or_default(),
+                    borrower_adaptor_signatures: borrower_adaptor_signatures__.unwrap_or_default(),
+                    borrower_adapted_signatures: borrower_adapted_signatures__.unwrap_or_default(),
+                    dcm_signatures: dcm_signatures__.unwrap_or_default(),
+                    signed_tx_hex: signed_tx_hex__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.lending.LiquidationCet", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
@@ -978,13 +1307,16 @@ impl serde::Serialize for Loan {
         if !self.borrower_pub_key.is_empty() {
             len += 1;
         }
-        if !self.agency.is_empty() {
+        if !self.dcm.is_empty() {
             len += 1;
         }
         if self.maturity_time != 0 {
             len += 1;
         }
         if self.final_timeout != 0 {
+            len += 1;
+        }
+        if !self.pool_id.is_empty() {
             len += 1;
         }
         if self.borrow_amount.is_some() {
@@ -1002,10 +1334,16 @@ impl serde::Serialize for Loan {
         if !self.term.is_empty() {
             len += 1;
         }
-        if self.event_id != 0 {
+        if !self.liquidation_price.is_empty() {
             len += 1;
         }
-        if self.attestation_id != 0 {
+        if self.liquidation_event_id != 0 {
+            len += 1;
+        }
+        if self.default_liquidation_event_id != 0 {
+            len += 1;
+        }
+        if self.repayment_event_id != 0 {
             len += 1;
         }
         if !self.deposit_txs.is_empty() {
@@ -1014,10 +1352,7 @@ impl serde::Serialize for Loan {
         if !self.collateral_amount.is_empty() {
             len += 1;
         }
-        if !self.pool_id.is_empty() {
-            len += 1;
-        }
-        if self.auction_id != 0 {
+        if self.liquidation_id != 0 {
             len += 1;
         }
         if self.create_at.is_some() {
@@ -1036,8 +1371,8 @@ impl serde::Serialize for Loan {
         if !self.borrower_pub_key.is_empty() {
             struct_ser.serialize_field("borrowerPubKey", &self.borrower_pub_key)?;
         }
-        if !self.agency.is_empty() {
-            struct_ser.serialize_field("agency", &self.agency)?;
+        if !self.dcm.is_empty() {
+            struct_ser.serialize_field("dcm", &self.dcm)?;
         }
         if self.maturity_time != 0 {
             #[allow(clippy::needless_borrow)]
@@ -1052,6 +1387,9 @@ impl serde::Serialize for Loan {
                 "finalTimeout",
                 alloc::string::ToString::to_string(&self.final_timeout).as_str(),
             )?;
+        }
+        if !self.pool_id.is_empty() {
+            struct_ser.serialize_field("poolId", &self.pool_id)?;
         }
         if let Some(v) = self.borrow_amount.as_ref() {
             struct_ser.serialize_field("borrowAmount", v)?;
@@ -1068,18 +1406,28 @@ impl serde::Serialize for Loan {
         if !self.term.is_empty() {
             struct_ser.serialize_field("term", &self.term)?;
         }
-        if self.event_id != 0 {
+        if !self.liquidation_price.is_empty() {
+            struct_ser.serialize_field("liquidationPrice", &self.liquidation_price)?;
+        }
+        if self.liquidation_event_id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser.serialize_field(
-                "eventId",
-                alloc::string::ToString::to_string(&self.event_id).as_str(),
+                "liquidationEventId",
+                alloc::string::ToString::to_string(&self.liquidation_event_id).as_str(),
             )?;
         }
-        if self.attestation_id != 0 {
+        if self.default_liquidation_event_id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser.serialize_field(
-                "attestationId",
-                alloc::string::ToString::to_string(&self.attestation_id).as_str(),
+                "defaultLiquidationEventId",
+                alloc::string::ToString::to_string(&self.default_liquidation_event_id).as_str(),
+            )?;
+        }
+        if self.repayment_event_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "repaymentEventId",
+                alloc::string::ToString::to_string(&self.repayment_event_id).as_str(),
             )?;
         }
         if !self.deposit_txs.is_empty() {
@@ -1088,14 +1436,11 @@ impl serde::Serialize for Loan {
         if !self.collateral_amount.is_empty() {
             struct_ser.serialize_field("collateralAmount", &self.collateral_amount)?;
         }
-        if !self.pool_id.is_empty() {
-            struct_ser.serialize_field("poolId", &self.pool_id)?;
-        }
-        if self.auction_id != 0 {
+        if self.liquidation_id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser.serialize_field(
-                "auctionId",
-                alloc::string::ToString::to_string(&self.auction_id).as_str(),
+                "liquidationId",
+                alloc::string::ToString::to_string(&self.liquidation_id).as_str(),
             )?;
         }
         if let Some(v) = self.create_at.as_ref() {
@@ -1122,11 +1467,13 @@ impl<'de> serde::Deserialize<'de> for Loan {
             "vaultAddress",
             "borrower",
             "borrowerPubKey",
-            "agency",
+            "dcm",
             "maturity_time",
             "maturityTime",
             "final_timeout",
             "finalTimeout",
+            "pool_id",
+            "poolId",
             "borrow_amount",
             "borrowAmount",
             "origination_fee",
@@ -1135,18 +1482,20 @@ impl<'de> serde::Deserialize<'de> for Loan {
             "protocol_fee",
             "protocolFee",
             "term",
-            "event_id",
-            "eventId",
-            "attestation_id",
-            "attestationId",
+            "liquidation_price",
+            "liquidationPrice",
+            "liquidation_event_id",
+            "liquidationEventId",
+            "default_liquidation_event_id",
+            "defaultLiquidationEventId",
+            "repayment_event_id",
+            "repaymentEventId",
             "deposit_txs",
             "depositTxs",
             "collateral_amount",
             "collateralAmount",
-            "pool_id",
-            "poolId",
-            "auction_id",
-            "auctionId",
+            "liquidation_id",
+            "liquidationId",
             "create_at",
             "createAt",
             "status",
@@ -1157,20 +1506,22 @@ impl<'de> serde::Deserialize<'de> for Loan {
             VaultAddress,
             Borrower,
             BorrowerPubKey,
-            Agency,
+            Dcm,
             MaturityTime,
             FinalTimeout,
+            PoolId,
             BorrowAmount,
             OriginationFee,
             Interest,
             ProtocolFee,
             Term,
-            EventId,
-            AttestationId,
+            LiquidationPrice,
+            LiquidationEventId,
+            DefaultLiquidationEventId,
+            RepaymentEventId,
             DepositTxs,
             CollateralAmount,
-            PoolId,
-            AuctionId,
+            LiquidationId,
             CreateAt,
             Status,
         }
@@ -1201,9 +1552,10 @@ impl<'de> serde::Deserialize<'de> for Loan {
                             "vaultAddress" | "vault_address" => Ok(GeneratedField::VaultAddress),
                             "borrower" => Ok(GeneratedField::Borrower),
                             "borrowerPubKey" => Ok(GeneratedField::BorrowerPubKey),
-                            "agency" => Ok(GeneratedField::Agency),
+                            "dcm" => Ok(GeneratedField::Dcm),
                             "maturityTime" | "maturity_time" => Ok(GeneratedField::MaturityTime),
                             "finalTimeout" | "final_timeout" => Ok(GeneratedField::FinalTimeout),
+                            "poolId" | "pool_id" => Ok(GeneratedField::PoolId),
                             "borrowAmount" | "borrow_amount" => Ok(GeneratedField::BorrowAmount),
                             "originationFee" | "origination_fee" => {
                                 Ok(GeneratedField::OriginationFee)
@@ -1211,14 +1563,23 @@ impl<'de> serde::Deserialize<'de> for Loan {
                             "interest" => Ok(GeneratedField::Interest),
                             "protocolFee" | "protocol_fee" => Ok(GeneratedField::ProtocolFee),
                             "term" => Ok(GeneratedField::Term),
-                            "eventId" | "event_id" => Ok(GeneratedField::EventId),
-                            "attestationId" | "attestation_id" => Ok(GeneratedField::AttestationId),
+                            "liquidationPrice" | "liquidation_price" => {
+                                Ok(GeneratedField::LiquidationPrice)
+                            }
+                            "liquidationEventId" | "liquidation_event_id" => {
+                                Ok(GeneratedField::LiquidationEventId)
+                            }
+                            "defaultLiquidationEventId" | "default_liquidation_event_id" => {
+                                Ok(GeneratedField::DefaultLiquidationEventId)
+                            }
+                            "repaymentEventId" | "repayment_event_id" => {
+                                Ok(GeneratedField::RepaymentEventId)
+                            }
                             "depositTxs" | "deposit_txs" => Ok(GeneratedField::DepositTxs),
                             "collateralAmount" | "collateral_amount" => {
                                 Ok(GeneratedField::CollateralAmount)
                             }
-                            "poolId" | "pool_id" => Ok(GeneratedField::PoolId),
-                            "auctionId" | "auction_id" => Ok(GeneratedField::AuctionId),
+                            "liquidationId" | "liquidation_id" => Ok(GeneratedField::LiquidationId),
                             "createAt" | "create_at" => Ok(GeneratedField::CreateAt),
                             "status" => Ok(GeneratedField::Status),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -1243,20 +1604,22 @@ impl<'de> serde::Deserialize<'de> for Loan {
                 let mut vault_address__ = None;
                 let mut borrower__ = None;
                 let mut borrower_pub_key__ = None;
-                let mut agency__ = None;
+                let mut dcm__ = None;
                 let mut maturity_time__ = None;
                 let mut final_timeout__ = None;
+                let mut pool_id__ = None;
                 let mut borrow_amount__ = None;
                 let mut origination_fee__ = None;
                 let mut interest__ = None;
                 let mut protocol_fee__ = None;
                 let mut term__ = None;
-                let mut event_id__ = None;
-                let mut attestation_id__ = None;
+                let mut liquidation_price__ = None;
+                let mut liquidation_event_id__ = None;
+                let mut default_liquidation_event_id__ = None;
+                let mut repayment_event_id__ = None;
                 let mut deposit_txs__ = None;
                 let mut collateral_amount__ = None;
-                let mut pool_id__ = None;
-                let mut auction_id__ = None;
+                let mut liquidation_id__ = None;
                 let mut create_at__ = None;
                 let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -1279,11 +1642,11 @@ impl<'de> serde::Deserialize<'de> for Loan {
                             }
                             borrower_pub_key__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::Agency => {
-                            if agency__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("agency"));
+                        GeneratedField::Dcm => {
+                            if dcm__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dcm"));
                             }
-                            agency__ = Some(map_.next_value()?);
+                            dcm__ = Some(map_.next_value()?);
                         }
                         GeneratedField::MaturityTime => {
                             if maturity_time__.is_some() {
@@ -1302,6 +1665,12 @@ impl<'de> serde::Deserialize<'de> for Loan {
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
+                        }
+                        GeneratedField::PoolId => {
+                            if pool_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("poolId"));
+                            }
+                            pool_id__ = Some(map_.next_value()?);
                         }
                         GeneratedField::BorrowAmount => {
                             if borrow_amount__.is_some() {
@@ -1333,20 +1702,39 @@ impl<'de> serde::Deserialize<'de> for Loan {
                             }
                             term__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::EventId => {
-                            if event_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("eventId"));
+                        GeneratedField::LiquidationPrice => {
+                            if liquidation_price__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("liquidationPrice"));
                             }
-                            event_id__ = Some(
+                            liquidation_price__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::LiquidationEventId => {
+                            if liquidation_event_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "liquidationEventId",
+                                ));
+                            }
+                            liquidation_event_id__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
                         }
-                        GeneratedField::AttestationId => {
-                            if attestation_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("attestationId"));
+                        GeneratedField::DefaultLiquidationEventId => {
+                            if default_liquidation_event_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "defaultLiquidationEventId",
+                                ));
                             }
-                            attestation_id__ = Some(
+                            default_liquidation_event_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::RepaymentEventId => {
+                            if repayment_event_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("repaymentEventId"));
+                            }
+                            repayment_event_id__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -1363,17 +1751,11 @@ impl<'de> serde::Deserialize<'de> for Loan {
                             }
                             collateral_amount__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::PoolId => {
-                            if pool_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("poolId"));
+                        GeneratedField::LiquidationId => {
+                            if liquidation_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("liquidationId"));
                             }
-                            pool_id__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::AuctionId => {
-                            if auction_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("auctionId"));
-                            }
-                            auction_id__ = Some(
+                            liquidation_id__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -1396,20 +1778,23 @@ impl<'de> serde::Deserialize<'de> for Loan {
                     vault_address: vault_address__.unwrap_or_default(),
                     borrower: borrower__.unwrap_or_default(),
                     borrower_pub_key: borrower_pub_key__.unwrap_or_default(),
-                    agency: agency__.unwrap_or_default(),
+                    dcm: dcm__.unwrap_or_default(),
                     maturity_time: maturity_time__.unwrap_or_default(),
                     final_timeout: final_timeout__.unwrap_or_default(),
+                    pool_id: pool_id__.unwrap_or_default(),
                     borrow_amount: borrow_amount__,
                     origination_fee: origination_fee__.unwrap_or_default(),
                     interest: interest__.unwrap_or_default(),
                     protocol_fee: protocol_fee__.unwrap_or_default(),
                     term: term__.unwrap_or_default(),
-                    event_id: event_id__.unwrap_or_default(),
-                    attestation_id: attestation_id__.unwrap_or_default(),
+                    liquidation_price: liquidation_price__.unwrap_or_default(),
+                    liquidation_event_id: liquidation_event_id__.unwrap_or_default(),
+                    default_liquidation_event_id: default_liquidation_event_id__
+                        .unwrap_or_default(),
+                    repayment_event_id: repayment_event_id__.unwrap_or_default(),
                     deposit_txs: deposit_txs__.unwrap_or_default(),
                     collateral_amount: collateral_amount__.unwrap_or_default(),
-                    pool_id: pool_id__.unwrap_or_default(),
-                    auction_id: auction_id__.unwrap_or_default(),
+                    liquidation_id: liquidation_id__.unwrap_or_default(),
                     create_at: create_at__,
                     status: status__.unwrap_or_default(),
                 })
@@ -1745,7 +2130,7 @@ impl serde::Serialize for MsgApply {
         if self.borrow_amount.is_some() {
             len += 1;
         }
-        if self.agency_id != 0 {
+        if self.dcm_id != 0 {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.lending.MsgApply", len)?;
@@ -1768,11 +2153,11 @@ impl serde::Serialize for MsgApply {
         if let Some(v) = self.borrow_amount.as_ref() {
             struct_ser.serialize_field("borrowAmount", v)?;
         }
-        if self.agency_id != 0 {
+        if self.dcm_id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser.serialize_field(
-                "agencyId",
-                alloc::string::ToString::to_string(&self.agency_id).as_str(),
+                "dcmId",
+                alloc::string::ToString::to_string(&self.dcm_id).as_str(),
             )?;
         }
         struct_ser.end()
@@ -1795,8 +2180,8 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
             "poolId",
             "borrow_amount",
             "borrowAmount",
-            "agency_id",
-            "agencyId",
+            "dcm_id",
+            "dcmId",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -1806,7 +2191,7 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
             MaturityTime,
             PoolId,
             BorrowAmount,
-            AgencyId,
+            DcmId,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -1839,7 +2224,7 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
                             "maturityTime" | "maturity_time" => Ok(GeneratedField::MaturityTime),
                             "poolId" | "pool_id" => Ok(GeneratedField::PoolId),
                             "borrowAmount" | "borrow_amount" => Ok(GeneratedField::BorrowAmount),
-                            "agencyId" | "agency_id" => Ok(GeneratedField::AgencyId),
+                            "dcmId" | "dcm_id" => Ok(GeneratedField::DcmId),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -1864,7 +2249,7 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
                 let mut maturity_time__ = None;
                 let mut pool_id__ = None;
                 let mut borrow_amount__ = None;
-                let mut agency_id__ = None;
+                let mut dcm_id__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Borrower => {
@@ -1900,11 +2285,11 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
                             }
                             borrow_amount__ = map_.next_value()?;
                         }
-                        GeneratedField::AgencyId => {
-                            if agency_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("agencyId"));
+                        GeneratedField::DcmId => {
+                            if dcm_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dcmId"));
                             }
-                            agency_id__ = Some(
+                            dcm_id__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -1917,7 +2302,7 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
                     maturity_time: maturity_time__.unwrap_or_default(),
                     pool_id: pool_id__.unwrap_or_default(),
                     borrow_amount: borrow_amount__,
-                    agency_id: agency_id__.unwrap_or_default(),
+                    dcm_id: dcm_id__.unwrap_or_default(),
                 })
             }
         }
@@ -2440,207 +2825,6 @@ impl<'de> serde::Deserialize<'de> for MsgCancelResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgClose {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let mut len = 0;
-        if !self.relayer.is_empty() {
-            len += 1;
-        }
-        if !self.loan_id.is_empty() {
-            len += 1;
-        }
-        if !self.signature.is_empty() {
-            len += 1;
-        }
-        let mut struct_ser = serializer.serialize_struct("side.lending.MsgClose", len)?;
-        if !self.relayer.is_empty() {
-            struct_ser.serialize_field("relayer", &self.relayer)?;
-        }
-        if !self.loan_id.is_empty() {
-            struct_ser.serialize_field("loanId", &self.loan_id)?;
-        }
-        if !self.signature.is_empty() {
-            struct_ser.serialize_field("signature", &self.signature)?;
-        }
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgClose {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &["relayer", "loan_id", "loanId", "signature"];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {
-            Relayer,
-            LoanId,
-            Signature,
-        }
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        match value {
-                            "relayer" => Ok(GeneratedField::Relayer),
-                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "signature" => Ok(GeneratedField::Signature),
-                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
-                        }
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgClose;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgClose")
-            }
-
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgClose, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                let mut relayer__ = None;
-                let mut loan_id__ = None;
-                let mut signature__ = None;
-                while let Some(k) = map_.next_key()? {
-                    match k {
-                        GeneratedField::Relayer => {
-                            if relayer__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("relayer"));
-                            }
-                            relayer__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::LoanId => {
-                            if loan_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("loanId"));
-                            }
-                            loan_id__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::Signature => {
-                            if signature__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("signature"));
-                            }
-                            signature__ = Some(map_.next_value()?);
-                        }
-                    }
-                }
-                Ok(MsgClose {
-                    relayer: relayer__.unwrap_or_default(),
-                    loan_id: loan_id__.unwrap_or_default(),
-                    signature: signature__.unwrap_or_default(),
-                })
-            }
-        }
-        deserializer.deserialize_struct("side.lending.MsgClose", FIELDS, GeneratedVisitor)
-    }
-}
-#[cfg(feature = "serde")]
-impl serde::Serialize for MsgCloseResponse {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let len = 0;
-        let struct_ser = serializer.serialize_struct("side.lending.MsgCloseResponse", len)?;
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgCloseResponse {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &[];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {}
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        Err(serde::de::Error::unknown_field(value, FIELDS))
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgCloseResponse;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgCloseResponse")
-            }
-
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgCloseResponse, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                while map_.next_key::<GeneratedField>()?.is_some() {
-                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
-                }
-                Ok(MsgCloseResponse {})
-            }
-        }
-        deserializer.deserialize_struct("side.lending.MsgCloseResponse", FIELDS, GeneratedVisitor)
-    }
-}
-#[cfg(feature = "serde")]
 impl serde::Serialize for MsgCreatePool {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -2876,15 +3060,15 @@ impl serde::Serialize for MsgRemoveLiquidity {
         if !self.lender.is_empty() {
             len += 1;
         }
-        if self.shares.is_some() {
+        if self.stokens.is_some() {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.lending.MsgRemoveLiquidity", len)?;
         if !self.lender.is_empty() {
             struct_ser.serialize_field("lender", &self.lender)?;
         }
-        if let Some(v) = self.shares.as_ref() {
-            struct_ser.serialize_field("shares", v)?;
+        if let Some(v) = self.stokens.as_ref() {
+            struct_ser.serialize_field("stokens", v)?;
         }
         struct_ser.end()
     }
@@ -2896,12 +3080,12 @@ impl<'de> serde::Deserialize<'de> for MsgRemoveLiquidity {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["lender", "shares"];
+        const FIELDS: &[&str] = &["lender", "stokens"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Lender,
-            Shares,
+            Stokens,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -2928,7 +3112,7 @@ impl<'de> serde::Deserialize<'de> for MsgRemoveLiquidity {
                     {
                         match value {
                             "lender" => Ok(GeneratedField::Lender),
-                            "shares" => Ok(GeneratedField::Shares),
+                            "stokens" => Ok(GeneratedField::Stokens),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -2949,7 +3133,7 @@ impl<'de> serde::Deserialize<'de> for MsgRemoveLiquidity {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut lender__ = None;
-                let mut shares__ = None;
+                let mut stokens__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Lender => {
@@ -2958,17 +3142,17 @@ impl<'de> serde::Deserialize<'de> for MsgRemoveLiquidity {
                             }
                             lender__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::Shares => {
-                            if shares__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("shares"));
+                        GeneratedField::Stokens => {
+                            if stokens__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("stokens"));
                             }
-                            shares__ = map_.next_value()?;
+                            stokens__ = map_.next_value()?;
                         }
                     }
                 }
                 Ok(MsgRemoveLiquidity {
                     lender: lender__.unwrap_or_default(),
-                    shares: shares__,
+                    stokens: stokens__,
                 })
             }
         }
@@ -3072,18 +3256,12 @@ impl serde::Serialize for MsgRepay {
         if !self.loan_id.is_empty() {
             len += 1;
         }
-        if !self.adaptor_point.is_empty() {
-            len += 1;
-        }
         let mut struct_ser = serializer.serialize_struct("side.lending.MsgRepay", len)?;
         if !self.borrower.is_empty() {
             struct_ser.serialize_field("borrower", &self.borrower)?;
         }
         if !self.loan_id.is_empty() {
             struct_ser.serialize_field("loanId", &self.loan_id)?;
-        }
-        if !self.adaptor_point.is_empty() {
-            struct_ser.serialize_field("adaptorPoint", &self.adaptor_point)?;
         }
         struct_ser.end()
     }
@@ -3095,19 +3273,12 @@ impl<'de> serde::Deserialize<'de> for MsgRepay {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "borrower",
-            "loan_id",
-            "loanId",
-            "adaptor_point",
-            "adaptorPoint",
-        ];
+        const FIELDS: &[&str] = &["borrower", "loan_id", "loanId"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Borrower,
             LoanId,
-            AdaptorPoint,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -3135,7 +3306,6 @@ impl<'de> serde::Deserialize<'de> for MsgRepay {
                         match value {
                             "borrower" => Ok(GeneratedField::Borrower),
                             "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "adaptorPoint" | "adaptor_point" => Ok(GeneratedField::AdaptorPoint),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -3157,7 +3327,6 @@ impl<'de> serde::Deserialize<'de> for MsgRepay {
             {
                 let mut borrower__ = None;
                 let mut loan_id__ = None;
-                let mut adaptor_point__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Borrower => {
@@ -3172,18 +3341,11 @@ impl<'de> serde::Deserialize<'de> for MsgRepay {
                             }
                             loan_id__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::AdaptorPoint => {
-                            if adaptor_point__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("adaptorPoint"));
-                            }
-                            adaptor_point__ = Some(map_.next_value()?);
-                        }
                     }
                 }
                 Ok(MsgRepay {
                     borrower: borrower__.unwrap_or_default(),
                     loan_id: loan_id__.unwrap_or_default(),
-                    adaptor_point: adaptor_point__.unwrap_or_default(),
                 })
             }
         }
@@ -3482,7 +3644,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCancellationSignaturesResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitLiquidationCet {
+impl serde::Serialize for MsgSubmitCets {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3496,9 +3658,6 @@ impl serde::Serialize for MsgSubmitLiquidationCet {
         if !self.loan_id.is_empty() {
             len += 1;
         }
-        if self.event_id != 0 {
-            len += 1;
-        }
         if !self.deposit_tx.is_empty() {
             len += 1;
         }
@@ -3508,20 +3667,21 @@ impl serde::Serialize for MsgSubmitLiquidationCet {
         if !self.liquidation_adaptor_signatures.is_empty() {
             len += 1;
         }
-        let mut struct_ser =
-            serializer.serialize_struct("side.lending.MsgSubmitLiquidationCet", len)?;
+        if !self.default_liquidation_adaptor_signatures.is_empty() {
+            len += 1;
+        }
+        if !self.repayment_cet.is_empty() {
+            len += 1;
+        }
+        if !self.repayment_signatures.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.lending.MsgSubmitCets", len)?;
         if !self.borrower.is_empty() {
             struct_ser.serialize_field("borrower", &self.borrower)?;
         }
         if !self.loan_id.is_empty() {
             struct_ser.serialize_field("loanId", &self.loan_id)?;
-        }
-        if self.event_id != 0 {
-            #[allow(clippy::needless_borrow)]
-            struct_ser.serialize_field(
-                "eventId",
-                alloc::string::ToString::to_string(&self.event_id).as_str(),
-            )?;
         }
         if !self.deposit_tx.is_empty() {
             struct_ser.serialize_field("depositTx", &self.deposit_tx)?;
@@ -3535,11 +3695,23 @@ impl serde::Serialize for MsgSubmitLiquidationCet {
                 &self.liquidation_adaptor_signatures,
             )?;
         }
+        if !self.default_liquidation_adaptor_signatures.is_empty() {
+            struct_ser.serialize_field(
+                "defaultLiquidationAdaptorSignatures",
+                &self.default_liquidation_adaptor_signatures,
+            )?;
+        }
+        if !self.repayment_cet.is_empty() {
+            struct_ser.serialize_field("repaymentCet", &self.repayment_cet)?;
+        }
+        if !self.repayment_signatures.is_empty() {
+            struct_ser.serialize_field("repaymentSignatures", &self.repayment_signatures)?;
+        }
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCet {
+impl<'de> serde::Deserialize<'de> for MsgSubmitCets {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3549,24 +3721,30 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCet {
             "borrower",
             "loan_id",
             "loanId",
-            "event_id",
-            "eventId",
             "deposit_tx",
             "depositTx",
             "liquidation_cet",
             "liquidationCet",
             "liquidation_adaptor_signatures",
             "liquidationAdaptorSignatures",
+            "default_liquidation_adaptor_signatures",
+            "defaultLiquidationAdaptorSignatures",
+            "repayment_cet",
+            "repaymentCet",
+            "repayment_signatures",
+            "repaymentSignatures",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Borrower,
             LoanId,
-            EventId,
             DepositTx,
             LiquidationCet,
             LiquidationAdaptorSignatures,
+            DefaultLiquidationAdaptorSignatures,
+            RepaymentCet,
+            RepaymentSignatures,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -3594,13 +3772,20 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCet {
                         match value {
                             "borrower" => Ok(GeneratedField::Borrower),
                             "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "eventId" | "event_id" => Ok(GeneratedField::EventId),
                             "depositTx" | "deposit_tx" => Ok(GeneratedField::DepositTx),
                             "liquidationCet" | "liquidation_cet" => {
                                 Ok(GeneratedField::LiquidationCet)
                             }
                             "liquidationAdaptorSignatures" | "liquidation_adaptor_signatures" => {
                                 Ok(GeneratedField::LiquidationAdaptorSignatures)
+                            }
+                            "defaultLiquidationAdaptorSignatures"
+                            | "default_liquidation_adaptor_signatures" => {
+                                Ok(GeneratedField::DefaultLiquidationAdaptorSignatures)
+                            }
+                            "repaymentCet" | "repayment_cet" => Ok(GeneratedField::RepaymentCet),
+                            "repaymentSignatures" | "repayment_signatures" => {
+                                Ok(GeneratedField::RepaymentSignatures)
                             }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -3611,25 +3796,24 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCet {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitLiquidationCet;
+            type Value = MsgSubmitCets;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitLiquidationCet")
+                formatter.write_str("struct side.lending.MsgSubmitCets")
             }
 
-            fn visit_map<V>(
-                self,
-                mut map_: V,
-            ) -> core::result::Result<MsgSubmitLiquidationCet, V::Error>
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgSubmitCets, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 let mut borrower__ = None;
                 let mut loan_id__ = None;
-                let mut event_id__ = None;
                 let mut deposit_tx__ = None;
                 let mut liquidation_cet__ = None;
                 let mut liquidation_adaptor_signatures__ = None;
+                let mut default_liquidation_adaptor_signatures__ = None;
+                let mut repayment_cet__ = None;
+                let mut repayment_signatures__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Borrower => {
@@ -3643,15 +3827,6 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCet {
                                 return Err(serde::de::Error::duplicate_field("loanId"));
                             }
                             loan_id__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::EventId => {
-                            if event_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("eventId"));
-                            }
-                            event_id__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
                         }
                         GeneratedField::DepositTx => {
                             if deposit_tx__.is_some() {
@@ -3673,28 +3848,49 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCet {
                             }
                             liquidation_adaptor_signatures__ = Some(map_.next_value()?);
                         }
+                        GeneratedField::DefaultLiquidationAdaptorSignatures => {
+                            if default_liquidation_adaptor_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "defaultLiquidationAdaptorSignatures",
+                                ));
+                            }
+                            default_liquidation_adaptor_signatures__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::RepaymentCet => {
+                            if repayment_cet__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("repaymentCet"));
+                            }
+                            repayment_cet__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::RepaymentSignatures => {
+                            if repayment_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "repaymentSignatures",
+                                ));
+                            }
+                            repayment_signatures__ = Some(map_.next_value()?);
+                        }
                     }
                 }
-                Ok(MsgSubmitLiquidationCet {
+                Ok(MsgSubmitCets {
                     borrower: borrower__.unwrap_or_default(),
                     loan_id: loan_id__.unwrap_or_default(),
-                    event_id: event_id__.unwrap_or_default(),
                     deposit_tx: deposit_tx__.unwrap_or_default(),
                     liquidation_cet: liquidation_cet__.unwrap_or_default(),
                     liquidation_adaptor_signatures: liquidation_adaptor_signatures__
                         .unwrap_or_default(),
+                    default_liquidation_adaptor_signatures:
+                        default_liquidation_adaptor_signatures__.unwrap_or_default(),
+                    repayment_cet: repayment_cet__.unwrap_or_default(),
+                    repayment_signatures: repayment_signatures__.unwrap_or_default(),
                 })
             }
         }
-        deserializer.deserialize_struct(
-            "side.lending.MsgSubmitLiquidationCet",
-            FIELDS,
-            GeneratedVisitor,
-        )
+        deserializer.deserialize_struct("side.lending.MsgSubmitCets", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitLiquidationCetResponse {
+impl serde::Serialize for MsgSubmitCetsResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3702,13 +3898,12 @@ impl serde::Serialize for MsgSubmitLiquidationCetResponse {
     {
         use serde::ser::SerializeStruct;
         let len = 0;
-        let struct_ser =
-            serializer.serialize_struct("side.lending.MsgSubmitLiquidationCetResponse", len)?;
+        let struct_ser = serializer.serialize_struct("side.lending.MsgSubmitCetsResponse", len)?;
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCetResponse {
+impl<'de> serde::Deserialize<'de> for MsgSubmitCetsResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3749,34 +3944,34 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCetResponse {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitLiquidationCetResponse;
+            type Value = MsgSubmitCetsResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitLiquidationCetResponse")
+                formatter.write_str("struct side.lending.MsgSubmitCetsResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgSubmitLiquidationCetResponse, V::Error>
+            ) -> core::result::Result<MsgSubmitCetsResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 while map_.next_key::<GeneratedField>()?.is_some() {
                     let _ = map_.next_value::<serde::de::IgnoredAny>()?;
                 }
-                Ok(MsgSubmitLiquidationCetResponse {})
+                Ok(MsgSubmitCetsResponse {})
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.MsgSubmitLiquidationCetResponse",
+            "side.lending.MsgSubmitCetsResponse",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitLiquidationCetSignatures {
+impl serde::Serialize for MsgSubmitLiquidationSignatures {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3794,7 +3989,7 @@ impl serde::Serialize for MsgSubmitLiquidationCetSignatures {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.lending.MsgSubmitLiquidationCetSignatures", len)?;
+            serializer.serialize_struct("side.lending.MsgSubmitLiquidationSignatures", len)?;
         if !self.sender.is_empty() {
             struct_ser.serialize_field("sender", &self.sender)?;
         }
@@ -3808,7 +4003,7 @@ impl serde::Serialize for MsgSubmitLiquidationCetSignatures {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCetSignatures {
+impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationSignatures {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3858,16 +4053,16 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCetSignatures {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitLiquidationCetSignatures;
+            type Value = MsgSubmitLiquidationSignatures;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitLiquidationCetSignatures")
+                formatter.write_str("struct side.lending.MsgSubmitLiquidationSignatures")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgSubmitLiquidationCetSignatures, V::Error>
+            ) -> core::result::Result<MsgSubmitLiquidationSignatures, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -3896,7 +4091,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCetSignatures {
                         }
                     }
                 }
-                Ok(MsgSubmitLiquidationCetSignatures {
+                Ok(MsgSubmitLiquidationSignatures {
                     sender: sender__.unwrap_or_default(),
                     loan_id: loan_id__.unwrap_or_default(),
                     signatures: signatures__.unwrap_or_default(),
@@ -3904,14 +4099,14 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCetSignatures {
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.MsgSubmitLiquidationCetSignatures",
+            "side.lending.MsgSubmitLiquidationSignatures",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitLiquidationCetSignaturesResponse {
+impl serde::Serialize for MsgSubmitLiquidationSignaturesResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3919,15 +4114,13 @@ impl serde::Serialize for MsgSubmitLiquidationCetSignaturesResponse {
     {
         use serde::ser::SerializeStruct;
         let len = 0;
-        let struct_ser = serializer.serialize_struct(
-            "side.lending.MsgSubmitLiquidationCetSignaturesResponse",
-            len,
-        )?;
+        let struct_ser = serializer
+            .serialize_struct("side.lending.MsgSubmitLiquidationSignaturesResponse", len)?;
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCetSignaturesResponse {
+impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationSignaturesResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3968,27 +4161,27 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationCetSignaturesResponse 
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitLiquidationCetSignaturesResponse;
+            type Value = MsgSubmitLiquidationSignaturesResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitLiquidationCetSignaturesResponse")
+                formatter.write_str("struct side.lending.MsgSubmitLiquidationSignaturesResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgSubmitLiquidationCetSignaturesResponse, V::Error>
+            ) -> core::result::Result<MsgSubmitLiquidationSignaturesResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 while map_.next_key::<GeneratedField>()?.is_some() {
                     let _ = map_.next_value::<serde::de::IgnoredAny>()?;
                 }
-                Ok(MsgSubmitLiquidationCetSignaturesResponse {})
+                Ok(MsgSubmitLiquidationSignaturesResponse {})
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.MsgSubmitLiquidationCetSignaturesResponse",
+            "side.lending.MsgSubmitLiquidationSignaturesResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -4980,10 +5173,7 @@ impl serde::Serialize for PoolConfig {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if self.supply_rate != 0 {
-            len += 1;
-        }
-        if self.borrow_rate != 0 {
+        if self.borrow_apr != 0 {
             len += 1;
         }
         if self.reserve_factor != 0 {
@@ -5001,21 +5191,18 @@ impl serde::Serialize for PoolConfig {
         if !self.origination_fee.is_empty() {
             len += 1;
         }
-        if self.ltv != 0 {
+        if self.max_ltv != 0 {
             len += 1;
         }
         if self.liquidation_threshold != 0 {
             len += 1;
         }
-        if self.liquidation_penalty != 0 {
+        if self.paused {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.lending.PoolConfig", len)?;
-        if self.supply_rate != 0 {
-            struct_ser.serialize_field("supplyRate", &self.supply_rate)?;
-        }
-        if self.borrow_rate != 0 {
-            struct_ser.serialize_field("borrowRate", &self.borrow_rate)?;
+        if self.borrow_apr != 0 {
+            struct_ser.serialize_field("borrowApr", &self.borrow_apr)?;
         }
         if self.reserve_factor != 0 {
             struct_ser.serialize_field("reserveFactor", &self.reserve_factor)?;
@@ -5032,14 +5219,14 @@ impl serde::Serialize for PoolConfig {
         if !self.origination_fee.is_empty() {
             struct_ser.serialize_field("originationFee", &self.origination_fee)?;
         }
-        if self.ltv != 0 {
-            struct_ser.serialize_field("ltv", &self.ltv)?;
+        if self.max_ltv != 0 {
+            struct_ser.serialize_field("maxLtv", &self.max_ltv)?;
         }
         if self.liquidation_threshold != 0 {
             struct_ser.serialize_field("liquidationThreshold", &self.liquidation_threshold)?;
         }
-        if self.liquidation_penalty != 0 {
-            struct_ser.serialize_field("liquidationPenalty", &self.liquidation_penalty)?;
+        if self.paused {
+            struct_ser.serialize_field("paused", &self.paused)?;
         }
         struct_ser.end()
     }
@@ -5052,10 +5239,8 @@ impl<'de> serde::Deserialize<'de> for PoolConfig {
         D: serde::Deserializer<'de>,
     {
         const FIELDS: &[&str] = &[
-            "supply_rate",
-            "supplyRate",
-            "borrow_rate",
-            "borrowRate",
+            "borrow_apr",
+            "borrowApr",
             "reserve_factor",
             "reserveFactor",
             "supply_cap",
@@ -5066,25 +5251,24 @@ impl<'de> serde::Deserialize<'de> for PoolConfig {
             "debtCeiling",
             "origination_fee",
             "originationFee",
-            "ltv",
+            "max_ltv",
+            "maxLtv",
             "liquidation_threshold",
             "liquidationThreshold",
-            "liquidation_penalty",
-            "liquidationPenalty",
+            "paused",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            SupplyRate,
-            BorrowRate,
+            BorrowApr,
             ReserveFactor,
             SupplyCap,
             BorrowCap,
             DebtCeiling,
             OriginationFee,
-            Ltv,
+            MaxLtv,
             LiquidationThreshold,
-            LiquidationPenalty,
+            Paused,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -5110,8 +5294,7 @@ impl<'de> serde::Deserialize<'de> for PoolConfig {
                         E: serde::de::Error,
                     {
                         match value {
-                            "supplyRate" | "supply_rate" => Ok(GeneratedField::SupplyRate),
-                            "borrowRate" | "borrow_rate" => Ok(GeneratedField::BorrowRate),
+                            "borrowApr" | "borrow_apr" => Ok(GeneratedField::BorrowApr),
                             "reserveFactor" | "reserve_factor" => Ok(GeneratedField::ReserveFactor),
                             "supplyCap" | "supply_cap" => Ok(GeneratedField::SupplyCap),
                             "borrowCap" | "borrow_cap" => Ok(GeneratedField::BorrowCap),
@@ -5119,13 +5302,11 @@ impl<'de> serde::Deserialize<'de> for PoolConfig {
                             "originationFee" | "origination_fee" => {
                                 Ok(GeneratedField::OriginationFee)
                             }
-                            "ltv" => Ok(GeneratedField::Ltv),
+                            "maxLtv" | "max_ltv" => Ok(GeneratedField::MaxLtv),
                             "liquidationThreshold" | "liquidation_threshold" => {
                                 Ok(GeneratedField::LiquidationThreshold)
                             }
-                            "liquidationPenalty" | "liquidation_penalty" => {
-                                Ok(GeneratedField::LiquidationPenalty)
-                            }
+                            "paused" => Ok(GeneratedField::Paused),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -5145,32 +5326,22 @@ impl<'de> serde::Deserialize<'de> for PoolConfig {
             where
                 V: serde::de::MapAccess<'de>,
             {
-                let mut supply_rate__ = None;
-                let mut borrow_rate__ = None;
+                let mut borrow_apr__ = None;
                 let mut reserve_factor__ = None;
                 let mut supply_cap__ = None;
                 let mut borrow_cap__ = None;
                 let mut debt_ceiling__ = None;
                 let mut origination_fee__ = None;
-                let mut ltv__ = None;
+                let mut max_ltv__ = None;
                 let mut liquidation_threshold__ = None;
-                let mut liquidation_penalty__ = None;
+                let mut paused__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
-                        GeneratedField::SupplyRate => {
-                            if supply_rate__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("supplyRate"));
+                        GeneratedField::BorrowApr => {
+                            if borrow_apr__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("borrowApr"));
                             }
-                            supply_rate__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
-                        }
-                        GeneratedField::BorrowRate => {
-                            if borrow_rate__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("borrowRate"));
-                            }
-                            borrow_rate__ = Some(
+                            borrow_apr__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -5208,11 +5379,11 @@ impl<'de> serde::Deserialize<'de> for PoolConfig {
                             }
                             origination_fee__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::Ltv => {
-                            if ltv__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("ltv"));
+                        GeneratedField::MaxLtv => {
+                            if max_ltv__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("maxLtv"));
                             }
-                            ltv__ = Some(
+                            max_ltv__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -5228,30 +5399,24 @@ impl<'de> serde::Deserialize<'de> for PoolConfig {
                                     .0,
                             );
                         }
-                        GeneratedField::LiquidationPenalty => {
-                            if liquidation_penalty__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "liquidationPenalty",
-                                ));
+                        GeneratedField::Paused => {
+                            if paused__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("paused"));
                             }
-                            liquidation_penalty__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            paused__ = Some(map_.next_value()?);
                         }
                     }
                 }
                 Ok(PoolConfig {
-                    supply_rate: supply_rate__.unwrap_or_default(),
-                    borrow_rate: borrow_rate__.unwrap_or_default(),
+                    borrow_apr: borrow_apr__.unwrap_or_default(),
                     reserve_factor: reserve_factor__.unwrap_or_default(),
                     supply_cap: supply_cap__.unwrap_or_default(),
                     borrow_cap: borrow_cap__.unwrap_or_default(),
                     debt_ceiling: debt_ceiling__.unwrap_or_default(),
                     origination_fee: origination_fee__.unwrap_or_default(),
-                    ltv: ltv__.unwrap_or_default(),
+                    max_ltv: max_ltv__.unwrap_or_default(),
                     liquidation_threshold: liquidation_threshold__.unwrap_or_default(),
-                    liquidation_penalty: liquidation_penalty__.unwrap_or_default(),
+                    paused: paused__.unwrap_or_default(),
                 })
             }
         }
@@ -5268,6 +5433,7 @@ impl serde::Serialize for PoolStatus {
         let variant = match self {
             Self::Inactive => "INACTIVE",
             Self::Active => "ACTIVE",
+            Self::Paused => "PAUSED",
         };
         serializer.serialize_str(variant)
     }
@@ -5279,7 +5445,7 @@ impl<'de> serde::Deserialize<'de> for PoolStatus {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["INACTIVE", "ACTIVE"];
+        const FIELDS: &[&str] = &["INACTIVE", "ACTIVE", "PAUSED"];
 
         struct GeneratedVisitor;
 
@@ -5321,6 +5487,7 @@ impl<'de> serde::Deserialize<'de> for PoolStatus {
                 match value {
                     "INACTIVE" => Ok(PoolStatus::Inactive),
                     "ACTIVE" => Ok(PoolStatus::Active),
+                    "PAUSED" => Ok(PoolStatus::Paused),
                     _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
                 }
             }
@@ -5340,7 +5507,7 @@ impl serde::Serialize for QueryCollateralAddressRequest {
         if !self.borrower_pubkey.is_empty() {
             len += 1;
         }
-        if !self.agency_pubkey.is_empty() {
+        if !self.dcm_pubkey.is_empty() {
             len += 1;
         }
         if self.maturity_time != 0 {
@@ -5351,8 +5518,8 @@ impl serde::Serialize for QueryCollateralAddressRequest {
         if !self.borrower_pubkey.is_empty() {
             struct_ser.serialize_field("borrowerPubkey", &self.borrower_pubkey)?;
         }
-        if !self.agency_pubkey.is_empty() {
-            struct_ser.serialize_field("agencyPubkey", &self.agency_pubkey)?;
+        if !self.dcm_pubkey.is_empty() {
+            struct_ser.serialize_field("dcmPubkey", &self.dcm_pubkey)?;
         }
         if self.maturity_time != 0 {
             #[allow(clippy::needless_borrow)]
@@ -5374,8 +5541,8 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
         const FIELDS: &[&str] = &[
             "borrower_pubkey",
             "borrowerPubkey",
-            "agency_pubkey",
-            "agencyPubkey",
+            "dcm_pubkey",
+            "dcmPubkey",
             "maturity_time",
             "maturityTime",
         ];
@@ -5383,7 +5550,7 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             BorrowerPubkey,
-            AgencyPubkey,
+            DcmPubkey,
             MaturityTime,
         }
         #[cfg(feature = "serde")]
@@ -5413,7 +5580,7 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
                             "borrowerPubkey" | "borrower_pubkey" => {
                                 Ok(GeneratedField::BorrowerPubkey)
                             }
-                            "agencyPubkey" | "agency_pubkey" => Ok(GeneratedField::AgencyPubkey),
+                            "dcmPubkey" | "dcm_pubkey" => Ok(GeneratedField::DcmPubkey),
                             "maturityTime" | "maturity_time" => Ok(GeneratedField::MaturityTime),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -5438,7 +5605,7 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut borrower_pubkey__ = None;
-                let mut agency_pubkey__ = None;
+                let mut dcm_pubkey__ = None;
                 let mut maturity_time__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -5448,11 +5615,11 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
                             }
                             borrower_pubkey__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::AgencyPubkey => {
-                            if agency_pubkey__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("agencyPubkey"));
+                        GeneratedField::DcmPubkey => {
+                            if dcm_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dcmPubkey"));
                             }
-                            agency_pubkey__ = Some(map_.next_value()?);
+                            dcm_pubkey__ = Some(map_.next_value()?);
                         }
                         GeneratedField::MaturityTime => {
                             if maturity_time__.is_some() {
@@ -5467,7 +5634,7 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
                 }
                 Ok(QueryCollateralAddressRequest {
                     borrower_pubkey: borrower_pubkey__.unwrap_or_default(),
-                    agency_pubkey: agency_pubkey__.unwrap_or_default(),
+                    dcm_pubkey: dcm_pubkey__.unwrap_or_default(),
                     maturity_time: maturity_time__.unwrap_or_default(),
                 })
             }
@@ -5583,7 +5750,7 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryLiquidationCetRequest {
+impl serde::Serialize for QueryCurrentInterestRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -5594,47 +5761,26 @@ impl serde::Serialize for QueryLiquidationCetRequest {
         if !self.loan_id.is_empty() {
             len += 1;
         }
-        if !self.borrower_pubkey.is_empty() {
-            len += 1;
-        }
-        if !self.agency_pubkey.is_empty() {
-            len += 1;
-        }
         let mut struct_ser =
-            serializer.serialize_struct("side.lending.QueryLiquidationCetRequest", len)?;
+            serializer.serialize_struct("side.lending.QueryCurrentInterestRequest", len)?;
         if !self.loan_id.is_empty() {
             struct_ser.serialize_field("loanId", &self.loan_id)?;
-        }
-        if !self.borrower_pubkey.is_empty() {
-            struct_ser.serialize_field("borrowerPubkey", &self.borrower_pubkey)?;
-        }
-        if !self.agency_pubkey.is_empty() {
-            struct_ser.serialize_field("agencyPubkey", &self.agency_pubkey)?;
         }
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
+impl<'de> serde::Deserialize<'de> for QueryCurrentInterestRequest {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "loan_id",
-            "loanId",
-            "borrower_pubkey",
-            "borrowerPubkey",
-            "agency_pubkey",
-            "agencyPubkey",
-        ];
+        const FIELDS: &[&str] = &["loan_id", "loanId"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             LoanId,
-            BorrowerPubkey,
-            AgencyPubkey,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -5661,10 +5807,6 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
                     {
                         match value {
                             "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "borrowerPubkey" | "borrower_pubkey" => {
-                                Ok(GeneratedField::BorrowerPubkey)
-                            }
-                            "agencyPubkey" | "agency_pubkey" => Ok(GeneratedField::AgencyPubkey),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -5674,22 +5816,20 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryLiquidationCetRequest;
+            type Value = QueryCurrentInterestRequest;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.QueryLiquidationCetRequest")
+                formatter.write_str("struct side.lending.QueryCurrentInterestRequest")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryLiquidationCetRequest, V::Error>
+            ) -> core::result::Result<QueryCurrentInterestRequest, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 let mut loan_id__ = None;
-                let mut borrower_pubkey__ = None;
-                let mut agency_pubkey__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::LoanId => {
@@ -5698,36 +5838,22 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetRequest {
                             }
                             loan_id__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::BorrowerPubkey => {
-                            if borrower_pubkey__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("borrowerPubkey"));
-                            }
-                            borrower_pubkey__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::AgencyPubkey => {
-                            if agency_pubkey__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("agencyPubkey"));
-                            }
-                            agency_pubkey__ = Some(map_.next_value()?);
-                        }
                     }
                 }
-                Ok(QueryLiquidationCetRequest {
+                Ok(QueryCurrentInterestRequest {
                     loan_id: loan_id__.unwrap_or_default(),
-                    borrower_pubkey: borrower_pubkey__.unwrap_or_default(),
-                    agency_pubkey: agency_pubkey__.unwrap_or_default(),
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.QueryLiquidationCetRequest",
+            "side.lending.QueryCurrentInterestRequest",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryLiquidationCetResponse {
+impl serde::Serialize for QueryCurrentInterestResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -5735,36 +5861,29 @@ impl serde::Serialize for QueryLiquidationCetResponse {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if !self.script.is_empty() {
-            len += 1;
-        }
-        if !self.sig_hashes.is_empty() {
+        if self.interest.is_some() {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.lending.QueryLiquidationCetResponse", len)?;
-        if !self.script.is_empty() {
-            struct_ser.serialize_field("script", &self.script)?;
-        }
-        if !self.sig_hashes.is_empty() {
-            struct_ser.serialize_field("sigHashes", &self.sig_hashes)?;
+            serializer.serialize_struct("side.lending.QueryCurrentInterestResponse", len)?;
+        if let Some(v) = self.interest.as_ref() {
+            struct_ser.serialize_field("interest", v)?;
         }
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryLiquidationCetResponse {
+impl<'de> serde::Deserialize<'de> for QueryCurrentInterestResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["script", "sig_hashes", "sigHashes"];
+        const FIELDS: &[&str] = &["interest"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            Script,
-            SigHashes,
+            Interest,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -5790,8 +5909,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetResponse {
                         E: serde::de::Error,
                     {
                         match value {
-                            "script" => Ok(GeneratedField::Script),
-                            "sigHashes" | "sig_hashes" => Ok(GeneratedField::SigHashes),
+                            "interest" => Ok(GeneratedField::Interest),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -5801,45 +5919,37 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationCetResponse {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryLiquidationCetResponse;
+            type Value = QueryCurrentInterestResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.QueryLiquidationCetResponse")
+                formatter.write_str("struct side.lending.QueryCurrentInterestResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryLiquidationCetResponse, V::Error>
+            ) -> core::result::Result<QueryCurrentInterestResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
-                let mut script__ = None;
-                let mut sig_hashes__ = None;
+                let mut interest__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
-                        GeneratedField::Script => {
-                            if script__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("script"));
+                        GeneratedField::Interest => {
+                            if interest__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("interest"));
                             }
-                            script__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::SigHashes => {
-                            if sig_hashes__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("sigHashes"));
-                            }
-                            sig_hashes__ = Some(map_.next_value()?);
+                            interest__ = map_.next_value()?;
                         }
                     }
                 }
-                Ok(QueryLiquidationCetResponse {
-                    script: script__.unwrap_or_default(),
-                    sig_hashes: sig_hashes__.unwrap_or_default(),
+                Ok(QueryCurrentInterestResponse {
+                    interest: interest__,
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.lending.QueryLiquidationCetResponse",
+            "side.lending.QueryCurrentInterestResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -6375,6 +6485,279 @@ impl<'de> serde::Deserialize<'de> for QueryLoanCancellationResponse {
         }
         deserializer.deserialize_struct(
             "side.lending.QueryLoanCancellationResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryLoanCetInfosRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.loan_id.is_empty() {
+            len += 1;
+        }
+        if !self.collateral_amount.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.lending.QueryLoanCetInfosRequest", len)?;
+        if !self.loan_id.is_empty() {
+            struct_ser.serialize_field("loanId", &self.loan_id)?;
+        }
+        if !self.collateral_amount.is_empty() {
+            struct_ser.serialize_field("collateralAmount", &self.collateral_amount)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryLoanCetInfosRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["loan_id", "loanId", "collateral_amount", "collateralAmount"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            LoanId,
+            CollateralAmount,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
+                            "collateralAmount" | "collateral_amount" => {
+                                Ok(GeneratedField::CollateralAmount)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryLoanCetInfosRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.QueryLoanCetInfosRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryLoanCetInfosRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut loan_id__ = None;
+                let mut collateral_amount__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::LoanId => {
+                            if loan_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("loanId"));
+                            }
+                            loan_id__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::CollateralAmount => {
+                            if collateral_amount__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("collateralAmount"));
+                            }
+                            collateral_amount__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryLoanCetInfosRequest {
+                    loan_id: loan_id__.unwrap_or_default(),
+                    collateral_amount: collateral_amount__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.lending.QueryLoanCetInfosRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryLoanCetInfosResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.liquidation_cet_info.is_some() {
+            len += 1;
+        }
+        if self.default_liquidation_cet_info.is_some() {
+            len += 1;
+        }
+        if self.repayment_cet_info.is_some() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.lending.QueryLoanCetInfosResponse", len)?;
+        if let Some(v) = self.liquidation_cet_info.as_ref() {
+            struct_ser.serialize_field("liquidationCetInfo", v)?;
+        }
+        if let Some(v) = self.default_liquidation_cet_info.as_ref() {
+            struct_ser.serialize_field("defaultLiquidationCetInfo", v)?;
+        }
+        if let Some(v) = self.repayment_cet_info.as_ref() {
+            struct_ser.serialize_field("repaymentCetInfo", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryLoanCetInfosResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "liquidation_cet_info",
+            "liquidationCetInfo",
+            "default_liquidation_cet_info",
+            "defaultLiquidationCetInfo",
+            "repayment_cet_info",
+            "repaymentCetInfo",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            LiquidationCetInfo,
+            DefaultLiquidationCetInfo,
+            RepaymentCetInfo,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "liquidationCetInfo" | "liquidation_cet_info" => {
+                                Ok(GeneratedField::LiquidationCetInfo)
+                            }
+                            "defaultLiquidationCetInfo" | "default_liquidation_cet_info" => {
+                                Ok(GeneratedField::DefaultLiquidationCetInfo)
+                            }
+                            "repaymentCetInfo" | "repayment_cet_info" => {
+                                Ok(GeneratedField::RepaymentCetInfo)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryLoanCetInfosResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.QueryLoanCetInfosResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryLoanCetInfosResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut liquidation_cet_info__ = None;
+                let mut default_liquidation_cet_info__ = None;
+                let mut repayment_cet_info__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::LiquidationCetInfo => {
+                            if liquidation_cet_info__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "liquidationCetInfo",
+                                ));
+                            }
+                            liquidation_cet_info__ = map_.next_value()?;
+                        }
+                        GeneratedField::DefaultLiquidationCetInfo => {
+                            if default_liquidation_cet_info__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "defaultLiquidationCetInfo",
+                                ));
+                            }
+                            default_liquidation_cet_info__ = map_.next_value()?;
+                        }
+                        GeneratedField::RepaymentCetInfo => {
+                            if repayment_cet_info__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("repaymentCetInfo"));
+                            }
+                            repayment_cet_info__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryLoanCetInfosResponse {
+                    liquidation_cet_info: liquidation_cet_info__,
+                    default_liquidation_cet_info: default_liquidation_cet_info__,
+                    repayment_cet_info: repayment_cet_info__,
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.lending.QueryLoanCetInfosResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -7432,6 +7815,212 @@ impl<'de> serde::Deserialize<'de> for QueryParamsResponse {
     }
 }
 #[cfg(feature = "serde")]
+impl serde::Serialize for QueryPoolExchangeRateRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.pool_id.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.lending.QueryPoolExchangeRateRequest", len)?;
+        if !self.pool_id.is_empty() {
+            struct_ser.serialize_field("poolId", &self.pool_id)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryPoolExchangeRateRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["pool_id", "poolId"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            PoolId,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "poolId" | "pool_id" => Ok(GeneratedField::PoolId),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryPoolExchangeRateRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.QueryPoolExchangeRateRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryPoolExchangeRateRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut pool_id__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::PoolId => {
+                            if pool_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("poolId"));
+                            }
+                            pool_id__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryPoolExchangeRateRequest {
+                    pool_id: pool_id__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.lending.QueryPoolExchangeRateRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryPoolExchangeRateResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.exchange_rate.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.lending.QueryPoolExchangeRateResponse", len)?;
+        if !self.exchange_rate.is_empty() {
+            struct_ser.serialize_field("exchangeRate", &self.exchange_rate)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryPoolExchangeRateResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["exchange_rate", "exchangeRate"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            ExchangeRate,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "exchangeRate" | "exchange_rate" => Ok(GeneratedField::ExchangeRate),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryPoolExchangeRateResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.QueryPoolExchangeRateResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryPoolExchangeRateResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut exchange_rate__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::ExchangeRate => {
+                            if exchange_rate__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("exchangeRate"));
+                            }
+                            exchange_rate__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryPoolExchangeRateResponse {
+                    exchange_rate: exchange_rate__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.lending.QueryPoolExchangeRateResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for QueryPoolRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -8043,19 +8632,7 @@ impl serde::Serialize for Repayment {
         if !self.loan_id.is_empty() {
             len += 1;
         }
-        if !self.txid.is_empty() {
-            len += 1;
-        }
-        if !self.tx.is_empty() {
-            len += 1;
-        }
-        if !self.adaptor_point.is_empty() {
-            len += 1;
-        }
-        if !self.dca_adaptor_signatures.is_empty() {
-            len += 1;
-        }
-        if !self.dca_adapted_signature.is_empty() {
+        if self.amount.is_some() {
             len += 1;
         }
         if self.create_at.is_some() {
@@ -8065,20 +8642,8 @@ impl serde::Serialize for Repayment {
         if !self.loan_id.is_empty() {
             struct_ser.serialize_field("loanId", &self.loan_id)?;
         }
-        if !self.txid.is_empty() {
-            struct_ser.serialize_field("txid", &self.txid)?;
-        }
-        if !self.tx.is_empty() {
-            struct_ser.serialize_field("tx", &self.tx)?;
-        }
-        if !self.adaptor_point.is_empty() {
-            struct_ser.serialize_field("adaptorPoint", &self.adaptor_point)?;
-        }
-        if !self.dca_adaptor_signatures.is_empty() {
-            struct_ser.serialize_field("dcaAdaptorSignatures", &self.dca_adaptor_signatures)?;
-        }
-        if !self.dca_adapted_signature.is_empty() {
-            struct_ser.serialize_field("dcaAdaptedSignature", &self.dca_adapted_signature)?;
+        if let Some(v) = self.amount.as_ref() {
+            struct_ser.serialize_field("amount", v)?;
         }
         if let Some(v) = self.create_at.as_ref() {
             struct_ser.serialize_field("createAt", v)?;
@@ -8093,29 +8658,12 @@ impl<'de> serde::Deserialize<'de> for Repayment {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &[
-            "loan_id",
-            "loanId",
-            "txid",
-            "tx",
-            "adaptor_point",
-            "adaptorPoint",
-            "dca_adaptor_signatures",
-            "dcaAdaptorSignatures",
-            "dca_adapted_signature",
-            "dcaAdaptedSignature",
-            "create_at",
-            "createAt",
-        ];
+        const FIELDS: &[&str] = &["loan_id", "loanId", "amount", "create_at", "createAt"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             LoanId,
-            Txid,
-            Tx,
-            AdaptorPoint,
-            DcaAdaptorSignatures,
-            DcaAdaptedSignature,
+            Amount,
             CreateAt,
         }
         #[cfg(feature = "serde")]
@@ -8143,15 +8691,7 @@ impl<'de> serde::Deserialize<'de> for Repayment {
                     {
                         match value {
                             "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "txid" => Ok(GeneratedField::Txid),
-                            "tx" => Ok(GeneratedField::Tx),
-                            "adaptorPoint" | "adaptor_point" => Ok(GeneratedField::AdaptorPoint),
-                            "dcaAdaptorSignatures" | "dca_adaptor_signatures" => {
-                                Ok(GeneratedField::DcaAdaptorSignatures)
-                            }
-                            "dcaAdaptedSignature" | "dca_adapted_signature" => {
-                                Ok(GeneratedField::DcaAdaptedSignature)
-                            }
+                            "amount" => Ok(GeneratedField::Amount),
                             "createAt" | "create_at" => Ok(GeneratedField::CreateAt),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -8173,11 +8713,7 @@ impl<'de> serde::Deserialize<'de> for Repayment {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut loan_id__ = None;
-                let mut txid__ = None;
-                let mut tx__ = None;
-                let mut adaptor_point__ = None;
-                let mut dca_adaptor_signatures__ = None;
-                let mut dca_adapted_signature__ = None;
+                let mut amount__ = None;
                 let mut create_at__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -8187,39 +8723,11 @@ impl<'de> serde::Deserialize<'de> for Repayment {
                             }
                             loan_id__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::Txid => {
-                            if txid__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("txid"));
+                        GeneratedField::Amount => {
+                            if amount__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("amount"));
                             }
-                            txid__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::Tx => {
-                            if tx__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("tx"));
-                            }
-                            tx__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::AdaptorPoint => {
-                            if adaptor_point__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("adaptorPoint"));
-                            }
-                            adaptor_point__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::DcaAdaptorSignatures => {
-                            if dca_adaptor_signatures__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "dcaAdaptorSignatures",
-                                ));
-                            }
-                            dca_adaptor_signatures__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::DcaAdaptedSignature => {
-                            if dca_adapted_signature__.is_some() {
-                                return Err(serde::de::Error::duplicate_field(
-                                    "dcaAdaptedSignature",
-                                ));
-                            }
-                            dca_adapted_signature__ = Some(map_.next_value()?);
+                            amount__ = map_.next_value()?;
                         }
                         GeneratedField::CreateAt => {
                             if create_at__.is_some() {
@@ -8231,15 +8739,192 @@ impl<'de> serde::Deserialize<'de> for Repayment {
                 }
                 Ok(Repayment {
                     loan_id: loan_id__.unwrap_or_default(),
-                    txid: txid__.unwrap_or_default(),
-                    tx: tx__.unwrap_or_default(),
-                    adaptor_point: adaptor_point__.unwrap_or_default(),
-                    dca_adaptor_signatures: dca_adaptor_signatures__.unwrap_or_default(),
-                    dca_adapted_signature: dca_adapted_signature__.unwrap_or_default(),
+                    amount: amount__,
                     create_at: create_at__,
                 })
             }
         }
         deserializer.deserialize_struct("side.lending.Repayment", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for RepaymentCet {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.tx.is_empty() {
+            len += 1;
+        }
+        if !self.dcm_adaptor_signatures.is_empty() {
+            len += 1;
+        }
+        if !self.dcm_adapted_signatures.is_empty() {
+            len += 1;
+        }
+        if !self.borrower_signatures.is_empty() {
+            len += 1;
+        }
+        if !self.signed_tx_hex.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.lending.RepaymentCet", len)?;
+        if !self.tx.is_empty() {
+            struct_ser.serialize_field("tx", &self.tx)?;
+        }
+        if !self.dcm_adaptor_signatures.is_empty() {
+            struct_ser.serialize_field("dcmAdaptorSignatures", &self.dcm_adaptor_signatures)?;
+        }
+        if !self.dcm_adapted_signatures.is_empty() {
+            struct_ser.serialize_field("dcmAdaptedSignatures", &self.dcm_adapted_signatures)?;
+        }
+        if !self.borrower_signatures.is_empty() {
+            struct_ser.serialize_field("borrowerSignatures", &self.borrower_signatures)?;
+        }
+        if !self.signed_tx_hex.is_empty() {
+            struct_ser.serialize_field("signedTxHex", &self.signed_tx_hex)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for RepaymentCet {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "tx",
+            "dcm_adaptor_signatures",
+            "dcmAdaptorSignatures",
+            "dcm_adapted_signatures",
+            "dcmAdaptedSignatures",
+            "borrower_signatures",
+            "borrowerSignatures",
+            "signed_tx_hex",
+            "signedTxHex",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Tx,
+            DcmAdaptorSignatures,
+            DcmAdaptedSignatures,
+            BorrowerSignatures,
+            SignedTxHex,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "tx" => Ok(GeneratedField::Tx),
+                            "dcmAdaptorSignatures" | "dcm_adaptor_signatures" => {
+                                Ok(GeneratedField::DcmAdaptorSignatures)
+                            }
+                            "dcmAdaptedSignatures" | "dcm_adapted_signatures" => {
+                                Ok(GeneratedField::DcmAdaptedSignatures)
+                            }
+                            "borrowerSignatures" | "borrower_signatures" => {
+                                Ok(GeneratedField::BorrowerSignatures)
+                            }
+                            "signedTxHex" | "signed_tx_hex" => Ok(GeneratedField::SignedTxHex),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = RepaymentCet;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.RepaymentCet")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<RepaymentCet, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut tx__ = None;
+                let mut dcm_adaptor_signatures__ = None;
+                let mut dcm_adapted_signatures__ = None;
+                let mut borrower_signatures__ = None;
+                let mut signed_tx_hex__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Tx => {
+                            if tx__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("tx"));
+                            }
+                            tx__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::DcmAdaptorSignatures => {
+                            if dcm_adaptor_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "dcmAdaptorSignatures",
+                                ));
+                            }
+                            dcm_adaptor_signatures__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::DcmAdaptedSignatures => {
+                            if dcm_adapted_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "dcmAdaptedSignatures",
+                                ));
+                            }
+                            dcm_adapted_signatures__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::BorrowerSignatures => {
+                            if borrower_signatures__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "borrowerSignatures",
+                                ));
+                            }
+                            borrower_signatures__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::SignedTxHex => {
+                            if signed_tx_hex__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("signedTxHex"));
+                            }
+                            signed_tx_hex__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(RepaymentCet {
+                    tx: tx__.unwrap_or_default(),
+                    dcm_adaptor_signatures: dcm_adaptor_signatures__.unwrap_or_default(),
+                    dcm_adapted_signatures: dcm_adapted_signatures__.unwrap_or_default(),
+                    borrower_signatures: borrower_signatures__.unwrap_or_default(),
+                    signed_tx_hex: signed_tx_hex__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.lending.RepaymentCet", FIELDS, GeneratedVisitor)
     }
 }

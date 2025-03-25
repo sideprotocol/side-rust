@@ -265,10 +265,10 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.dlc.Query", "Oracles"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn agencies(
+        pub async fn dc_ms(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryAgenciesRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAgenciesResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::QueryDcMsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryDcMsResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -277,10 +277,10 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Agencies");
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/DCMs");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Agencies"));
+                .insert(GrpcMethod::new("side.dlc.Query", "DCMs"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -333,10 +333,10 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryOraclesRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryOraclesResponse>, tonic::Status>;
-        async fn agencies(
+        async fn dc_ms(
             &self,
-            request: tonic::Request<super::QueryAgenciesRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAgenciesResponse>, tonic::Status>;
+            request: tonic::Request<super::QueryDcMsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryDcMsResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -794,18 +794,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Query/Agencies" => {
+                "/side.dlc.Query/DCMs" => {
                     #[allow(non_camel_case_types)]
-                    struct AgenciesSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryAgenciesRequest> for AgenciesSvc<T> {
-                        type Response = super::QueryAgenciesResponse;
+                    struct DCMsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryDcMsRequest> for DCMsSvc<T> {
+                        type Response = super::QueryDcMsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryAgenciesRequest>,
+                            request: tonic::Request<super::QueryDcMsRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).agencies(request).await };
+                            let fut = async move { (*inner).dc_ms(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -816,7 +816,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = AgenciesSvc(inner);
+                        let method = DCMsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1008,13 +1008,11 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.dlc.Msg", "SubmitOraclePubKey"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn submit_agency_pub_key(
+        pub async fn submit_dcm_pub_key(
             &mut self,
-            request: impl tonic::IntoRequest<super::MsgSubmitAgencyPubKey>,
-        ) -> core::result::Result<
-            tonic::Response<super::MsgSubmitAgencyPubKeyResponse>,
-            tonic::Status,
-        > {
+            request: impl tonic::IntoRequest<super::MsgSubmitDcmPubKey>,
+        ) -> core::result::Result<tonic::Response<super::MsgSubmitDcmPubKeyResponse>, tonic::Status>
+        {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -1022,10 +1020,10 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/SubmitAgencyPubKey");
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/SubmitDCMPubKey");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Msg", "SubmitAgencyPubKey"));
+                .insert(GrpcMethod::new("side.dlc.Msg", "SubmitDCMPubKey"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn create_oracle(
@@ -1046,10 +1044,10 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.dlc.Msg", "CreateOracle"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn create_agency(
+        pub async fn create_dcm(
             &mut self,
-            request: impl tonic::IntoRequest<super::MsgCreateAgency>,
-        ) -> core::result::Result<tonic::Response<super::MsgCreateAgencyResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::MsgCreateDcm>,
+        ) -> core::result::Result<tonic::Response<super::MsgCreateDcmResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -1058,10 +1056,10 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/CreateAgency");
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/CreateDCM");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Msg", "CreateAgency"));
+                .insert(GrpcMethod::new("side.dlc.Msg", "CreateDCM"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn update_params(
@@ -1107,21 +1105,18 @@ pub mod msg_server {
             tonic::Response<super::MsgSubmitOraclePubKeyResponse>,
             tonic::Status,
         >;
-        async fn submit_agency_pub_key(
+        async fn submit_dcm_pub_key(
             &self,
-            request: tonic::Request<super::MsgSubmitAgencyPubKey>,
-        ) -> core::result::Result<
-            tonic::Response<super::MsgSubmitAgencyPubKeyResponse>,
-            tonic::Status,
-        >;
+            request: tonic::Request<super::MsgSubmitDcmPubKey>,
+        ) -> core::result::Result<tonic::Response<super::MsgSubmitDcmPubKeyResponse>, tonic::Status>;
         async fn create_oracle(
             &self,
             request: tonic::Request<super::MsgCreateOracle>,
         ) -> core::result::Result<tonic::Response<super::MsgCreateOracleResponse>, tonic::Status>;
-        async fn create_agency(
+        async fn create_dcm(
             &self,
-            request: tonic::Request<super::MsgCreateAgency>,
-        ) -> core::result::Result<tonic::Response<super::MsgCreateAgencyResponse>, tonic::Status>;
+            request: tonic::Request<super::MsgCreateDcm>,
+        ) -> core::result::Result<tonic::Response<super::MsgCreateDcmResponse>, tonic::Status>;
         async fn update_params(
             &self,
             request: tonic::Request<super::MsgUpdateParams>,
@@ -1319,20 +1314,18 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Msg/SubmitAgencyPubKey" => {
+                "/side.dlc.Msg/SubmitDCMPubKey" => {
                     #[allow(non_camel_case_types)]
-                    struct SubmitAgencyPubKeySvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitAgencyPubKey>
-                        for SubmitAgencyPubKeySvc<T>
-                    {
-                        type Response = super::MsgSubmitAgencyPubKeyResponse;
+                    struct SubmitDCMPubKeySvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitDcmPubKey> for SubmitDCMPubKeySvc<T> {
+                        type Response = super::MsgSubmitDcmPubKeyResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MsgSubmitAgencyPubKey>,
+                            request: tonic::Request<super::MsgSubmitDcmPubKey>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).submit_agency_pub_key(request).await };
+                            let fut = async move { (*inner).submit_dcm_pub_key(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1343,7 +1336,7 @@ pub mod msg_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = SubmitAgencyPubKeySvc(inner);
+                        let method = SubmitDCMPubKeySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1397,18 +1390,18 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Msg/CreateAgency" => {
+                "/side.dlc.Msg/CreateDCM" => {
                     #[allow(non_camel_case_types)]
-                    struct CreateAgencySvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgCreateAgency> for CreateAgencySvc<T> {
-                        type Response = super::MsgCreateAgencyResponse;
+                    struct CreateDCMSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgCreateDcm> for CreateDCMSvc<T> {
+                        type Response = super::MsgCreateDcmResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MsgCreateAgency>,
+                            request: tonic::Request<super::MsgCreateDcm>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).create_agency(request).await };
+                            let fut = async move { (*inner).create_dcm(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1419,7 +1412,7 @@ pub mod msg_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = CreateAgencySvc(inner);
+                        let method = CreateDCMSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
