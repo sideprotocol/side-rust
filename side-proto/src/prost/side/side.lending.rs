@@ -230,12 +230,14 @@ impl ::prost::Name for DlcMeta {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DepositLog {
-    #[prost(string, tag = "2")]
-    pub txid: ::prost::alloc::string::String,
     #[prost(string, tag = "1")]
+    pub txid: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
     pub vault_address: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub deposit_tx: ::prost::alloc::string::String,
+    #[prost(bool, tag = "4")]
+    pub verified: bool,
 }
 impl ::prost::Name for DepositLog {
     const NAME: &'static str = "DepositLog";
@@ -512,6 +514,8 @@ pub struct QueryLiquidationEventRequest {
     pub collateral_amount: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub borrow_amount: ::prost::alloc::string::String,
+    #[prost(int64, tag = "4")]
+    pub term: i64,
 }
 impl ::prost::Name for QueryLiquidationEventRequest {
     const NAME: &'static str = "QueryLiquidationEventRequest";
@@ -633,7 +637,7 @@ impl ::prost::Name for QueryParamsResponse {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryLoanRequest {
     #[prost(string, tag = "1")]
-    pub loan_id: ::prost::alloc::string::String,
+    pub id: ::prost::alloc::string::String,
 }
 impl ::prost::Name for QueryLoanRequest {
     const NAME: &'static str = "QueryLoanRequest";
@@ -1049,10 +1053,12 @@ pub struct MsgApprove {
     #[prost(string, tag = "1")]
     pub relayer: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
-    pub deposit_tx_id: ::prost::alloc::string::String,
+    pub vault: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
+    pub deposit_tx: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
     pub block_hash: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "4")]
+    #[prost(string, repeated, tag = "5")]
     pub proof: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 impl ::prost::Name for MsgApprove {

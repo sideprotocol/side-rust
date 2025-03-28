@@ -655,6 +655,9 @@ impl serde::Serialize for DepositLog {
         if !self.deposit_tx.is_empty() {
             len += 1;
         }
+        if self.verified {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("side.lending.DepositLog", len)?;
         if !self.txid.is_empty() {
             struct_ser.serialize_field("txid", &self.txid)?;
@@ -664,6 +667,9 @@ impl serde::Serialize for DepositLog {
         }
         if !self.deposit_tx.is_empty() {
             struct_ser.serialize_field("depositTx", &self.deposit_tx)?;
+        }
+        if self.verified {
+            struct_ser.serialize_field("verified", &self.verified)?;
         }
         struct_ser.end()
     }
@@ -681,6 +687,7 @@ impl<'de> serde::Deserialize<'de> for DepositLog {
             "vaultAddress",
             "deposit_tx",
             "depositTx",
+            "verified",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -688,6 +695,7 @@ impl<'de> serde::Deserialize<'de> for DepositLog {
             Txid,
             VaultAddress,
             DepositTx,
+            Verified,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -716,6 +724,7 @@ impl<'de> serde::Deserialize<'de> for DepositLog {
                             "txid" => Ok(GeneratedField::Txid),
                             "vaultAddress" | "vault_address" => Ok(GeneratedField::VaultAddress),
                             "depositTx" | "deposit_tx" => Ok(GeneratedField::DepositTx),
+                            "verified" => Ok(GeneratedField::Verified),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -738,6 +747,7 @@ impl<'de> serde::Deserialize<'de> for DepositLog {
                 let mut txid__ = None;
                 let mut vault_address__ = None;
                 let mut deposit_tx__ = None;
+                let mut verified__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Txid => {
@@ -758,12 +768,19 @@ impl<'de> serde::Deserialize<'de> for DepositLog {
                             }
                             deposit_tx__ = Some(map_.next_value()?);
                         }
+                        GeneratedField::Verified => {
+                            if verified__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("verified"));
+                            }
+                            verified__ = Some(map_.next_value()?);
+                        }
                     }
                 }
                 Ok(DepositLog {
                     txid: txid__.unwrap_or_default(),
                     vault_address: vault_address__.unwrap_or_default(),
                     deposit_tx: deposit_tx__.unwrap_or_default(),
+                    verified: verified__.unwrap_or_default(),
                 })
             }
         }
@@ -2395,7 +2412,10 @@ impl serde::Serialize for MsgApprove {
         if !self.relayer.is_empty() {
             len += 1;
         }
-        if !self.deposit_tx_id.is_empty() {
+        if !self.vault.is_empty() {
+            len += 1;
+        }
+        if !self.deposit_tx.is_empty() {
             len += 1;
         }
         if !self.block_hash.is_empty() {
@@ -2408,8 +2428,11 @@ impl serde::Serialize for MsgApprove {
         if !self.relayer.is_empty() {
             struct_ser.serialize_field("relayer", &self.relayer)?;
         }
-        if !self.deposit_tx_id.is_empty() {
-            struct_ser.serialize_field("depositTxId", &self.deposit_tx_id)?;
+        if !self.vault.is_empty() {
+            struct_ser.serialize_field("vault", &self.vault)?;
+        }
+        if !self.deposit_tx.is_empty() {
+            struct_ser.serialize_field("depositTx", &self.deposit_tx)?;
         }
         if !self.block_hash.is_empty() {
             struct_ser.serialize_field("blockHash", &self.block_hash)?;
@@ -2429,8 +2452,9 @@ impl<'de> serde::Deserialize<'de> for MsgApprove {
     {
         const FIELDS: &[&str] = &[
             "relayer",
-            "deposit_tx_id",
-            "depositTxId",
+            "vault",
+            "deposit_tx",
+            "depositTx",
             "block_hash",
             "blockHash",
             "proof",
@@ -2439,7 +2463,8 @@ impl<'de> serde::Deserialize<'de> for MsgApprove {
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Relayer,
-            DepositTxId,
+            Vault,
+            DepositTx,
             BlockHash,
             Proof,
         }
@@ -2468,7 +2493,8 @@ impl<'de> serde::Deserialize<'de> for MsgApprove {
                     {
                         match value {
                             "relayer" => Ok(GeneratedField::Relayer),
-                            "depositTxId" | "deposit_tx_id" => Ok(GeneratedField::DepositTxId),
+                            "vault" => Ok(GeneratedField::Vault),
+                            "depositTx" | "deposit_tx" => Ok(GeneratedField::DepositTx),
                             "blockHash" | "block_hash" => Ok(GeneratedField::BlockHash),
                             "proof" => Ok(GeneratedField::Proof),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -2491,7 +2517,8 @@ impl<'de> serde::Deserialize<'de> for MsgApprove {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut relayer__ = None;
-                let mut deposit_tx_id__ = None;
+                let mut vault__ = None;
+                let mut deposit_tx__ = None;
                 let mut block_hash__ = None;
                 let mut proof__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -2502,11 +2529,17 @@ impl<'de> serde::Deserialize<'de> for MsgApprove {
                             }
                             relayer__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::DepositTxId => {
-                            if deposit_tx_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("depositTxId"));
+                        GeneratedField::Vault => {
+                            if vault__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("vault"));
                             }
-                            deposit_tx_id__ = Some(map_.next_value()?);
+                            vault__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::DepositTx => {
+                            if deposit_tx__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("depositTx"));
+                            }
+                            deposit_tx__ = Some(map_.next_value()?);
                         }
                         GeneratedField::BlockHash => {
                             if block_hash__.is_some() {
@@ -2524,7 +2557,8 @@ impl<'de> serde::Deserialize<'de> for MsgApprove {
                 }
                 Ok(MsgApprove {
                     relayer: relayer__.unwrap_or_default(),
-                    deposit_tx_id: deposit_tx_id__.unwrap_or_default(),
+                    vault: vault__.unwrap_or_default(),
+                    deposit_tx: deposit_tx__.unwrap_or_default(),
                     block_hash: block_hash__.unwrap_or_default(),
                     proof: proof__.unwrap_or_default(),
                 })
@@ -5973,6 +6007,9 @@ impl serde::Serialize for QueryLiquidationEventRequest {
         if !self.borrow_amount.is_empty() {
             len += 1;
         }
+        if self.term != 0 {
+            len += 1;
+        }
         let mut struct_ser =
             serializer.serialize_struct("side.lending.QueryLiquidationEventRequest", len)?;
         if !self.pool_id.is_empty() {
@@ -5983,6 +6020,13 @@ impl serde::Serialize for QueryLiquidationEventRequest {
         }
         if !self.borrow_amount.is_empty() {
             struct_ser.serialize_field("borrowAmount", &self.borrow_amount)?;
+        }
+        if self.term != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "term",
+                alloc::string::ToString::to_string(&self.term).as_str(),
+            )?;
         }
         struct_ser.end()
     }
@@ -6001,6 +6045,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationEventRequest {
             "collateralAmount",
             "borrow_amount",
             "borrowAmount",
+            "term",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -6008,6 +6053,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationEventRequest {
             PoolId,
             CollateralAmount,
             BorrowAmount,
+            Term,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -6038,6 +6084,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationEventRequest {
                                 Ok(GeneratedField::CollateralAmount)
                             }
                             "borrowAmount" | "borrow_amount" => Ok(GeneratedField::BorrowAmount),
+                            "term" => Ok(GeneratedField::Term),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -6063,6 +6110,7 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationEventRequest {
                 let mut pool_id__ = None;
                 let mut collateral_amount__ = None;
                 let mut borrow_amount__ = None;
+                let mut term__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::PoolId => {
@@ -6083,12 +6131,22 @@ impl<'de> serde::Deserialize<'de> for QueryLiquidationEventRequest {
                             }
                             borrow_amount__ = Some(map_.next_value()?);
                         }
+                        GeneratedField::Term => {
+                            if term__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("term"));
+                            }
+                            term__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
                     }
                 }
                 Ok(QueryLiquidationEventRequest {
                     pool_id: pool_id__.unwrap_or_default(),
                     collateral_amount: collateral_amount__.unwrap_or_default(),
                     borrow_amount: borrow_amount__.unwrap_or_default(),
+                    term: term__.unwrap_or_default(),
                 })
             }
         }
@@ -6978,12 +7036,12 @@ impl serde::Serialize for QueryLoanRequest {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if !self.loan_id.is_empty() {
+        if !self.id.is_empty() {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.lending.QueryLoanRequest", len)?;
-        if !self.loan_id.is_empty() {
-            struct_ser.serialize_field("loanId", &self.loan_id)?;
+        if !self.id.is_empty() {
+            struct_ser.serialize_field("id", &self.id)?;
         }
         struct_ser.end()
     }
@@ -6995,11 +7053,11 @@ impl<'de> serde::Deserialize<'de> for QueryLoanRequest {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["loan_id", "loanId"];
+        const FIELDS: &[&str] = &["id"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            LoanId,
+            Id,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -7025,7 +7083,7 @@ impl<'de> serde::Deserialize<'de> for QueryLoanRequest {
                         E: serde::de::Error,
                     {
                         match value {
-                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
+                            "id" => Ok(GeneratedField::Id),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -7045,19 +7103,19 @@ impl<'de> serde::Deserialize<'de> for QueryLoanRequest {
             where
                 V: serde::de::MapAccess<'de>,
             {
-                let mut loan_id__ = None;
+                let mut id__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
-                        GeneratedField::LoanId => {
-                            if loan_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("loanId"));
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
                             }
-                            loan_id__ = Some(map_.next_value()?);
+                            id__ = Some(map_.next_value()?);
                         }
                     }
                 }
                 Ok(QueryLoanRequest {
-                    loan_id: loan_id__.unwrap_or_default(),
+                    id: id__.unwrap_or_default(),
                 })
             }
         }

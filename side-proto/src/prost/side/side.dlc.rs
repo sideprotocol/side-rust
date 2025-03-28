@@ -309,6 +309,32 @@ impl ::prost::Name for QueryAttestationResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAttestationByEventRequest {
+    #[prost(uint64, tag = "1")]
+    pub event_id: u64,
+}
+impl ::prost::Name for QueryAttestationByEventRequest {
+    const NAME: &'static str = "QueryAttestationByEventRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAttestationByEventResponse {
+    #[prost(message, optional, tag = "1")]
+    pub attestation: ::core::option::Option<DlcAttestation>,
+}
+impl ::prost::Name for QueryAttestationByEventResponse {
+    const NAME: &'static str = "QueryAttestationByEventResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryAttestationsRequest {
     #[prost(message, optional, tag = "1")]
     pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,

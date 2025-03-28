@@ -157,6 +157,26 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.dlc.Query", "Attestation"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn attestation_by_event(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryAttestationByEventRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryAttestationByEventResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/AttestationByEvent");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.dlc.Query", "AttestationByEvent"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn attestations(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryAttestationsRequest>,
@@ -309,6 +329,13 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryAttestationRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryAttestationResponse>, tonic::Status>;
+        async fn attestation_by_event(
+            &self,
+            request: tonic::Request<super::QueryAttestationByEventRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryAttestationByEventResponse>,
+            tonic::Status,
+        >;
         async fn attestations(
             &self,
             request: tonic::Request<super::QueryAttestationsRequest>,
@@ -551,6 +578,47 @@ pub mod query_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = AttestationSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.dlc.Query/AttestationByEvent" => {
+                    #[allow(non_camel_case_types)]
+                    struct AttestationByEventSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query>
+                        tonic::server::UnaryService<super::QueryAttestationByEventRequest>
+                        for AttestationByEventSvc<T>
+                    {
+                        type Response = super::QueryAttestationByEventResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryAttestationByEventRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).attestation_by_event(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AttestationByEventSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

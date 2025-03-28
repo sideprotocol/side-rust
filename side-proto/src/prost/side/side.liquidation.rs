@@ -7,21 +7,22 @@ pub struct Liquidation {
     #[prost(string, tag = "2")]
     pub loan_id: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
-    pub borrower: ::prost::alloc::string::String,
+    pub debtor: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
     pub dcm: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "5")]
-    pub liquidated_collateral: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(int64, tag = "6")]
-    pub liquidated_price: i64,
-    #[prost(message, optional, tag = "7")]
-    pub liquidated_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(message, optional, tag = "8")]
+    pub collateral_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "6")]
     pub debt_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(int64, tag = "7")]
+    pub liquidated_price: i64,
+    #[prost(message, optional, tag = "8")]
+    pub liquidated_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
     #[prost(message, optional, tag = "9")]
+    pub liquidated_collateral_amount:
+        ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "10")]
     pub liquidated_debt_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(uint32, tag = "10")]
-    pub liquidation_bonus: u32,
     #[prost(message, optional, tag = "11")]
     pub liquidation_bonus_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "12")]
@@ -127,12 +128,12 @@ impl LiquidationStatus {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
-    /// liquidation bonus permille
+    /// liquidation bonus factor permille
     #[prost(uint32, tag = "1")]
-    pub liquidation_bonus: u32,
-    /// protocol liquidation fee permille
+    pub liquidation_bonus_factor: u32,
+    /// protocol liquidation fee factor permille
     #[prost(uint32, tag = "2")]
-    pub protocol_liquidation_fee: u32,
+    pub protocol_liquidation_fee_factor: u32,
     /// protocol liquidation fee collector
     #[prost(string, tag = "3")]
     pub protocol_liquidation_fee_collector: ::prost::alloc::string::String,
