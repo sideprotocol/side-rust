@@ -3,16 +3,22 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
-    /// origination fee collector address
-    #[prost(string, tag = "1")]
-    pub origination_fee_collector: ::prost::alloc::string::String,
-    /// protocol fee collector address
-    #[prost(string, tag = "2")]
-    pub protocol_fee_collector: ::prost::alloc::string::String,
-    /// final timeout duration for each loan
+    /// minimum loan duration
+    #[prost(message, optional, tag = "1")]
+    pub min_loan_duration: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+    /// maximum loan duration
+    #[prost(message, optional, tag = "2")]
+    pub max_loan_duration: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+    /// final timeout duration for loan
     #[prost(message, optional, tag = "3")]
     pub final_timeout_duration:
         ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+    /// origination fee collector address
+    #[prost(string, tag = "4")]
+    pub origination_fee_collector: ::prost::alloc::string::String,
+    /// protocol fee collector address
+    #[prost(string, tag = "5")]
+    pub protocol_fee_collector: ::prost::alloc::string::String,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
@@ -40,17 +46,20 @@ pub struct PoolConfig {
     /// debt ceiling
     #[prost(string, tag = "5")]
     pub debt_ceiling: ::prost::alloc::string::String,
-    /// origination fee
+    /// minimum amount to be borrowed
     #[prost(string, tag = "6")]
+    pub min_borrow_amount: ::prost::alloc::string::String,
+    /// origination fee
+    #[prost(string, tag = "7")]
     pub origination_fee: ::prost::alloc::string::String,
     /// maximum ltv percent
-    #[prost(uint32, tag = "7")]
+    #[prost(uint32, tag = "8")]
     pub max_ltv: u32,
     /// liquidation ltv percent
-    #[prost(uint32, tag = "8")]
+    #[prost(uint32, tag = "9")]
     pub liquidation_threshold: u32,
     /// indicates if the pool is paused
-    #[prost(bool, tag = "9")]
+    #[prost(bool, tag = "10")]
     pub paused: bool,
 }
 impl ::prost::Name for PoolConfig {
@@ -113,8 +122,8 @@ pub struct Loan {
     pub interest: ::prost::alloc::string::String,
     #[prost(string, tag = "11")]
     pub protocol_fee: ::prost::alloc::string::String,
-    #[prost(string, tag = "12")]
-    pub term: ::prost::alloc::string::String,
+    #[prost(int64, tag = "12")]
+    pub term: i64,
     #[prost(string, tag = "13")]
     pub liquidation_price: ::prost::alloc::string::String,
     #[prost(uint64, tag = "14")]
@@ -131,7 +140,9 @@ pub struct Loan {
     pub liquidation_id: u64,
     #[prost(message, optional, tag = "20")]
     pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "LoanStatus", tag = "21")]
+    #[prost(message, optional, tag = "21")]
+    pub disburse_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(enumeration = "LoanStatus", tag = "22")]
     pub status: i32,
 }
 impl ::prost::Name for Loan {
@@ -275,7 +286,7 @@ pub struct Cancellation {
     #[prost(string, repeated, tag = "4")]
     pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag = "5")]
-    pub dca_signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub dcm_signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "6")]
     pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
 }
@@ -831,6 +842,34 @@ pub struct QueryCurrentInterestResponse {
 }
 impl ::prost::Name for QueryCurrentInterestResponse {
     const NAME: &'static str = "QueryCurrentInterestResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// QueryPriceRequest is request type for the Query/Price RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPriceRequest {
+    #[prost(string, tag = "1")]
+    pub pair: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryPriceRequest {
+    const NAME: &'static str = "QueryPriceRequest";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// QueryPriceResponse is response type for the Query/Price RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPriceResponse {
+    #[prost(string, tag = "1")]
+    pub price: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryPriceResponse {
+    const NAME: &'static str = "QueryPriceResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)

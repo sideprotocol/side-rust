@@ -570,34 +570,6 @@ impl ::prost::Name for QueryEventsResponse {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
     }
 }
-/// QueryPriceRequest is request type for the Query/Price RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceRequest {
-    #[prost(string, tag = "1")]
-    pub symbol: ::prost::alloc::string::String,
-}
-impl ::prost::Name for QueryPriceRequest {
-    const NAME: &'static str = "QueryPriceRequest";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-/// QueryPriceResponse is response type for the Query/Price RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceResponse {
-    #[prost(uint64, tag = "1")]
-    pub price: u64,
-}
-impl ::prost::Name for QueryPriceResponse {
-    const NAME: &'static str = "QueryPriceResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
 /// QueryParamsRequest is request type for the Query/Params RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
