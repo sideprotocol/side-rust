@@ -3486,223 +3486,6 @@ impl<'de> serde::Deserialize<'de> for MsgRepayResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitCancellationSignatures {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let mut len = 0;
-        if !self.sender.is_empty() {
-            len += 1;
-        }
-        if !self.loan_id.is_empty() {
-            len += 1;
-        }
-        if !self.signatures.is_empty() {
-            len += 1;
-        }
-        let mut struct_ser =
-            serializer.serialize_struct("side.lending.MsgSubmitCancellationSignatures", len)?;
-        if !self.sender.is_empty() {
-            struct_ser.serialize_field("sender", &self.sender)?;
-        }
-        if !self.loan_id.is_empty() {
-            struct_ser.serialize_field("loanId", &self.loan_id)?;
-        }
-        if !self.signatures.is_empty() {
-            struct_ser.serialize_field("signatures", &self.signatures)?;
-        }
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitCancellationSignatures {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &["sender", "loan_id", "loanId", "signatures"];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {
-            Sender,
-            LoanId,
-            Signatures,
-        }
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        match value {
-                            "sender" => Ok(GeneratedField::Sender),
-                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "signatures" => Ok(GeneratedField::Signatures),
-                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
-                        }
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitCancellationSignatures;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitCancellationSignatures")
-            }
-
-            fn visit_map<V>(
-                self,
-                mut map_: V,
-            ) -> core::result::Result<MsgSubmitCancellationSignatures, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                let mut sender__ = None;
-                let mut loan_id__ = None;
-                let mut signatures__ = None;
-                while let Some(k) = map_.next_key()? {
-                    match k {
-                        GeneratedField::Sender => {
-                            if sender__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("sender"));
-                            }
-                            sender__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::LoanId => {
-                            if loan_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("loanId"));
-                            }
-                            loan_id__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::Signatures => {
-                            if signatures__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("signatures"));
-                            }
-                            signatures__ = Some(map_.next_value()?);
-                        }
-                    }
-                }
-                Ok(MsgSubmitCancellationSignatures {
-                    sender: sender__.unwrap_or_default(),
-                    loan_id: loan_id__.unwrap_or_default(),
-                    signatures: signatures__.unwrap_or_default(),
-                })
-            }
-        }
-        deserializer.deserialize_struct(
-            "side.lending.MsgSubmitCancellationSignatures",
-            FIELDS,
-            GeneratedVisitor,
-        )
-    }
-}
-#[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitCancellationSignaturesResponse {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let len = 0;
-        let struct_ser = serializer
-            .serialize_struct("side.lending.MsgSubmitCancellationSignaturesResponse", len)?;
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitCancellationSignaturesResponse {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &[];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {}
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        Err(serde::de::Error::unknown_field(value, FIELDS))
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitCancellationSignaturesResponse;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitCancellationSignaturesResponse")
-            }
-
-            fn visit_map<V>(
-                self,
-                mut map_: V,
-            ) -> core::result::Result<MsgSubmitCancellationSignaturesResponse, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                while map_.next_key::<GeneratedField>()?.is_some() {
-                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
-                }
-                Ok(MsgSubmitCancellationSignaturesResponse {})
-            }
-        }
-        deserializer.deserialize_struct(
-            "side.lending.MsgSubmitCancellationSignaturesResponse",
-            FIELDS,
-            GeneratedVisitor,
-        )
-    }
-}
-#[cfg(feature = "serde")]
 impl serde::Serialize for MsgSubmitCets {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -4030,223 +3813,6 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCetsResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitLiquidationSignatures {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let mut len = 0;
-        if !self.sender.is_empty() {
-            len += 1;
-        }
-        if !self.loan_id.is_empty() {
-            len += 1;
-        }
-        if !self.signatures.is_empty() {
-            len += 1;
-        }
-        let mut struct_ser =
-            serializer.serialize_struct("side.lending.MsgSubmitLiquidationSignatures", len)?;
-        if !self.sender.is_empty() {
-            struct_ser.serialize_field("sender", &self.sender)?;
-        }
-        if !self.loan_id.is_empty() {
-            struct_ser.serialize_field("loanId", &self.loan_id)?;
-        }
-        if !self.signatures.is_empty() {
-            struct_ser.serialize_field("signatures", &self.signatures)?;
-        }
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationSignatures {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &["sender", "loan_id", "loanId", "signatures"];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {
-            Sender,
-            LoanId,
-            Signatures,
-        }
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        match value {
-                            "sender" => Ok(GeneratedField::Sender),
-                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "signatures" => Ok(GeneratedField::Signatures),
-                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
-                        }
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitLiquidationSignatures;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitLiquidationSignatures")
-            }
-
-            fn visit_map<V>(
-                self,
-                mut map_: V,
-            ) -> core::result::Result<MsgSubmitLiquidationSignatures, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                let mut sender__ = None;
-                let mut loan_id__ = None;
-                let mut signatures__ = None;
-                while let Some(k) = map_.next_key()? {
-                    match k {
-                        GeneratedField::Sender => {
-                            if sender__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("sender"));
-                            }
-                            sender__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::LoanId => {
-                            if loan_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("loanId"));
-                            }
-                            loan_id__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::Signatures => {
-                            if signatures__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("signatures"));
-                            }
-                            signatures__ = Some(map_.next_value()?);
-                        }
-                    }
-                }
-                Ok(MsgSubmitLiquidationSignatures {
-                    sender: sender__.unwrap_or_default(),
-                    loan_id: loan_id__.unwrap_or_default(),
-                    signatures: signatures__.unwrap_or_default(),
-                })
-            }
-        }
-        deserializer.deserialize_struct(
-            "side.lending.MsgSubmitLiquidationSignatures",
-            FIELDS,
-            GeneratedVisitor,
-        )
-    }
-}
-#[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitLiquidationSignaturesResponse {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let len = 0;
-        let struct_ser = serializer
-            .serialize_struct("side.lending.MsgSubmitLiquidationSignaturesResponse", len)?;
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitLiquidationSignaturesResponse {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &[];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {}
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        Err(serde::de::Error::unknown_field(value, FIELDS))
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitLiquidationSignaturesResponse;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitLiquidationSignaturesResponse")
-            }
-
-            fn visit_map<V>(
-                self,
-                mut map_: V,
-            ) -> core::result::Result<MsgSubmitLiquidationSignaturesResponse, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                while map_.next_key::<GeneratedField>()?.is_some() {
-                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
-                }
-                Ok(MsgSubmitLiquidationSignaturesResponse {})
-            }
-        }
-        deserializer.deserialize_struct(
-            "side.lending.MsgSubmitLiquidationSignaturesResponse",
-            FIELDS,
-            GeneratedVisitor,
-        )
-    }
-}
-#[cfg(feature = "serde")]
 impl serde::Serialize for MsgSubmitPrice {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -4433,234 +3999,6 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitPriceResponse {
         }
         deserializer.deserialize_struct(
             "side.lending.MsgSubmitPriceResponse",
-            FIELDS,
-            GeneratedVisitor,
-        )
-    }
-}
-#[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitRepaymentAdaptorSignatures {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let mut len = 0;
-        if !self.sender.is_empty() {
-            len += 1;
-        }
-        if !self.loan_id.is_empty() {
-            len += 1;
-        }
-        if !self.adaptor_signatures.is_empty() {
-            len += 1;
-        }
-        let mut struct_ser =
-            serializer.serialize_struct("side.lending.MsgSubmitRepaymentAdaptorSignatures", len)?;
-        if !self.sender.is_empty() {
-            struct_ser.serialize_field("sender", &self.sender)?;
-        }
-        if !self.loan_id.is_empty() {
-            struct_ser.serialize_field("loanId", &self.loan_id)?;
-        }
-        if !self.adaptor_signatures.is_empty() {
-            struct_ser.serialize_field("adaptorSignatures", &self.adaptor_signatures)?;
-        }
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignatures {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &[
-            "sender",
-            "loan_id",
-            "loanId",
-            "adaptor_signatures",
-            "adaptorSignatures",
-        ];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {
-            Sender,
-            LoanId,
-            AdaptorSignatures,
-        }
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        match value {
-                            "sender" => Ok(GeneratedField::Sender),
-                            "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "adaptorSignatures" | "adaptor_signatures" => {
-                                Ok(GeneratedField::AdaptorSignatures)
-                            }
-                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
-                        }
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitRepaymentAdaptorSignatures;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgSubmitRepaymentAdaptorSignatures")
-            }
-
-            fn visit_map<V>(
-                self,
-                mut map_: V,
-            ) -> core::result::Result<MsgSubmitRepaymentAdaptorSignatures, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                let mut sender__ = None;
-                let mut loan_id__ = None;
-                let mut adaptor_signatures__ = None;
-                while let Some(k) = map_.next_key()? {
-                    match k {
-                        GeneratedField::Sender => {
-                            if sender__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("sender"));
-                            }
-                            sender__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::LoanId => {
-                            if loan_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("loanId"));
-                            }
-                            loan_id__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::AdaptorSignatures => {
-                            if adaptor_signatures__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("adaptorSignatures"));
-                            }
-                            adaptor_signatures__ = Some(map_.next_value()?);
-                        }
-                    }
-                }
-                Ok(MsgSubmitRepaymentAdaptorSignatures {
-                    sender: sender__.unwrap_or_default(),
-                    loan_id: loan_id__.unwrap_or_default(),
-                    adaptor_signatures: adaptor_signatures__.unwrap_or_default(),
-                })
-            }
-        }
-        deserializer.deserialize_struct(
-            "side.lending.MsgSubmitRepaymentAdaptorSignatures",
-            FIELDS,
-            GeneratedVisitor,
-        )
-    }
-}
-#[cfg(feature = "serde")]
-impl serde::Serialize for MsgSubmitRepaymentAdaptorSignaturesResponse {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let len = 0;
-        let struct_ser = serializer.serialize_struct(
-            "side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse",
-            len,
-        )?;
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgSubmitRepaymentAdaptorSignaturesResponse {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &[];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {}
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        Err(serde::de::Error::unknown_field(value, FIELDS))
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgSubmitRepaymentAdaptorSignaturesResponse;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter
-                    .write_str("struct side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse")
-            }
-
-            fn visit_map<V>(
-                self,
-                mut map_: V,
-            ) -> core::result::Result<MsgSubmitRepaymentAdaptorSignaturesResponse, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                while map_.next_key::<GeneratedField>()?.is_some() {
-                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
-                }
-                Ok(MsgSubmitRepaymentAdaptorSignaturesResponse {})
-            }
-        }
-        deserializer.deserialize_struct(
-            "side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -9259,5 +8597,84 @@ impl<'de> serde::Deserialize<'de> for RepaymentCet {
             }
         }
         deserializer.deserialize_struct("side.lending.RepaymentCet", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for SigningIntent {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let variant = match self {
+            Self::Repayment => "SIGNING_INTENT_REPAYMENT",
+            Self::Liquidation => "SIGNING_INTENT_LIQUIDATION",
+            Self::DefaultLiquidation => "SIGNING_INTENT_DEFAULT_LIQUIDATION",
+            Self::Cancellation => "SIGNING_INTENT_CANCELLATION",
+        };
+        serializer.serialize_str(variant)
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for SigningIntent {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "SIGNING_INTENT_REPAYMENT",
+            "SIGNING_INTENT_LIQUIDATION",
+            "SIGNING_INTENT_DEFAULT_LIQUIDATION",
+            "SIGNING_INTENT_CANCELLATION",
+        ];
+
+        struct GeneratedVisitor;
+
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = SigningIntent;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                write!(formatter, "expected one of: {:?}", &FIELDS)
+            }
+
+            fn visit_i64<E>(self, v: i64) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                i32::try_from(v)
+                    .ok()
+                    .and_then(|x| x.try_into().ok())
+                    .ok_or_else(|| {
+                        serde::de::Error::invalid_value(serde::de::Unexpected::Signed(v), &self)
+                    })
+            }
+
+            fn visit_u64<E>(self, v: u64) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                i32::try_from(v)
+                    .ok()
+                    .and_then(|x| x.try_into().ok())
+                    .ok_or_else(|| {
+                        serde::de::Error::invalid_value(serde::de::Unexpected::Unsigned(v), &self)
+                    })
+            }
+
+            fn visit_str<E>(self, value: &str) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                match value {
+                    "SIGNING_INTENT_REPAYMENT" => Ok(SigningIntent::Repayment),
+                    "SIGNING_INTENT_LIQUIDATION" => Ok(SigningIntent::Liquidation),
+                    "SIGNING_INTENT_DEFAULT_LIQUIDATION" => Ok(SigningIntent::DefaultLiquidation),
+                    "SIGNING_INTENT_CANCELLATION" => Ok(SigningIntent::Cancellation),
+                    _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
+                }
+            }
+        }
+        deserializer.deserialize_any(GeneratedVisitor)
     }
 }

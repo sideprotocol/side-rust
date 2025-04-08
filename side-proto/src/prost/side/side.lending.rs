@@ -413,6 +413,39 @@ impl CetType {
         }
     }
 }
+/// Signing intent
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SigningIntent {
+    Repayment = 0,
+    Liquidation = 1,
+    DefaultLiquidation = 2,
+    Cancellation = 3,
+}
+impl SigningIntent {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            SigningIntent::Repayment => "SIGNING_INTENT_REPAYMENT",
+            SigningIntent::Liquidation => "SIGNING_INTENT_LIQUIDATION",
+            SigningIntent::DefaultLiquidation => "SIGNING_INTENT_DEFAULT_LIQUIDATION",
+            SigningIntent::Cancellation => "SIGNING_INTENT_CANCELLATION",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SIGNING_INTENT_REPAYMENT" => Some(Self::Repayment),
+            "SIGNING_INTENT_LIQUIDATION" => Some(Self::Liquidation),
+            "SIGNING_INTENT_DEFAULT_LIQUIDATION" => Some(Self::DefaultLiquidation),
+            "SIGNING_INTENT_CANCELLATION" => Some(Self::Cancellation),
+            _ => None,
+        }
+    }
+}
 /// GenesisState defines the lending module's genesis state.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1141,87 +1174,6 @@ impl ::prost::Name for MsgCancel {
 pub struct MsgCancelResponse {}
 impl ::prost::Name for MsgCancelResponse {
     const NAME: &'static str = "MsgCancelResponse";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitCancellationSignatures {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub loan_id: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "3")]
-    pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-impl ::prost::Name for MsgSubmitCancellationSignatures {
-    const NAME: &'static str = "MsgSubmitCancellationSignatures";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitCancellationSignaturesResponse {}
-impl ::prost::Name for MsgSubmitCancellationSignaturesResponse {
-    const NAME: &'static str = "MsgSubmitCancellationSignaturesResponse";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitRepaymentAdaptorSignatures {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub loan_id: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "3")]
-    pub adaptor_signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-impl ::prost::Name for MsgSubmitRepaymentAdaptorSignatures {
-    const NAME: &'static str = "MsgSubmitRepaymentAdaptorSignatures";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitRepaymentAdaptorSignaturesResponse {}
-impl ::prost::Name for MsgSubmitRepaymentAdaptorSignaturesResponse {
-    const NAME: &'static str = "MsgSubmitRepaymentAdaptorSignaturesResponse";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitLiquidationSignatures {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub loan_id: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "3")]
-    pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-impl ::prost::Name for MsgSubmitLiquidationSignatures {
-    const NAME: &'static str = "MsgSubmitLiquidationSignatures";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitLiquidationSignaturesResponse {}
-impl ::prost::Name for MsgSubmitLiquidationSignaturesResponse {
-    const NAME: &'static str = "MsgSubmitLiquidationSignaturesResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
