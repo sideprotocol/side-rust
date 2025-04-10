@@ -20,7 +20,7 @@ use walkdir::WalkDir;
 static QUIET: AtomicBool = AtomicBool::new(false);
 
 /// The Cosmos SDK commit or tag to be cloned and used to build the proto files
-const COSMOS_SDK_REV: &str = "release/v2.0.x";
+const COSMOS_SDK_REV: &str = "lending-without-tss";
 
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.

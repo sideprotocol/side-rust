@@ -127,30 +127,6 @@ impl LiquidationStatus {
         }
     }
 }
-/// Signing intent
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum SigningIntent {
-    Default = 0,
-}
-impl SigningIntent {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            SigningIntent::Default => "SIGNING_INTENT_DEFAULT",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "SIGNING_INTENT_DEFAULT" => Some(Self::Default),
-            _ => None,
-        }
-    }
-}
 /// Params defines the parameters for the module.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -364,6 +340,35 @@ impl ::prost::Name for MsgLiquidate {
 pub struct MsgLiquidateResponse {}
 impl ::prost::Name for MsgLiquidateResponse {
     const NAME: &'static str = "MsgLiquidateResponse";
+    const PACKAGE: &'static str = "side.liquidation";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.liquidation.{}", Self::NAME)
+    }
+}
+/// MsgSubmitSettlementSignatures defines the Msg/SubmitSettlementSignatures request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitSettlementSignatures {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub liquidation_id: u64,
+    #[prost(string, repeated, tag = "3")]
+    pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for MsgSubmitSettlementSignatures {
+    const NAME: &'static str = "MsgSubmitSettlementSignatures";
+    const PACKAGE: &'static str = "side.liquidation";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.liquidation.{}", Self::NAME)
+    }
+}
+/// MsgSubmitSettlementSignaturesResponse defines the Msg/SubmitSettlementSignatures response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitSettlementSignaturesResponse {}
+impl ::prost::Name for MsgSubmitSettlementSignaturesResponse {
+    const NAME: &'static str = "MsgSubmitSettlementSignaturesResponse";
     const PACKAGE: &'static str = "side.liquidation";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.liquidation.{}", Self::NAME)

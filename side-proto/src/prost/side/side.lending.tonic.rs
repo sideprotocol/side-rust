@@ -1350,6 +1350,30 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.lending.Msg", "Approve"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn submit_repayment_adaptor_signatures(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgSubmitRepaymentAdaptorSignatures>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitRepaymentAdaptorSignaturesResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.lending.Msg/SubmitRepaymentAdaptorSignatures",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.lending.Msg",
+                "SubmitRepaymentAdaptorSignatures",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn cancel(
             &mut self,
             request: impl tonic::IntoRequest<super::MsgCancel>,
@@ -1368,6 +1392,30 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.lending.Msg", "Cancel"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn submit_cancellation_signatures(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgSubmitCancellationSignatures>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitCancellationSignaturesResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.lending.Msg/SubmitCancellationSignatures",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.lending.Msg",
+                "SubmitCancellationSignatures",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn repay(
             &mut self,
             request: impl tonic::IntoRequest<super::MsgRepay>,
@@ -1383,6 +1431,30 @@ pub mod msg_client {
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("side.lending.Msg", "Repay"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn submit_liquidation_signatures(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgSubmitLiquidationSignatures>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitLiquidationSignaturesResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.lending.Msg/SubmitLiquidationSignatures",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.lending.Msg",
+                "SubmitLiquidationSignatures",
+            ));
             self.inner.unary(req, path, codec).await
         }
         pub async fn submit_price(
@@ -1459,14 +1531,35 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgApprove>,
         ) -> core::result::Result<tonic::Response<super::MsgApproveResponse>, tonic::Status>;
+        async fn submit_repayment_adaptor_signatures(
+            &self,
+            request: tonic::Request<super::MsgSubmitRepaymentAdaptorSignatures>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitRepaymentAdaptorSignaturesResponse>,
+            tonic::Status,
+        >;
         async fn cancel(
             &self,
             request: tonic::Request<super::MsgCancel>,
         ) -> core::result::Result<tonic::Response<super::MsgCancelResponse>, tonic::Status>;
+        async fn submit_cancellation_signatures(
+            &self,
+            request: tonic::Request<super::MsgSubmitCancellationSignatures>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitCancellationSignaturesResponse>,
+            tonic::Status,
+        >;
         async fn repay(
             &self,
             request: tonic::Request<super::MsgRepay>,
         ) -> core::result::Result<tonic::Response<super::MsgRepayResponse>, tonic::Status>;
+        async fn submit_liquidation_signatures(
+            &self,
+            request: tonic::Request<super::MsgSubmitLiquidationSignatures>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitLiquidationSignaturesResponse>,
+            tonic::Status,
+        >;
         async fn submit_price(
             &self,
             request: tonic::Request<super::MsgSubmitPrice>,
@@ -1818,6 +1911,49 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
+                "/side.lending.Msg/SubmitRepaymentAdaptorSignatures" => {
+                    #[allow(non_camel_case_types)]
+                    struct SubmitRepaymentAdaptorSignaturesSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg>
+                        tonic::server::UnaryService<super::MsgSubmitRepaymentAdaptorSignatures>
+                        for SubmitRepaymentAdaptorSignaturesSvc<T>
+                    {
+                        type Response = super::MsgSubmitRepaymentAdaptorSignaturesResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgSubmitRepaymentAdaptorSignatures>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).submit_repayment_adaptor_signatures(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SubmitRepaymentAdaptorSignaturesSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 "/side.lending.Msg/Cancel" => {
                     #[allow(non_camel_case_types)]
                     struct CancelSvc<T: Msg>(pub Arc<T>);
@@ -1856,6 +1992,48 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
+                "/side.lending.Msg/SubmitCancellationSignatures" => {
+                    #[allow(non_camel_case_types)]
+                    struct SubmitCancellationSignaturesSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitCancellationSignatures>
+                        for SubmitCancellationSignaturesSvc<T>
+                    {
+                        type Response = super::MsgSubmitCancellationSignaturesResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgSubmitCancellationSignatures>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).submit_cancellation_signatures(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SubmitCancellationSignaturesSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 "/side.lending.Msg/Repay" => {
                     #[allow(non_camel_case_types)]
                     struct RepaySvc<T: Msg>(pub Arc<T>);
@@ -1879,6 +2057,48 @@ pub mod msg_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = RepaySvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Msg/SubmitLiquidationSignatures" => {
+                    #[allow(non_camel_case_types)]
+                    struct SubmitLiquidationSignaturesSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitLiquidationSignatures>
+                        for SubmitLiquidationSignaturesSvc<T>
+                    {
+                        type Response = super::MsgSubmitLiquidationSignaturesResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgSubmitLiquidationSignatures>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).submit_liquidation_signatures(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SubmitLiquidationSignaturesSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

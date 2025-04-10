@@ -3,21 +3,18 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
-    /// minimum loan duration
-    #[prost(message, optional, tag = "1")]
-    pub min_loan_duration: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
-    /// maximum loan duration
-    #[prost(message, optional, tag = "2")]
-    pub max_loan_duration: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
     /// final timeout duration for loan
-    #[prost(message, optional, tag = "3")]
+    #[prost(message, optional, tag = "1")]
     pub final_timeout_duration:
         ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+    /// request fee collector address
+    #[prost(string, tag = "2")]
+    pub request_fee_collector: ::prost::alloc::string::String,
     /// origination fee collector address
-    #[prost(string, tag = "4")]
+    #[prost(string, tag = "3")]
     pub origination_fee_collector: ::prost::alloc::string::String,
     /// protocol fee collector address
-    #[prost(string, tag = "5")]
+    #[prost(string, tag = "4")]
     pub protocol_fee_collector: ::prost::alloc::string::String,
 }
 impl ::prost::Name for Params {
@@ -27,43 +24,88 @@ impl ::prost::Name for Params {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
     }
 }
-/// Lending pool config
+/// Pool tranche config
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PoolTrancheConfig {
+    /// maturity duration in seconds
+    #[prost(int64, tag = "1")]
+    pub maturity: i64,
+    /// borrow apr permille
+    #[prost(uint32, tag = "2")]
+    pub borrow_apr: u32,
+    /// minimum maturity factor permille
+    #[prost(uint32, tag = "3")]
+    pub min_maturity_factor: u32,
+}
+impl ::prost::Name for PoolTrancheConfig {
+    const NAME: &'static str = "PoolTrancheConfig";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// Pool config
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PoolConfig {
-    /// borrow apr permille
-    #[prost(uint32, tag = "1")]
-    pub borrow_apr: u32,
-    /// reserve factor permille
-    #[prost(uint32, tag = "2")]
-    pub reserve_factor: u32,
     /// supply cap
-    #[prost(string, tag = "3")]
+    #[prost(string, tag = "1")]
     pub supply_cap: ::prost::alloc::string::String,
     /// borrow cap
-    #[prost(string, tag = "4")]
+    #[prost(string, tag = "2")]
     pub borrow_cap: ::prost::alloc::string::String,
-    /// debt ceiling
-    #[prost(string, tag = "5")]
-    pub debt_ceiling: ::prost::alloc::string::String,
     /// minimum amount to be borrowed
-    #[prost(string, tag = "6")]
+    #[prost(string, tag = "3")]
     pub min_borrow_amount: ::prost::alloc::string::String,
+    /// maximum amount to be borrowed
+    #[prost(string, tag = "4")]
+    pub max_borrow_amount: ::prost::alloc::string::String,
+    /// tranches
+    #[prost(message, repeated, tag = "5")]
+    pub tranches: ::prost::alloc::vec::Vec<PoolTrancheConfig>,
+    /// request fee
+    #[prost(message, optional, tag = "6")]
+    pub request_fee: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     /// origination fee
     #[prost(string, tag = "7")]
     pub origination_fee: ::prost::alloc::string::String,
-    /// maximum ltv percent
+    /// reserve factor permille
     #[prost(uint32, tag = "8")]
+    pub reserve_factor: u32,
+    /// referral fee factor permille
+    #[prost(uint32, tag = "9")]
+    pub referral_fee_factor: u32,
+    /// maximum ltv percent
+    #[prost(uint32, tag = "10")]
     pub max_ltv: u32,
     /// liquidation ltv percent
-    #[prost(uint32, tag = "9")]
+    #[prost(uint32, tag = "11")]
     pub liquidation_threshold: u32,
     /// indicates if the pool is paused
-    #[prost(bool, tag = "10")]
+    #[prost(bool, tag = "12")]
     pub paused: bool,
 }
 impl ::prost::Name for PoolConfig {
     const NAME: &'static str = "PoolConfig";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// Pool tranche
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PoolTranche {
+    /// maturity duration
+    #[prost(int64, tag = "1")]
+    pub maturity: i64,
+    /// total borrowed
+    #[prost(string, tag = "2")]
+    pub total_borrowed: ::prost::alloc::string::String,
+}
+impl ::prost::Name for PoolTranche {
+    const NAME: &'static str = "PoolTranche";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -79,14 +121,18 @@ pub struct LendingPool {
     #[prost(string, tag = "3")]
     pub available_amount: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
-    pub total_borrowed: ::prost::alloc::string::String,
+    pub borrowed_amount: ::prost::alloc::string::String,
     #[prost(string, tag = "5")]
-    pub total_reserves: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "6")]
-    pub total_stokens: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    pub total_borrowed: ::prost::alloc::string::String,
+    #[prost(string, tag = "6")]
+    pub reserve_amount: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "7")]
+    pub total_stokens: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, repeated, tag = "8")]
+    pub tranches: ::prost::alloc::vec::Vec<PoolTranche>,
+    #[prost(message, optional, tag = "9")]
     pub config: ::core::option::Option<PoolConfig>,
-    #[prost(enumeration = "PoolStatus", tag = "8")]
+    #[prost(enumeration = "PoolStatus", tag = "10")]
     pub status: i32,
 }
 impl ::prost::Name for LendingPool {
@@ -116,33 +162,41 @@ pub struct Loan {
     pub pool_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "8")]
     pub borrow_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "9")]
-    pub origination_fee: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "9")]
+    pub request_fee: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(string, tag = "10")]
-    pub interest: ::prost::alloc::string::String,
+    pub origination_fee: ::prost::alloc::string::String,
     #[prost(string, tag = "11")]
+    pub interest: ::prost::alloc::string::String,
+    #[prost(string, tag = "12")]
     pub protocol_fee: ::prost::alloc::string::String,
-    #[prost(int64, tag = "12")]
-    pub term: i64,
-    #[prost(string, tag = "13")]
+    #[prost(int64, tag = "13")]
+    pub maturity: i64,
+    #[prost(uint32, tag = "14")]
+    pub borrow_apr: u32,
+    #[prost(int64, tag = "15")]
+    pub min_maturity: i64,
+    #[prost(string, tag = "16")]
     pub liquidation_price: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "14")]
+    #[prost(uint64, tag = "17")]
     pub liquidation_event_id: u64,
-    #[prost(uint64, tag = "15")]
+    #[prost(uint64, tag = "18")]
     pub default_liquidation_event_id: u64,
-    #[prost(uint64, tag = "16")]
-    pub repayment_event_id: u64,
-    #[prost(string, repeated, tag = "17")]
-    pub deposit_txs: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, tag = "18")]
-    pub collateral_amount: ::prost::alloc::string::String,
     #[prost(uint64, tag = "19")]
+    pub repayment_event_id: u64,
+    #[prost(string, repeated, tag = "20")]
+    pub deposit_txs: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, tag = "21")]
+    pub collateral_amount: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "22")]
     pub liquidation_id: u64,
-    #[prost(message, optional, tag = "20")]
+    #[prost(string, tag = "23")]
+    pub referrer: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "24")]
     pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(message, optional, tag = "21")]
+    #[prost(message, optional, tag = "25")]
     pub disburse_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "LoanStatus", tag = "22")]
+    #[prost(enumeration = "LoanStatus", tag = "26")]
     pub status: i32,
 }
 impl ::prost::Name for Loan {
@@ -222,13 +276,15 @@ pub struct DlcMeta {
     pub default_liquidation_cet: ::core::option::Option<LiquidationCet>,
     #[prost(message, optional, tag = "3")]
     pub repayment_cet: ::core::option::Option<RepaymentCet>,
-    #[prost(message, repeated, tag = "4")]
+    #[prost(string, tag = "4")]
+    pub timeout_refund_tx: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "5")]
     pub vault_utxos: ::prost::alloc::vec::Vec<super::btcbridge::Utxo>,
-    #[prost(string, tag = "5")]
-    pub internal_key: ::prost::alloc::string::String,
     #[prost(string, tag = "6")]
-    pub multisig_script: ::prost::alloc::string::String,
+    pub internal_key: ::prost::alloc::string::String,
     #[prost(string, tag = "7")]
+    pub multisig_script: ::prost::alloc::string::String,
+    #[prost(string, tag = "8")]
     pub timeout_refund_script: ::prost::alloc::string::String,
 }
 impl ::prost::Name for DlcMeta {
@@ -413,39 +469,6 @@ impl CetType {
         }
     }
 }
-/// Signing intent
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum SigningIntent {
-    Repayment = 0,
-    Liquidation = 1,
-    DefaultLiquidation = 2,
-    Cancellation = 3,
-}
-impl SigningIntent {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            SigningIntent::Repayment => "SIGNING_INTENT_REPAYMENT",
-            SigningIntent::Liquidation => "SIGNING_INTENT_LIQUIDATION",
-            SigningIntent::DefaultLiquidation => "SIGNING_INTENT_DEFAULT_LIQUIDATION",
-            SigningIntent::Cancellation => "SIGNING_INTENT_CANCELLATION",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "SIGNING_INTENT_REPAYMENT" => Some(Self::Repayment),
-            "SIGNING_INTENT_LIQUIDATION" => Some(Self::Liquidation),
-            "SIGNING_INTENT_DEFAULT_LIQUIDATION" => Some(Self::DefaultLiquidation),
-            "SIGNING_INTENT_CANCELLATION" => Some(Self::Cancellation),
-            _ => None,
-        }
-    }
-}
 /// GenesisState defines the lending module's genesis state.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -559,7 +582,7 @@ pub struct QueryLiquidationEventRequest {
     #[prost(string, tag = "3")]
     pub borrow_amount: ::prost::alloc::string::String,
     #[prost(int64, tag = "4")]
-    pub term: i64,
+    pub maturity: i64,
 }
 impl ::prost::Name for QueryLiquidationEventRequest {
     const NAME: &'static str = "QueryLiquidationEventRequest";
@@ -1055,14 +1078,16 @@ pub struct MsgApply {
     pub borrower: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub borrower_pubkey: ::prost::alloc::string::String,
-    #[prost(int64, tag = "3")]
-    pub maturity_time: i64,
-    #[prost(string, tag = "4")]
+    #[prost(string, tag = "3")]
     pub pool_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "5")]
+    #[prost(message, optional, tag = "4")]
     pub borrow_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(int64, tag = "5")]
+    pub maturity: i64,
     #[prost(uint64, tag = "6")]
     pub dcm_id: u64,
+    #[prost(string, tag = "7")]
+    pub referrer: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgApply {
     const NAME: &'static str = "MsgApply";
@@ -1174,6 +1199,87 @@ impl ::prost::Name for MsgCancel {
 pub struct MsgCancelResponse {}
 impl ::prost::Name for MsgCancelResponse {
     const NAME: &'static str = "MsgCancelResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitCancellationSignatures {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub loan_id: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for MsgSubmitCancellationSignatures {
+    const NAME: &'static str = "MsgSubmitCancellationSignatures";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitCancellationSignaturesResponse {}
+impl ::prost::Name for MsgSubmitCancellationSignaturesResponse {
+    const NAME: &'static str = "MsgSubmitCancellationSignaturesResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitRepaymentAdaptorSignatures {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub loan_id: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub adaptor_signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for MsgSubmitRepaymentAdaptorSignatures {
+    const NAME: &'static str = "MsgSubmitRepaymentAdaptorSignatures";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitRepaymentAdaptorSignaturesResponse {}
+impl ::prost::Name for MsgSubmitRepaymentAdaptorSignaturesResponse {
+    const NAME: &'static str = "MsgSubmitRepaymentAdaptorSignaturesResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitLiquidationSignatures {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub loan_id: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for MsgSubmitLiquidationSignatures {
+    const NAME: &'static str = "MsgSubmitLiquidationSignatures";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgSubmitLiquidationSignaturesResponse {}
+impl ::prost::Name for MsgSubmitLiquidationSignaturesResponse {
+    const NAME: &'static str = "MsgSubmitLiquidationSignaturesResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
