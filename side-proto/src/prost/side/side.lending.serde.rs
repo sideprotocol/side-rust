@@ -1,5 +1,108 @@
 // @generated
 #[cfg(feature = "serde")]
+impl serde::Serialize for AuthorizationDeposits {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.deposit_txs.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.lending.AuthorizationDeposits", len)?;
+        if !self.deposit_txs.is_empty() {
+            struct_ser.serialize_field("depositTxs", &self.deposit_txs)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for AuthorizationDeposits {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["deposit_txs", "depositTxs"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            DepositTxs,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "depositTxs" | "deposit_txs" => Ok(GeneratedField::DepositTxs),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = AuthorizationDeposits;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.AuthorizationDeposits")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<AuthorizationDeposits, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut deposit_txs__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::DepositTxs => {
+                            if deposit_txs__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("depositTxs"));
+                            }
+                            deposit_txs__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(AuthorizationDeposits {
+                    deposit_txs: deposit_txs__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.lending.AuthorizationDeposits",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for Cancellation {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -1417,6 +1520,9 @@ impl serde::Serialize for Loan {
         if self.min_maturity != 0 {
             len += 1;
         }
+        if !self.start_borrow_index.is_empty() {
+            len += 1;
+        }
         if !self.liquidation_price.is_empty() {
             len += 1;
         }
@@ -1429,7 +1535,7 @@ impl serde::Serialize for Loan {
         if self.repayment_event_id != 0 {
             len += 1;
         }
-        if !self.deposit_txs.is_empty() {
+        if !self.authorization_deposits.is_empty() {
             len += 1;
         }
         if !self.collateral_amount.is_empty() {
@@ -1512,6 +1618,9 @@ impl serde::Serialize for Loan {
                 alloc::string::ToString::to_string(&self.min_maturity).as_str(),
             )?;
         }
+        if !self.start_borrow_index.is_empty() {
+            struct_ser.serialize_field("startBorrowIndex", &self.start_borrow_index)?;
+        }
         if !self.liquidation_price.is_empty() {
             struct_ser.serialize_field("liquidationPrice", &self.liquidation_price)?;
         }
@@ -1536,8 +1645,8 @@ impl serde::Serialize for Loan {
                 alloc::string::ToString::to_string(&self.repayment_event_id).as_str(),
             )?;
         }
-        if !self.deposit_txs.is_empty() {
-            struct_ser.serialize_field("depositTxs", &self.deposit_txs)?;
+        if !self.authorization_deposits.is_empty() {
+            struct_ser.serialize_field("authorizationDeposits", &self.authorization_deposits)?;
         }
         if !self.collateral_amount.is_empty() {
             struct_ser.serialize_field("collateralAmount", &self.collateral_amount)?;
@@ -1600,6 +1709,8 @@ impl<'de> serde::Deserialize<'de> for Loan {
             "borrowApr",
             "min_maturity",
             "minMaturity",
+            "start_borrow_index",
+            "startBorrowIndex",
             "liquidation_price",
             "liquidationPrice",
             "liquidation_event_id",
@@ -1608,8 +1719,8 @@ impl<'de> serde::Deserialize<'de> for Loan {
             "defaultLiquidationEventId",
             "repayment_event_id",
             "repaymentEventId",
-            "deposit_txs",
-            "depositTxs",
+            "authorization_deposits",
+            "authorizationDeposits",
             "collateral_amount",
             "collateralAmount",
             "liquidation_id",
@@ -1639,11 +1750,12 @@ impl<'de> serde::Deserialize<'de> for Loan {
             Maturity,
             BorrowApr,
             MinMaturity,
+            StartBorrowIndex,
             LiquidationPrice,
             LiquidationEventId,
             DefaultLiquidationEventId,
             RepaymentEventId,
-            DepositTxs,
+            AuthorizationDeposits,
             CollateralAmount,
             LiquidationId,
             Referrer,
@@ -1692,6 +1804,9 @@ impl<'de> serde::Deserialize<'de> for Loan {
                             "maturity" => Ok(GeneratedField::Maturity),
                             "borrowApr" | "borrow_apr" => Ok(GeneratedField::BorrowApr),
                             "minMaturity" | "min_maturity" => Ok(GeneratedField::MinMaturity),
+                            "startBorrowIndex" | "start_borrow_index" => {
+                                Ok(GeneratedField::StartBorrowIndex)
+                            }
                             "liquidationPrice" | "liquidation_price" => {
                                 Ok(GeneratedField::LiquidationPrice)
                             }
@@ -1704,7 +1819,9 @@ impl<'de> serde::Deserialize<'de> for Loan {
                             "repaymentEventId" | "repayment_event_id" => {
                                 Ok(GeneratedField::RepaymentEventId)
                             }
-                            "depositTxs" | "deposit_txs" => Ok(GeneratedField::DepositTxs),
+                            "authorizationDeposits" | "authorization_deposits" => {
+                                Ok(GeneratedField::AuthorizationDeposits)
+                            }
                             "collateralAmount" | "collateral_amount" => {
                                 Ok(GeneratedField::CollateralAmount)
                             }
@@ -1747,11 +1864,12 @@ impl<'de> serde::Deserialize<'de> for Loan {
                 let mut maturity__ = None;
                 let mut borrow_apr__ = None;
                 let mut min_maturity__ = None;
+                let mut start_borrow_index__ = None;
                 let mut liquidation_price__ = None;
                 let mut liquidation_event_id__ = None;
                 let mut default_liquidation_event_id__ = None;
                 let mut repayment_event_id__ = None;
-                let mut deposit_txs__ = None;
+                let mut authorization_deposits__ = None;
                 let mut collateral_amount__ = None;
                 let mut liquidation_id__ = None;
                 let mut referrer__ = None;
@@ -1865,6 +1983,12 @@ impl<'de> serde::Deserialize<'de> for Loan {
                                     .0,
                             );
                         }
+                        GeneratedField::StartBorrowIndex => {
+                            if start_borrow_index__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("startBorrowIndex"));
+                            }
+                            start_borrow_index__ = Some(map_.next_value()?);
+                        }
                         GeneratedField::LiquidationPrice => {
                             if liquidation_price__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("liquidationPrice"));
@@ -1902,11 +2026,13 @@ impl<'de> serde::Deserialize<'de> for Loan {
                                     .0,
                             );
                         }
-                        GeneratedField::DepositTxs => {
-                            if deposit_txs__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("depositTxs"));
+                        GeneratedField::AuthorizationDeposits => {
+                            if authorization_deposits__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "authorizationDeposits",
+                                ));
                             }
-                            deposit_txs__ = Some(map_.next_value()?);
+                            authorization_deposits__ = Some(map_.next_value()?);
                         }
                         GeneratedField::CollateralAmount => {
                             if collateral_amount__.is_some() {
@@ -1965,12 +2091,13 @@ impl<'de> serde::Deserialize<'de> for Loan {
                     maturity: maturity__.unwrap_or_default(),
                     borrow_apr: borrow_apr__.unwrap_or_default(),
                     min_maturity: min_maturity__.unwrap_or_default(),
+                    start_borrow_index: start_borrow_index__.unwrap_or_default(),
                     liquidation_price: liquidation_price__.unwrap_or_default(),
                     liquidation_event_id: liquidation_event_id__.unwrap_or_default(),
                     default_liquidation_event_id: default_liquidation_event_id__
                         .unwrap_or_default(),
                     repayment_event_id: repayment_event_id__.unwrap_or_default(),
-                    deposit_txs: deposit_txs__.unwrap_or_default(),
+                    authorization_deposits: authorization_deposits__.unwrap_or_default(),
                     collateral_amount: collateral_amount__.unwrap_or_default(),
                     liquidation_id: liquidation_id__.unwrap_or_default(),
                     referrer: referrer__.unwrap_or_default(),
@@ -3871,7 +3998,7 @@ impl serde::Serialize for MsgSubmitCets {
         if !self.loan_id.is_empty() {
             len += 1;
         }
-        if !self.deposit_tx.is_empty() {
+        if !self.deposit_txs.is_empty() {
             len += 1;
         }
         if !self.liquidation_cet.is_empty() {
@@ -3896,8 +4023,8 @@ impl serde::Serialize for MsgSubmitCets {
         if !self.loan_id.is_empty() {
             struct_ser.serialize_field("loanId", &self.loan_id)?;
         }
-        if !self.deposit_tx.is_empty() {
-            struct_ser.serialize_field("depositTx", &self.deposit_tx)?;
+        if !self.deposit_txs.is_empty() {
+            struct_ser.serialize_field("depositTxs", &self.deposit_txs)?;
         }
         if !self.liquidation_cet.is_empty() {
             struct_ser.serialize_field("liquidationCet", &self.liquidation_cet)?;
@@ -3934,8 +4061,8 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCets {
             "borrower",
             "loan_id",
             "loanId",
-            "deposit_tx",
-            "depositTx",
+            "deposit_txs",
+            "depositTxs",
             "liquidation_cet",
             "liquidationCet",
             "liquidation_adaptor_signatures",
@@ -3952,7 +4079,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCets {
         enum GeneratedField {
             Borrower,
             LoanId,
-            DepositTx,
+            DepositTxs,
             LiquidationCet,
             LiquidationAdaptorSignatures,
             DefaultLiquidationAdaptorSignatures,
@@ -3985,7 +4112,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCets {
                         match value {
                             "borrower" => Ok(GeneratedField::Borrower),
                             "loanId" | "loan_id" => Ok(GeneratedField::LoanId),
-                            "depositTx" | "deposit_tx" => Ok(GeneratedField::DepositTx),
+                            "depositTxs" | "deposit_txs" => Ok(GeneratedField::DepositTxs),
                             "liquidationCet" | "liquidation_cet" => {
                                 Ok(GeneratedField::LiquidationCet)
                             }
@@ -4021,7 +4148,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCets {
             {
                 let mut borrower__ = None;
                 let mut loan_id__ = None;
-                let mut deposit_tx__ = None;
+                let mut deposit_txs__ = None;
                 let mut liquidation_cet__ = None;
                 let mut liquidation_adaptor_signatures__ = None;
                 let mut default_liquidation_adaptor_signatures__ = None;
@@ -4041,11 +4168,11 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCets {
                             }
                             loan_id__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::DepositTx => {
-                            if deposit_tx__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("depositTx"));
+                        GeneratedField::DepositTxs => {
+                            if deposit_txs__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("depositTxs"));
                             }
-                            deposit_tx__ = Some(map_.next_value()?);
+                            deposit_txs__ = Some(map_.next_value()?);
                         }
                         GeneratedField::LiquidationCet => {
                             if liquidation_cet__.is_some() {
@@ -4088,7 +4215,7 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCets {
                 Ok(MsgSubmitCets {
                     borrower: borrower__.unwrap_or_default(),
                     loan_id: loan_id__.unwrap_or_default(),
-                    deposit_tx: deposit_tx__.unwrap_or_default(),
+                    deposit_txs: deposit_txs__.unwrap_or_default(),
                     liquidation_cet: liquidation_cet__.unwrap_or_default(),
                     liquidation_adaptor_signatures: liquidation_adaptor_signatures__
                         .unwrap_or_default(),
@@ -5801,6 +5928,9 @@ impl serde::Serialize for PoolTranche {
         if self.maturity != 0 {
             len += 1;
         }
+        if !self.borrow_index.is_empty() {
+            len += 1;
+        }
         if !self.total_borrowed.is_empty() {
             len += 1;
         }
@@ -5811,6 +5941,9 @@ impl serde::Serialize for PoolTranche {
                 "maturity",
                 alloc::string::ToString::to_string(&self.maturity).as_str(),
             )?;
+        }
+        if !self.borrow_index.is_empty() {
+            struct_ser.serialize_field("borrowIndex", &self.borrow_index)?;
         }
         if !self.total_borrowed.is_empty() {
             struct_ser.serialize_field("totalBorrowed", &self.total_borrowed)?;
@@ -5825,11 +5958,18 @@ impl<'de> serde::Deserialize<'de> for PoolTranche {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["maturity", "total_borrowed", "totalBorrowed"];
+        const FIELDS: &[&str] = &[
+            "maturity",
+            "borrow_index",
+            "borrowIndex",
+            "total_borrowed",
+            "totalBorrowed",
+        ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Maturity,
+            BorrowIndex,
             TotalBorrowed,
         }
         #[cfg(feature = "serde")]
@@ -5857,6 +5997,7 @@ impl<'de> serde::Deserialize<'de> for PoolTranche {
                     {
                         match value {
                             "maturity" => Ok(GeneratedField::Maturity),
+                            "borrowIndex" | "borrow_index" => Ok(GeneratedField::BorrowIndex),
                             "totalBorrowed" | "total_borrowed" => Ok(GeneratedField::TotalBorrowed),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -5878,6 +6019,7 @@ impl<'de> serde::Deserialize<'de> for PoolTranche {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut maturity__ = None;
+                let mut borrow_index__ = None;
                 let mut total_borrowed__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -5890,6 +6032,12 @@ impl<'de> serde::Deserialize<'de> for PoolTranche {
                                     .0,
                             );
                         }
+                        GeneratedField::BorrowIndex => {
+                            if borrow_index__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("borrowIndex"));
+                            }
+                            borrow_index__ = Some(map_.next_value()?);
+                        }
                         GeneratedField::TotalBorrowed => {
                             if total_borrowed__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("totalBorrowed"));
@@ -5900,6 +6048,7 @@ impl<'de> serde::Deserialize<'de> for PoolTranche {
                 }
                 Ok(PoolTranche {
                     maturity: maturity__.unwrap_or_default(),
+                    borrow_index: borrow_index__.unwrap_or_default(),
                     total_borrowed: total_borrowed__.unwrap_or_default(),
                 })
             }

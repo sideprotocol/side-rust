@@ -1,6 +1,6 @@
 [package]
 name = "side-proto"
-version = "2.0.0-alpha.4"
+version = "2.0.0-alpha.5"
 edition = "2021"
 description = "Rust Client for Side Chain"
 readme = "README.md"

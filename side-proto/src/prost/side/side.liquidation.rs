@@ -13,30 +13,32 @@ pub struct Liquidation {
     #[prost(message, optional, tag = "5")]
     pub collateral_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "6")]
+    pub actual_collateral_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "7")]
     pub debt_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "7")]
+    #[prost(string, tag = "8")]
     pub liquidated_price: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "8")]
-    pub liquidated_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
     #[prost(message, optional, tag = "9")]
+    pub liquidated_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(message, optional, tag = "10")]
     pub liquidated_collateral_amount:
         ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(message, optional, tag = "10")]
-    pub liquidated_debt_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "11")]
-    pub liquidation_bonus_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    pub liquidated_debt_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "12")]
-    pub protocol_liquidation_fee: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    pub liquidation_bonus_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "13")]
+    pub protocol_liquidation_fee: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "14")]
     pub unliquidated_collateral_amount:
         ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "14")]
-    pub liquidation_cet: ::prost::alloc::string::String,
     #[prost(string, tag = "15")]
-    pub settlement_tx: ::prost::alloc::string::String,
+    pub liquidation_cet: ::prost::alloc::string::String,
     #[prost(string, tag = "16")]
+    pub settlement_tx: ::prost::alloc::string::String,
+    #[prost(string, tag = "17")]
     pub settlement_tx_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "LiquidationStatus", tag = "17")]
+    #[prost(enumeration = "LiquidationStatus", tag = "18")]
     pub status: i32,
 }
 impl ::prost::Name for Liquidation {
@@ -60,6 +62,8 @@ pub struct LiquidationRecord {
     #[prost(message, optional, tag = "5")]
     pub collateral_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "6")]
+    pub bonus_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "7")]
     pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
 }
 impl ::prost::Name for LiquidationRecord {

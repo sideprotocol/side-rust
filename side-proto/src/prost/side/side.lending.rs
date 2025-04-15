@@ -100,8 +100,11 @@ pub struct PoolTranche {
     /// maturity duration
     #[prost(int64, tag = "1")]
     pub maturity: i64,
-    /// total borrowed
+    /// borrow index
     #[prost(string, tag = "2")]
+    pub borrow_index: ::prost::alloc::string::String,
+    /// total borrowed
+    #[prost(string, tag = "3")]
     pub total_borrowed: ::prost::alloc::string::String,
 }
 impl ::prost::Name for PoolTranche {
@@ -142,6 +145,20 @@ impl ::prost::Name for LendingPool {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
     }
 }
+/// Deposits used for CET authorization
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AuthorizationDeposits {
+    #[prost(string, repeated, tag = "1")]
+    pub deposit_txs: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for AuthorizationDeposits {
+    const NAME: &'static str = "AuthorizationDeposits";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Loan {
@@ -177,26 +194,28 @@ pub struct Loan {
     #[prost(int64, tag = "15")]
     pub min_maturity: i64,
     #[prost(string, tag = "16")]
+    pub start_borrow_index: ::prost::alloc::string::String,
+    #[prost(string, tag = "17")]
     pub liquidation_price: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "17")]
-    pub liquidation_event_id: u64,
     #[prost(uint64, tag = "18")]
-    pub default_liquidation_event_id: u64,
+    pub liquidation_event_id: u64,
     #[prost(uint64, tag = "19")]
+    pub default_liquidation_event_id: u64,
+    #[prost(uint64, tag = "20")]
     pub repayment_event_id: u64,
-    #[prost(string, repeated, tag = "20")]
-    pub deposit_txs: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, tag = "21")]
+    #[prost(message, repeated, tag = "21")]
+    pub authorization_deposits: ::prost::alloc::vec::Vec<AuthorizationDeposits>,
+    #[prost(string, tag = "22")]
     pub collateral_amount: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "22")]
+    #[prost(uint64, tag = "23")]
     pub liquidation_id: u64,
-    #[prost(string, tag = "23")]
+    #[prost(string, tag = "24")]
     pub referrer: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "24")]
-    pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
     #[prost(message, optional, tag = "25")]
+    pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(message, optional, tag = "26")]
     pub disburse_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "LoanStatus", tag = "26")]
+    #[prost(enumeration = "LoanStatus", tag = "27")]
     pub status: i32,
 }
 impl ::prost::Name for Loan {
@@ -1113,8 +1132,8 @@ pub struct MsgSubmitCets {
     pub borrower: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub loan_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub deposit_tx: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub deposit_txs: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, tag = "4")]
     pub liquidation_cet: ::prost::alloc::string::String,
     #[prost(string, repeated, tag = "5")]

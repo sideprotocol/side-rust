@@ -91,6 +91,8 @@ pub struct DlcEvent {
     pub outcome_index: u32,
     #[prost(message, optional, tag = "9")]
     pub publish_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(message, optional, tag = "10")]
+    pub trigger_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
 }
 impl ::prost::Name for DlcEvent {
     const NAME: &'static str = "DLCEvent";

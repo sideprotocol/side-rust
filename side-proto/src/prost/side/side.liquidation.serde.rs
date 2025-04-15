@@ -220,6 +220,9 @@ impl serde::Serialize for Liquidation {
         if self.collateral_amount.is_some() {
             len += 1;
         }
+        if self.actual_collateral_amount.is_some() {
+            len += 1;
+        }
         if self.debt_amount.is_some() {
             len += 1;
         }
@@ -273,6 +276,9 @@ impl serde::Serialize for Liquidation {
         }
         if let Some(v) = self.collateral_amount.as_ref() {
             struct_ser.serialize_field("collateralAmount", v)?;
+        }
+        if let Some(v) = self.actual_collateral_amount.as_ref() {
+            struct_ser.serialize_field("actualCollateralAmount", v)?;
         }
         if let Some(v) = self.debt_amount.as_ref() {
             struct_ser.serialize_field("debtAmount", v)?;
@@ -331,6 +337,8 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
             "dcm",
             "collateral_amount",
             "collateralAmount",
+            "actual_collateral_amount",
+            "actualCollateralAmount",
             "debt_amount",
             "debtAmount",
             "liquidated_price",
@@ -363,6 +371,7 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
             Debtor,
             Dcm,
             CollateralAmount,
+            ActualCollateralAmount,
             DebtAmount,
             LiquidatedPrice,
             LiquidatedTime,
@@ -406,6 +415,9 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
                             "dcm" => Ok(GeneratedField::Dcm),
                             "collateralAmount" | "collateral_amount" => {
                                 Ok(GeneratedField::CollateralAmount)
+                            }
+                            "actualCollateralAmount" | "actual_collateral_amount" => {
+                                Ok(GeneratedField::ActualCollateralAmount)
                             }
                             "debtAmount" | "debt_amount" => Ok(GeneratedField::DebtAmount),
                             "liquidatedPrice" | "liquidated_price" => {
@@ -461,6 +473,7 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
                 let mut debtor__ = None;
                 let mut dcm__ = None;
                 let mut collateral_amount__ = None;
+                let mut actual_collateral_amount__ = None;
                 let mut debt_amount__ = None;
                 let mut liquidated_price__ = None;
                 let mut liquidated_time__ = None;
@@ -507,6 +520,14 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
                                 return Err(serde::de::Error::duplicate_field("collateralAmount"));
                             }
                             collateral_amount__ = map_.next_value()?;
+                        }
+                        GeneratedField::ActualCollateralAmount => {
+                            if actual_collateral_amount__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "actualCollateralAmount",
+                                ));
+                            }
+                            actual_collateral_amount__ = map_.next_value()?;
                         }
                         GeneratedField::DebtAmount => {
                             if debt_amount__.is_some() {
@@ -598,6 +619,7 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
                     debtor: debtor__.unwrap_or_default(),
                     dcm: dcm__.unwrap_or_default(),
                     collateral_amount: collateral_amount__,
+                    actual_collateral_amount: actual_collateral_amount__,
                     debt_amount: debt_amount__,
                     liquidated_price: liquidated_price__.unwrap_or_default(),
                     liquidated_time: liquidated_time__,
@@ -640,6 +662,9 @@ impl serde::Serialize for LiquidationRecord {
         if self.collateral_amount.is_some() {
             len += 1;
         }
+        if self.bonus_amount.is_some() {
+            len += 1;
+        }
         if self.time.is_some() {
             len += 1;
         }
@@ -666,6 +691,9 @@ impl serde::Serialize for LiquidationRecord {
         if let Some(v) = self.collateral_amount.as_ref() {
             struct_ser.serialize_field("collateralAmount", v)?;
         }
+        if let Some(v) = self.bonus_amount.as_ref() {
+            struct_ser.serialize_field("bonusAmount", v)?;
+        }
         if let Some(v) = self.time.as_ref() {
             struct_ser.serialize_field("time", v)?;
         }
@@ -688,6 +716,8 @@ impl<'de> serde::Deserialize<'de> for LiquidationRecord {
             "debtAmount",
             "collateral_amount",
             "collateralAmount",
+            "bonus_amount",
+            "bonusAmount",
             "time",
         ];
 
@@ -698,6 +728,7 @@ impl<'de> serde::Deserialize<'de> for LiquidationRecord {
             Liquidator,
             DebtAmount,
             CollateralAmount,
+            BonusAmount,
             Time,
         }
         #[cfg(feature = "serde")]
@@ -731,6 +762,7 @@ impl<'de> serde::Deserialize<'de> for LiquidationRecord {
                             "collateralAmount" | "collateral_amount" => {
                                 Ok(GeneratedField::CollateralAmount)
                             }
+                            "bonusAmount" | "bonus_amount" => Ok(GeneratedField::BonusAmount),
                             "time" => Ok(GeneratedField::Time),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -756,6 +788,7 @@ impl<'de> serde::Deserialize<'de> for LiquidationRecord {
                 let mut liquidator__ = None;
                 let mut debt_amount__ = None;
                 let mut collateral_amount__ = None;
+                let mut bonus_amount__ = None;
                 let mut time__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -795,6 +828,12 @@ impl<'de> serde::Deserialize<'de> for LiquidationRecord {
                             }
                             collateral_amount__ = map_.next_value()?;
                         }
+                        GeneratedField::BonusAmount => {
+                            if bonus_amount__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("bonusAmount"));
+                            }
+                            bonus_amount__ = map_.next_value()?;
+                        }
                         GeneratedField::Time => {
                             if time__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("time"));
@@ -809,6 +848,7 @@ impl<'de> serde::Deserialize<'de> for LiquidationRecord {
                     liquidator: liquidator__.unwrap_or_default(),
                     debt_amount: debt_amount__,
                     collateral_amount: collateral_amount__,
+                    bonus_amount: bonus_amount__,
                     time: time__,
                 })
             }
