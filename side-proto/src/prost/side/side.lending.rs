@@ -230,6 +230,8 @@ pub struct DlcMeta {
     pub multisig_script: ::prost::alloc::string::String,
     #[prost(string, tag = "7")]
     pub timeout_refund_script: ::prost::alloc::string::String,
+    #[prost(string, tag = "8")]
+    pub timeout_refund_tx: ::prost::alloc::string::String,
 }
 impl ::prost::Name for DlcMeta {
     const NAME: &'static str = "DLCMeta";

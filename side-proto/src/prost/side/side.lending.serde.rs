@@ -449,6 +449,9 @@ impl serde::Serialize for DlcMeta {
         if !self.timeout_refund_script.is_empty() {
             len += 1;
         }
+        if !self.timeout_refund_tx.is_empty() {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("side.lending.DLCMeta", len)?;
         if let Some(v) = self.liquidation_cet.as_ref() {
             struct_ser.serialize_field("liquidationCet", v)?;
@@ -470,6 +473,9 @@ impl serde::Serialize for DlcMeta {
         }
         if !self.timeout_refund_script.is_empty() {
             struct_ser.serialize_field("timeoutRefundScript", &self.timeout_refund_script)?;
+        }
+        if !self.timeout_refund_tx.is_empty() {
+            struct_ser.serialize_field("timeoutRefundTx", &self.timeout_refund_tx)?;
         }
         struct_ser.end()
     }
@@ -496,6 +502,8 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
             "multisigScript",
             "timeout_refund_script",
             "timeoutRefundScript",
+            "timeout_refund_tx",
+            "timeoutRefundTx",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -507,6 +515,7 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
             InternalKey,
             MultisigScript,
             TimeoutRefundScript,
+            TimeoutRefundTx,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -547,6 +556,9 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                             "timeoutRefundScript" | "timeout_refund_script" => {
                                 Ok(GeneratedField::TimeoutRefundScript)
                             }
+                            "timeoutRefundTx" | "timeout_refund_tx" => {
+                                Ok(GeneratedField::TimeoutRefundTx)
+                            }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -573,6 +585,7 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                 let mut internal_key__ = None;
                 let mut multisig_script__ = None;
                 let mut timeout_refund_script__ = None;
+                let mut timeout_refund_tx__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::LiquidationCet => {
@@ -621,6 +634,12 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                             }
                             timeout_refund_script__ = Some(map_.next_value()?);
                         }
+                        GeneratedField::TimeoutRefundTx => {
+                            if timeout_refund_tx__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("timeoutRefundTx"));
+                            }
+                            timeout_refund_tx__ = Some(map_.next_value()?);
+                        }
                     }
                 }
                 Ok(DlcMeta {
@@ -631,6 +650,7 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                     internal_key: internal_key__.unwrap_or_default(),
                     multisig_script: multisig_script__.unwrap_or_default(),
                     timeout_refund_script: timeout_refund_script__.unwrap_or_default(),
+                    timeout_refund_tx: timeout_refund_tx__.unwrap_or_default(),
                 })
             }
         }
