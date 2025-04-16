@@ -6,17 +6,13 @@ pub struct DlcOracle {
     pub id: u64,
     #[prost(string, tag = "2")]
     pub desc: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "3")]
-    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(uint32, tag = "4")]
-    pub threshold: u32,
-    #[prost(string, tag = "5")]
+    #[prost(string, tag = "3")]
     pub pubkey: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "6")]
+    #[prost(uint64, tag = "4")]
     pub nonce_index: u64,
-    #[prost(message, optional, tag = "7")]
+    #[prost(message, optional, tag = "5")]
     pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "DlcOracleStatus", tag = "8")]
+    #[prost(enumeration = "DlcOracleStatus", tag = "6")]
     pub status: i32,
 }
 impl ::prost::Name for DlcOracle {
@@ -28,24 +24,20 @@ impl ::prost::Name for DlcOracle {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Agency {
+pub struct Dcm {
     #[prost(uint64, tag = "1")]
     pub id: u64,
     #[prost(string, tag = "2")]
     pub desc: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "3")]
-    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(uint32, tag = "4")]
-    pub threshold: u32,
-    #[prost(string, tag = "5")]
+    #[prost(string, tag = "3")]
     pub pubkey: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "6")]
+    #[prost(message, optional, tag = "4")]
     pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "AgencyStatus", tag = "7")]
+    #[prost(enumeration = "DcmStatus", tag = "5")]
     pub status: i32,
 }
-impl ::prost::Name for Agency {
-    const NAME: &'static str = "Agency";
+impl ::prost::Name for Dcm {
+    const NAME: &'static str = "DCM";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -72,26 +64,28 @@ impl ::prost::Name for DlcNonce {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DlcPriceEvent {
+pub struct DlcEvent {
     #[prost(uint64, tag = "1")]
     pub id: u64,
-    #[prost(string, tag = "2")]
-    pub trigger_price: ::prost::alloc::string::String,
+    #[prost(enumeration = "DlcEventType", tag = "2")]
+    pub r#type: i32,
     #[prost(string, tag = "3")]
-    pub price_decimal: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
     pub nonce: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
+    #[prost(string, tag = "4")]
     pub pubkey: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
+    #[prost(string, tag = "5")]
     pub description: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "6")]
+    pub outcomes: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(bool, tag = "7")]
     pub has_triggered: bool,
-    #[prost(message, optional, tag = "8")]
+    #[prost(uint32, tag = "8")]
+    pub outcome_index: u32,
+    #[prost(message, optional, tag = "9")]
     pub publish_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
 }
-impl ::prost::Name for DlcPriceEvent {
-    const NAME: &'static str = "DLCPriceEvent";
+impl ::prost::Name for DlcEvent {
+    const NAME: &'static str = "DLCEvent";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -104,14 +98,14 @@ pub struct DlcAttestation {
     pub id: u64,
     #[prost(uint64, tag = "2")]
     pub event_id: u64,
-    #[prost(message, optional, tag = "3")]
-    pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(string, tag = "3")]
+    pub outcome: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
     pub pubkey: ::prost::alloc::string::String,
     #[prost(string, tag = "5")]
-    pub outcome: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
     pub signature: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "6")]
+    pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
 }
 impl ::prost::Name for DlcAttestation {
     const NAME: &'static str = "DLCAttestation";
@@ -123,11 +117,8 @@ impl ::prost::Name for DlcAttestation {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum DlcOracleStatus {
-    OracleStatusPending = 0,
-    OracleStatusFailed = 1,
-    OracleStatusTimedout = 2,
-    OracleStatusEnable = 3,
-    OracleStatusDisable = 4,
+    OracleStatusEnable = 0,
+    OracleStatusDisable = 1,
 }
 impl DlcOracleStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -136,9 +127,6 @@ impl DlcOracleStatus {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            DlcOracleStatus::OracleStatusPending => "Oracle_Status_Pending",
-            DlcOracleStatus::OracleStatusFailed => "Oracle_Status_Failed",
-            DlcOracleStatus::OracleStatusTimedout => "Oracle_Status_Timedout",
             DlcOracleStatus::OracleStatusEnable => "Oracle_status_Enable",
             DlcOracleStatus::OracleStatusDisable => "Oracle_status_Disable",
         }
@@ -146,9 +134,6 @@ impl DlcOracleStatus {
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "Oracle_Status_Pending" => Some(Self::OracleStatusPending),
-            "Oracle_Status_Failed" => Some(Self::OracleStatusFailed),
-            "Oracle_Status_Timedout" => Some(Self::OracleStatusTimedout),
             "Oracle_status_Enable" => Some(Self::OracleStatusEnable),
             "Oracle_status_Disable" => Some(Self::OracleStatusDisable),
             _ => None,
@@ -157,35 +142,115 @@ impl DlcOracleStatus {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum AgencyStatus {
-    Pending = 0,
-    Failed = 1,
-    Timedout = 2,
-    Enable = 3,
-    Disable = 4,
+pub enum DcmStatus {
+    Enable = 0,
+    Disable = 1,
 }
-impl AgencyStatus {
+impl DcmStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            AgencyStatus::Pending => "Agency_Status_Pending",
-            AgencyStatus::Failed => "Agency_Status_Failed",
-            AgencyStatus::Timedout => "Agency_Status_Timedout",
-            AgencyStatus::Enable => "Agency_status_Enable",
-            AgencyStatus::Disable => "Agency_status_Disable",
+            DcmStatus::Enable => "DCM_status_Enable",
+            DcmStatus::Disable => "DCM_status_Disable",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "Agency_Status_Pending" => Some(Self::Pending),
-            "Agency_Status_Failed" => Some(Self::Failed),
-            "Agency_Status_Timedout" => Some(Self::Timedout),
-            "Agency_status_Enable" => Some(Self::Enable),
-            "Agency_status_Disable" => Some(Self::Disable),
+            "DCM_status_Enable" => Some(Self::Enable),
+            "DCM_status_Disable" => Some(Self::Disable),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum DlcEventType {
+    Unspecified = 0,
+    Price = 1,
+    Date = 2,
+    Lending = 3,
+}
+impl DlcEventType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            DlcEventType::Unspecified => "UNSPECIFIED",
+            DlcEventType::Price => "PRICE",
+            DlcEventType::Date => "DATE",
+            DlcEventType::Lending => "LENDING",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "UNSPECIFIED" => Some(Self::Unspecified),
+            "PRICE" => Some(Self::Price),
+            "DATE" => Some(Self::Date),
+            "LENDING" => Some(Self::Lending),
+            _ => None,
+        }
+    }
+}
+/// Signing intent
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SigningIntent {
+    Default = 0,
+}
+impl SigningIntent {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            SigningIntent::Default => "SIGNING_INTENT_DEFAULT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SIGNING_INTENT_DEFAULT" => Some(Self::Default),
+            _ => None,
+        }
+    }
+}
+/// DKG intent
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum DkgIntent {
+    Default = 0,
+    PriceEventNonce = 10000,
+    DateEventNonce = 20000,
+    LendingEventNonce = 30000,
+}
+impl DkgIntent {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            DkgIntent::Default => "DKG_INTENT_DEFAULT",
+            DkgIntent::PriceEventNonce => "DKG_INTENT_PRICE_EVENT_NONCE",
+            DkgIntent::DateEventNonce => "DKG_INTENT_DATE_EVENT_NONCE",
+            DkgIntent::LendingEventNonce => "DKG_INTENT_LENDING_EVENT_NONCE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "DKG_INTENT_DEFAULT" => Some(Self::Default),
+            "DKG_INTENT_PRICE_EVENT_NONCE" => Some(Self::PriceEventNonce),
+            "DKG_INTENT_DATE_EVENT_NONCE" => Some(Self::DateEventNonce),
+            "DKG_INTENT_LENDING_EVENT_NONCE" => Some(Self::LendingEventNonce),
             _ => None,
         }
     }
@@ -210,11 +275,21 @@ impl ::prost::Name for PriceInterval {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
     #[prost(uint32, tag = "1")]
-    pub nonce_queue_size: u32,
+    pub price_event_nonce_queue_size: u32,
     #[prost(message, repeated, tag = "2")]
     pub price_intervals: ::prost::alloc::vec::Vec<PriceInterval>,
-    #[prost(message, optional, tag = "3")]
-    pub dkg_timeout_period: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+    #[prost(uint32, tag = "3")]
+    pub date_event_nonce_queue_size: u32,
+    #[prost(message, optional, tag = "4")]
+    pub date_interval: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+    #[prost(uint32, tag = "5")]
+    pub lending_event_nonce_queue_size: u32,
+    #[prost(uint32, tag = "6")]
+    pub oracle_participant_base_num: u32,
+    #[prost(uint32, tag = "7")]
+    pub oracle_participant_num: u32,
+    #[prost(uint32, tag = "8")]
+    pub nonce_generation_batch_size: u32,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
@@ -230,7 +305,7 @@ pub struct GenesisState {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
     #[prost(message, repeated, tag = "2")]
-    pub events: ::prost::alloc::vec::Vec<DlcPriceEvent>,
+    pub events: ::prost::alloc::vec::Vec<DlcEvent>,
     #[prost(message, repeated, tag = "3")]
     pub attestations: ::prost::alloc::vec::Vec<DlcAttestation>,
 }
@@ -269,6 +344,32 @@ impl ::prost::Name for QueryAttestationResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAttestationByEventRequest {
+    #[prost(uint64, tag = "1")]
+    pub event_id: u64,
+}
+impl ::prost::Name for QueryAttestationByEventRequest {
+    const NAME: &'static str = "QueryAttestationByEventRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryAttestationByEventResponse {
+    #[prost(message, optional, tag = "1")]
+    pub attestation: ::core::option::Option<DlcAttestation>,
+}
+impl ::prost::Name for QueryAttestationByEventResponse {
+    const NAME: &'static str = "QueryAttestationByEventResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryAttestationsRequest {
     #[prost(message, optional, tag = "1")]
     pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
@@ -298,14 +399,14 @@ impl ::prost::Name for QueryAttestationsResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryAgenciesRequest {
-    #[prost(enumeration = "AgencyStatus", tag = "1")]
+pub struct QueryDcMsRequest {
+    #[prost(enumeration = "DcmStatus", tag = "1")]
     pub status: i32,
     #[prost(message, optional, tag = "2")]
     pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
 }
-impl ::prost::Name for QueryAgenciesRequest {
-    const NAME: &'static str = "QueryAgenciesRequest";
+impl ::prost::Name for QueryDcMsRequest {
+    const NAME: &'static str = "QueryDCMsRequest";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -313,15 +414,15 @@ impl ::prost::Name for QueryAgenciesRequest {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryAgenciesResponse {
+pub struct QueryDcMsResponse {
     #[prost(message, repeated, tag = "1")]
-    pub agencies: ::prost::alloc::vec::Vec<Agency>,
+    pub dcms: ::prost::alloc::vec::Vec<Dcm>,
     #[prost(message, optional, tag = "2")]
     pub pagination:
         ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
 }
-impl ::prost::Name for QueryAgenciesResponse {
-    const NAME: &'static str = "QueryAgenciesResponse";
+impl ::prost::Name for QueryDcMsResponse {
+    const NAME: &'static str = "QueryDCMsResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -462,7 +563,7 @@ impl ::prost::Name for QueryEventRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryEventResponse {
     #[prost(message, optional, tag = "1")]
-    pub event: ::core::option::Option<DlcPriceEvent>,
+    pub event: ::core::option::Option<DlcEvent>,
 }
 impl ::prost::Name for QueryEventResponse {
     const NAME: &'static str = "QueryEventResponse";
@@ -492,41 +593,13 @@ impl ::prost::Name for QueryEventsRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryEventsResponse {
     #[prost(message, repeated, tag = "1")]
-    pub events: ::prost::alloc::vec::Vec<DlcPriceEvent>,
+    pub events: ::prost::alloc::vec::Vec<DlcEvent>,
     #[prost(message, optional, tag = "2")]
     pub pagination:
         ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
 }
 impl ::prost::Name for QueryEventsResponse {
     const NAME: &'static str = "QueryEventsResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-/// QueryPriceRequest is request type for the Query/Price RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceRequest {
-    #[prost(string, tag = "1")]
-    pub symbol: ::prost::alloc::string::String,
-}
-impl ::prost::Name for QueryPriceRequest {
-    const NAME: &'static str = "QueryPriceRequest";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-/// QueryPriceResponse is response type for the Query/Price RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceResponse {
-    #[prost(uint64, tag = "1")]
-    pub price: u64,
-}
-impl ::prost::Name for QueryPriceResponse {
-    const NAME: &'static str = "QueryPriceResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -559,125 +632,7 @@ impl ::prost::Name for QueryParamsResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitAgencyPubKey {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub pub_key: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "3")]
-    pub agency_id: u64,
-    #[prost(string, tag = "4")]
-    pub agency_pubkey: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub signature: ::prost::alloc::string::String,
-}
-impl ::prost::Name for MsgSubmitAgencyPubKey {
-    const NAME: &'static str = "MsgSubmitAgencyPubKey";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitAgencyPubKeyResponse {}
-impl ::prost::Name for MsgSubmitAgencyPubKeyResponse {
-    const NAME: &'static str = "MsgSubmitAgencyPubKeyResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitOraclePubKey {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub pub_key: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "3")]
-    pub oracle_id: u64,
-    #[prost(string, tag = "4")]
-    pub oracle_pubkey: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub signature: ::prost::alloc::string::String,
-}
-impl ::prost::Name for MsgSubmitOraclePubKey {
-    const NAME: &'static str = "MsgSubmitOraclePubKey";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitOraclePubKeyResponse {}
-impl ::prost::Name for MsgSubmitOraclePubKeyResponse {
-    const NAME: &'static str = "MsgSubmitOraclePubKeyResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitNonce {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub nonce: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub oracle_pubkey: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub signature: ::prost::alloc::string::String,
-}
-impl ::prost::Name for MsgSubmitNonce {
-    const NAME: &'static str = "MsgSubmitNonce";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitNonceResponse {}
-impl ::prost::Name for MsgSubmitNonceResponse {
-    const NAME: &'static str = "MsgSubmitNonceResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitAttestation {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    pub event_id: u64,
-    #[prost(string, tag = "3")]
-    pub signature: ::prost::alloc::string::String,
-}
-impl ::prost::Name for MsgSubmitAttestation {
-    const NAME: &'static str = "MsgSubmitAttestation";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitAttestationResponse {}
-impl ::prost::Name for MsgSubmitAttestationResponse {
-    const NAME: &'static str = "MsgSubmitAttestationResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgCreateOracle {
+pub struct MsgCreateDcm {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
     pub authority: ::prost::alloc::string::String,
@@ -686,8 +641,8 @@ pub struct MsgCreateOracle {
     #[prost(uint32, tag = "3")]
     pub threshold: u32,
 }
-impl ::prost::Name for MsgCreateOracle {
-    const NAME: &'static str = "MsgCreateOracle";
+impl ::prost::Name for MsgCreateDcm {
+    const NAME: &'static str = "MsgCreateDCM";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -695,37 +650,9 @@ impl ::prost::Name for MsgCreateOracle {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgCreateOracleResponse {}
-impl ::prost::Name for MsgCreateOracleResponse {
-    const NAME: &'static str = "MsgCreateOracleResponse";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgCreateAgency {
-    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
-    #[prost(string, tag = "1")]
-    pub authority: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "2")]
-    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(uint32, tag = "3")]
-    pub threshold: u32,
-}
-impl ::prost::Name for MsgCreateAgency {
-    const NAME: &'static str = "MsgCreateAgency";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgCreateAgencyResponse {}
-impl ::prost::Name for MsgCreateAgencyResponse {
-    const NAME: &'static str = "MsgCreateAgencyResponse";
+pub struct MsgCreateDcmResponse {}
+impl ::prost::Name for MsgCreateDcmResponse {
+    const NAME: &'static str = "MsgCreateDCMResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
