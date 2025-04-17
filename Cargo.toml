@@ -6,9 +6,9 @@ members = [
 ]
 
 [workspace.dependencies]
-cosmrs = "0.21"
+cosmrs = "0.22"
 tendermint-proto = "0.40.0"
-cosmos-sdk-proto = "0.26.1"
+cosmos-sdk-proto = "0.27.0"
 prost = "0.13"
 prost-types = "0.13"
 
