@@ -202,6 +202,245 @@ impl<'de> serde::Deserialize<'de> for BtcConsolidation {
     }
 }
 #[cfg(feature = "serde")]
+impl serde::Serialize for CompactSigningRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.address.is_empty() {
+            len += 1;
+        }
+        if self.sequence != 0 {
+            len += 1;
+        }
+        if self.r#type != 0 {
+            len += 1;
+        }
+        if !self.txid.is_empty() {
+            len += 1;
+        }
+        if !self.signers.is_empty() {
+            len += 1;
+        }
+        if !self.sig_hashes.is_empty() {
+            len += 1;
+        }
+        if self.creation_time.is_some() {
+            len += 1;
+        }
+        if self.status != 0 {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.CompactSigningRequest", len)?;
+        if !self.address.is_empty() {
+            struct_ser.serialize_field("address", &self.address)?;
+        }
+        if self.sequence != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "sequence",
+                alloc::string::ToString::to_string(&self.sequence).as_str(),
+            )?;
+        }
+        if self.r#type != 0 {
+            let v = AssetType::try_from(self.r#type).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.r#type))
+            })?;
+            struct_ser.serialize_field("type", &v)?;
+        }
+        if !self.txid.is_empty() {
+            struct_ser.serialize_field("txid", &self.txid)?;
+        }
+        if !self.signers.is_empty() {
+            struct_ser.serialize_field("signers", &self.signers)?;
+        }
+        if !self.sig_hashes.is_empty() {
+            struct_ser.serialize_field("sigHashes", &self.sig_hashes)?;
+        }
+        if let Some(v) = self.creation_time.as_ref() {
+            struct_ser.serialize_field("creationTime", v)?;
+        }
+        if self.status != 0 {
+            let v = SigningStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
+            struct_ser.serialize_field("status", &v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for CompactSigningRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "address",
+            "sequence",
+            "type",
+            "txid",
+            "signers",
+            "sig_hashes",
+            "sigHashes",
+            "creation_time",
+            "creationTime",
+            "status",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Address,
+            Sequence,
+            Type,
+            Txid,
+            Signers,
+            SigHashes,
+            CreationTime,
+            Status,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "address" => Ok(GeneratedField::Address),
+                            "sequence" => Ok(GeneratedField::Sequence),
+                            "type" => Ok(GeneratedField::Type),
+                            "txid" => Ok(GeneratedField::Txid),
+                            "signers" => Ok(GeneratedField::Signers),
+                            "sigHashes" | "sig_hashes" => Ok(GeneratedField::SigHashes),
+                            "creationTime" | "creation_time" => Ok(GeneratedField::CreationTime),
+                            "status" => Ok(GeneratedField::Status),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = CompactSigningRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.CompactSigningRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<CompactSigningRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut address__ = None;
+                let mut sequence__ = None;
+                let mut r#type__ = None;
+                let mut txid__ = None;
+                let mut signers__ = None;
+                let mut sig_hashes__ = None;
+                let mut creation_time__ = None;
+                let mut status__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Address => {
+                            if address__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("address"));
+                            }
+                            address__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Sequence => {
+                            if sequence__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("sequence"));
+                            }
+                            sequence__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Type => {
+                            if r#type__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("type"));
+                            }
+                            r#type__ = Some(map_.next_value::<AssetType>()? as i32);
+                        }
+                        GeneratedField::Txid => {
+                            if txid__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("txid"));
+                            }
+                            txid__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Signers => {
+                            if signers__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("signers"));
+                            }
+                            signers__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::SigHashes => {
+                            if sig_hashes__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("sigHashes"));
+                            }
+                            sig_hashes__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::CreationTime => {
+                            if creation_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("creationTime"));
+                            }
+                            creation_time__ = map_.next_value()?;
+                        }
+                        GeneratedField::Status => {
+                            if status__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("status"));
+                            }
+                            status__ = Some(map_.next_value::<SigningStatus>()? as i32);
+                        }
+                    }
+                }
+                Ok(CompactSigningRequest {
+                    address: address__.unwrap_or_default(),
+                    sequence: sequence__.unwrap_or_default(),
+                    r#type: r#type__.unwrap_or_default(),
+                    txid: txid__.unwrap_or_default(),
+                    signers: signers__.unwrap_or_default(),
+                    sig_hashes: sig_hashes__.unwrap_or_default(),
+                    creation_time: creation_time__,
+                    status: status__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.CompactSigningRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for DkgCompletionRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -6145,6 +6384,228 @@ impl<'de> serde::Deserialize<'de> for QueryPendingBtcWithdrawRequestsResponse {
         }
         deserializer.deserialize_struct(
             "side.btcbridge.QueryPendingBtcWithdrawRequestsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryPendingSigningRequestsRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.pagination.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer
+            .serialize_struct("side.btcbridge.QueryPendingSigningRequestsRequest", len)?;
+        if let Some(v) = self.pagination.as_ref() {
+            struct_ser.serialize_field("pagination", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryPendingSigningRequestsRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["pagination"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Pagination,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "pagination" => Ok(GeneratedField::Pagination),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryPendingSigningRequestsRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.QueryPendingSigningRequestsRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryPendingSigningRequestsRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut pagination__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Pagination => {
+                            if pagination__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pagination"));
+                            }
+                            pagination__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryPendingSigningRequestsRequest {
+                    pagination: pagination__,
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.QueryPendingSigningRequestsRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryPendingSigningRequestsResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.requests.is_empty() {
+            len += 1;
+        }
+        if self.pagination.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer
+            .serialize_struct("side.btcbridge.QueryPendingSigningRequestsResponse", len)?;
+        if !self.requests.is_empty() {
+            struct_ser.serialize_field("requests", &self.requests)?;
+        }
+        if let Some(v) = self.pagination.as_ref() {
+            struct_ser.serialize_field("pagination", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryPendingSigningRequestsResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["requests", "pagination"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Requests,
+            Pagination,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "requests" => Ok(GeneratedField::Requests),
+                            "pagination" => Ok(GeneratedField::Pagination),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryPendingSigningRequestsResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.QueryPendingSigningRequestsResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryPendingSigningRequestsResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut requests__ = None;
+                let mut pagination__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Requests => {
+                            if requests__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("requests"));
+                            }
+                            requests__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Pagination => {
+                            if pagination__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pagination"));
+                            }
+                            pagination__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryPendingSigningRequestsResponse {
+                    requests: requests__.unwrap_or_default(),
+                    pagination: pagination__,
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.QueryPendingSigningRequestsResponse",
             FIELDS,
             GeneratedVisitor,
         )

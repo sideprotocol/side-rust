@@ -242,6 +242,34 @@ impl ::prost::Name for SigningRequest {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
     }
 }
+/// Compact Signing Request
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CompactSigningRequest {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub sequence: u64,
+    #[prost(enumeration = "AssetType", tag = "3")]
+    pub r#type: i32,
+    #[prost(string, tag = "4")]
+    pub txid: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "5")]
+    pub signers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag = "6")]
+    pub sig_hashes: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "7")]
+    pub creation_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(enumeration = "SigningStatus", tag = "8")]
+    pub status: i32,
+}
+impl ::prost::Name for CompactSigningRequest {
+    const NAME: &'static str = "CompactSigningRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
 /// Withdrawal Request
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -776,6 +804,37 @@ pub struct QuerySigningRequestByTxHashResponse {
 }
 impl ::prost::Name for QuerySigningRequestByTxHashResponse {
     const NAME: &'static str = "QuerySigningRequestByTxHashResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QueryPendingSigningRequestsRequest is request type for the Query/PendingSigningRequests RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPendingSigningRequestsRequest {
+    #[prost(message, optional, tag = "1")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryPendingSigningRequestsRequest {
+    const NAME: &'static str = "QueryPendingSigningRequestsRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QueryPendingSigningRequestsResponse is response type for the Query/PendingSigningRequests RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryPendingSigningRequestsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub requests: ::prost::alloc::vec::Vec<CompactSigningRequest>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryPendingSigningRequestsResponse {
+    const NAME: &'static str = "QueryPendingSigningRequestsResponse";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)

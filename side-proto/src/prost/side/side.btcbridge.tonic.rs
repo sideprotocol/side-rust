@@ -307,6 +307,30 @@ pub mod query_client {
             ));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn query_pending_signing_requests(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryPendingSigningRequestsRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryPendingSigningRequestsResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.btcbridge.Query/QueryPendingSigningRequests",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.btcbridge.Query",
+                "QueryPendingSigningRequests",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn query_utx_os(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryUtxOsRequest>,
@@ -519,6 +543,13 @@ pub mod query_server {
             request: tonic::Request<super::QuerySigningRequestByTxHashRequest>,
         ) -> core::result::Result<
             tonic::Response<super::QuerySigningRequestByTxHashResponse>,
+            tonic::Status,
+        >;
+        async fn query_pending_signing_requests(
+            &self,
+            request: tonic::Request<super::QueryPendingSigningRequestsRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryPendingSigningRequestsResponse>,
             tonic::Status,
         >;
         async fn query_utx_os(
@@ -1030,6 +1061,49 @@ pub mod query_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = QuerySigningRequestByTxHashSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.btcbridge.Query/QueryPendingSigningRequests" => {
+                    #[allow(non_camel_case_types)]
+                    struct QueryPendingSigningRequestsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query>
+                        tonic::server::UnaryService<super::QueryPendingSigningRequestsRequest>
+                        for QueryPendingSigningRequestsSvc<T>
+                    {
+                        type Response = super::QueryPendingSigningRequestsResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryPendingSigningRequestsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                (*inner).query_pending_signing_requests(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = QueryPendingSigningRequestsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
