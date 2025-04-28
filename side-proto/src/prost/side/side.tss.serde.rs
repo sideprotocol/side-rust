@@ -896,6 +896,485 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteDkgResponse {
     }
 }
 #[cfg(feature = "serde")]
+impl serde::Serialize for MsgCompleteResharing {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.sender.is_empty() {
+            len += 1;
+        }
+        if self.id != 0 {
+            len += 1;
+        }
+        if !self.consensus_pubkey.is_empty() {
+            len += 1;
+        }
+        if !self.signature.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.tss.MsgCompleteResharing", len)?;
+        if !self.sender.is_empty() {
+            struct_ser.serialize_field("sender", &self.sender)?;
+        }
+        if self.id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        if !self.consensus_pubkey.is_empty() {
+            struct_ser.serialize_field("consensusPubkey", &self.consensus_pubkey)?;
+        }
+        if !self.signature.is_empty() {
+            struct_ser.serialize_field("signature", &self.signature)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgCompleteResharing {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "sender",
+            "id",
+            "consensus_pubkey",
+            "consensusPubkey",
+            "signature",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Sender,
+            Id,
+            ConsensusPubkey,
+            Signature,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "sender" => Ok(GeneratedField::Sender),
+                            "id" => Ok(GeneratedField::Id),
+                            "consensusPubkey" | "consensus_pubkey" => {
+                                Ok(GeneratedField::ConsensusPubkey)
+                            }
+                            "signature" => Ok(GeneratedField::Signature),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgCompleteResharing;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.MsgCompleteResharing")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgCompleteResharing, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut sender__ = None;
+                let mut id__ = None;
+                let mut consensus_pubkey__ = None;
+                let mut signature__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Sender => {
+                            if sender__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("sender"));
+                            }
+                            sender__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::ConsensusPubkey => {
+                            if consensus_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("consensusPubkey"));
+                            }
+                            consensus_pubkey__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Signature => {
+                            if signature__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("signature"));
+                            }
+                            signature__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(MsgCompleteResharing {
+                    sender: sender__.unwrap_or_default(),
+                    id: id__.unwrap_or_default(),
+                    consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
+                    signature: signature__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.tss.MsgCompleteResharing", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgCompleteResharingResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let len = 0;
+        let struct_ser =
+            serializer.serialize_struct("side.tss.MsgCompleteResharingResponse", len)?;
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgCompleteResharingResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {}
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgCompleteResharingResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.MsgCompleteResharingResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgCompleteResharingResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                while map_.next_key::<GeneratedField>()?.is_some() {
+                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                }
+                Ok(MsgCompleteResharingResponse {})
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.tss.MsgCompleteResharingResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgRefreshShares {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.authority.is_empty() {
+            len += 1;
+        }
+        if self.dkg_id != 0 {
+            len += 1;
+        }
+        if !self.pub_key.is_empty() {
+            len += 1;
+        }
+        if !self.participants.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.tss.MsgRefreshShares", len)?;
+        if !self.authority.is_empty() {
+            struct_ser.serialize_field("authority", &self.authority)?;
+        }
+        if self.dkg_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "dkgId",
+                alloc::string::ToString::to_string(&self.dkg_id).as_str(),
+            )?;
+        }
+        if !self.pub_key.is_empty() {
+            struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        }
+        if !self.participants.is_empty() {
+            struct_ser.serialize_field("participants", &self.participants)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgRefreshShares {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "authority",
+            "dkg_id",
+            "dkgId",
+            "pub_key",
+            "pubKey",
+            "participants",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Authority,
+            DkgId,
+            PubKey,
+            Participants,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "authority" => Ok(GeneratedField::Authority),
+                            "dkgId" | "dkg_id" => Ok(GeneratedField::DkgId),
+                            "pubKey" | "pub_key" => Ok(GeneratedField::PubKey),
+                            "participants" => Ok(GeneratedField::Participants),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgRefreshShares;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.MsgRefreshShares")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgRefreshShares, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut authority__ = None;
+                let mut dkg_id__ = None;
+                let mut pub_key__ = None;
+                let mut participants__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Authority => {
+                            if authority__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("authority"));
+                            }
+                            authority__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::DkgId => {
+                            if dkg_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dkgId"));
+                            }
+                            dkg_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::PubKey => {
+                            if pub_key__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pubKey"));
+                            }
+                            pub_key__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Participants => {
+                            if participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("participants"));
+                            }
+                            participants__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(MsgRefreshShares {
+                    authority: authority__.unwrap_or_default(),
+                    dkg_id: dkg_id__.unwrap_or_default(),
+                    pub_key: pub_key__.unwrap_or_default(),
+                    participants: participants__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.tss.MsgRefreshShares", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgRefreshSharesResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let len = 0;
+        let struct_ser = serializer.serialize_struct("side.tss.MsgRefreshSharesResponse", len)?;
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgRefreshSharesResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {}
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgRefreshSharesResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.MsgRefreshSharesResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgRefreshSharesResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                while map_.next_key::<GeneratedField>()?.is_some() {
+                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                }
+                Ok(MsgRefreshSharesResponse {})
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.tss.MsgRefreshSharesResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for MsgSubmitSignatures {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -2276,6 +2755,699 @@ impl<'de> serde::Deserialize<'de> for QueryParamsResponse {
     }
 }
 #[cfg(feature = "serde")]
+impl serde::Serialize for QueryResharingCompletionsRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.id != 0 {
+            len += 1;
+        }
+        if self.pagination.is_some() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.tss.QueryResharingCompletionsRequest", len)?;
+        if self.id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        if let Some(v) = self.pagination.as_ref() {
+            struct_ser.serialize_field("pagination", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryResharingCompletionsRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["id", "pagination"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+            Pagination,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            "pagination" => Ok(GeneratedField::Pagination),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryResharingCompletionsRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.QueryResharingCompletionsRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryResharingCompletionsRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                let mut pagination__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Pagination => {
+                            if pagination__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pagination"));
+                            }
+                            pagination__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryResharingCompletionsRequest {
+                    id: id__.unwrap_or_default(),
+                    pagination: pagination__,
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.tss.QueryResharingCompletionsRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryResharingCompletionsResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.completions.is_empty() {
+            len += 1;
+        }
+        if self.pagination.is_some() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.tss.QueryResharingCompletionsResponse", len)?;
+        if !self.completions.is_empty() {
+            struct_ser.serialize_field("completions", &self.completions)?;
+        }
+        if let Some(v) = self.pagination.as_ref() {
+            struct_ser.serialize_field("pagination", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryResharingCompletionsResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["completions", "pagination"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Completions,
+            Pagination,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "completions" => Ok(GeneratedField::Completions),
+                            "pagination" => Ok(GeneratedField::Pagination),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryResharingCompletionsResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.QueryResharingCompletionsResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryResharingCompletionsResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut completions__ = None;
+                let mut pagination__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Completions => {
+                            if completions__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("completions"));
+                            }
+                            completions__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Pagination => {
+                            if pagination__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pagination"));
+                            }
+                            pagination__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryResharingCompletionsResponse {
+                    completions: completions__.unwrap_or_default(),
+                    pagination: pagination__,
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.tss.QueryResharingCompletionsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryResharingRequestRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.id != 0 {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.tss.QueryResharingRequestRequest", len)?;
+        if self.id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryResharingRequestRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["id"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryResharingRequestRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.QueryResharingRequestRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryResharingRequestRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(QueryResharingRequestRequest {
+                    id: id__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.tss.QueryResharingRequestRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryResharingRequestResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.request.is_some() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.tss.QueryResharingRequestResponse", len)?;
+        if let Some(v) = self.request.as_ref() {
+            struct_ser.serialize_field("request", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryResharingRequestResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["request"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Request,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "request" => Ok(GeneratedField::Request),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryResharingRequestResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.QueryResharingRequestResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryResharingRequestResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut request__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Request => {
+                            if request__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("request"));
+                            }
+                            request__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryResharingRequestResponse { request: request__ })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.tss.QueryResharingRequestResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryResharingRequestsRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.status != 0 {
+            len += 1;
+        }
+        if self.pagination.is_some() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.tss.QueryResharingRequestsRequest", len)?;
+        if self.status != 0 {
+            let v = ResharingStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
+            struct_ser.serialize_field("status", &v)?;
+        }
+        if let Some(v) = self.pagination.as_ref() {
+            struct_ser.serialize_field("pagination", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryResharingRequestsRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["status", "pagination"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Status,
+            Pagination,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "status" => Ok(GeneratedField::Status),
+                            "pagination" => Ok(GeneratedField::Pagination),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryResharingRequestsRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.QueryResharingRequestsRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryResharingRequestsRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut status__ = None;
+                let mut pagination__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Status => {
+                            if status__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("status"));
+                            }
+                            status__ = Some(map_.next_value::<ResharingStatus>()? as i32);
+                        }
+                        GeneratedField::Pagination => {
+                            if pagination__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pagination"));
+                            }
+                            pagination__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryResharingRequestsRequest {
+                    status: status__.unwrap_or_default(),
+                    pagination: pagination__,
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.tss.QueryResharingRequestsRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryResharingRequestsResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.requests.is_empty() {
+            len += 1;
+        }
+        if self.pagination.is_some() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.tss.QueryResharingRequestsResponse", len)?;
+        if !self.requests.is_empty() {
+            struct_ser.serialize_field("requests", &self.requests)?;
+        }
+        if let Some(v) = self.pagination.as_ref() {
+            struct_ser.serialize_field("pagination", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryResharingRequestsResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["requests", "pagination"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Requests,
+            Pagination,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "requests" => Ok(GeneratedField::Requests),
+                            "pagination" => Ok(GeneratedField::Pagination),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryResharingRequestsResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.QueryResharingRequestsResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryResharingRequestsResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut requests__ = None;
+                let mut pagination__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Requests => {
+                            if requests__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("requests"));
+                            }
+                            requests__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Pagination => {
+                            if pagination__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pagination"));
+                            }
+                            pagination__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryResharingRequestsResponse {
+                    requests: requests__.unwrap_or_default(),
+                    pagination: pagination__,
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.tss.QueryResharingRequestsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for QuerySigningRequestRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -2739,6 +3911,446 @@ impl<'de> serde::Deserialize<'de> for QuerySigningRequestsResponse {
             FIELDS,
             GeneratedVisitor,
         )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for ResharingCompletion {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.id != 0 {
+            len += 1;
+        }
+        if !self.sender.is_empty() {
+            len += 1;
+        }
+        if !self.consensus_pubkey.is_empty() {
+            len += 1;
+        }
+        if !self.signature.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.tss.ResharingCompletion", len)?;
+        if self.id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        if !self.sender.is_empty() {
+            struct_ser.serialize_field("sender", &self.sender)?;
+        }
+        if !self.consensus_pubkey.is_empty() {
+            struct_ser.serialize_field("consensusPubkey", &self.consensus_pubkey)?;
+        }
+        if !self.signature.is_empty() {
+            struct_ser.serialize_field("signature", &self.signature)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for ResharingCompletion {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "id",
+            "sender",
+            "consensus_pubkey",
+            "consensusPubkey",
+            "signature",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+            Sender,
+            ConsensusPubkey,
+            Signature,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            "sender" => Ok(GeneratedField::Sender),
+                            "consensusPubkey" | "consensus_pubkey" => {
+                                Ok(GeneratedField::ConsensusPubkey)
+                            }
+                            "signature" => Ok(GeneratedField::Signature),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = ResharingCompletion;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.ResharingCompletion")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<ResharingCompletion, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                let mut sender__ = None;
+                let mut consensus_pubkey__ = None;
+                let mut signature__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Sender => {
+                            if sender__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("sender"));
+                            }
+                            sender__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::ConsensusPubkey => {
+                            if consensus_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("consensusPubkey"));
+                            }
+                            consensus_pubkey__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Signature => {
+                            if signature__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("signature"));
+                            }
+                            signature__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(ResharingCompletion {
+                    id: id__.unwrap_or_default(),
+                    sender: sender__.unwrap_or_default(),
+                    consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
+                    signature: signature__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.tss.ResharingCompletion", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for ResharingRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.id != 0 {
+            len += 1;
+        }
+        if self.dkg_id != 0 {
+            len += 1;
+        }
+        if !self.pub_key.is_empty() {
+            len += 1;
+        }
+        if !self.participants.is_empty() {
+            len += 1;
+        }
+        if self.expiration_time.is_some() {
+            len += 1;
+        }
+        if self.status != 0 {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.tss.ResharingRequest", len)?;
+        if self.id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        if self.dkg_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "dkgId",
+                alloc::string::ToString::to_string(&self.dkg_id).as_str(),
+            )?;
+        }
+        if !self.pub_key.is_empty() {
+            struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        }
+        if !self.participants.is_empty() {
+            struct_ser.serialize_field("participants", &self.participants)?;
+        }
+        if let Some(v) = self.expiration_time.as_ref() {
+            struct_ser.serialize_field("expirationTime", v)?;
+        }
+        if self.status != 0 {
+            let v = ResharingStatus::try_from(self.status).map_err(|_| {
+                serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
+            })?;
+            struct_ser.serialize_field("status", &v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for ResharingRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "id",
+            "dkg_id",
+            "dkgId",
+            "pub_key",
+            "pubKey",
+            "participants",
+            "expiration_time",
+            "expirationTime",
+            "status",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+            DkgId,
+            PubKey,
+            Participants,
+            ExpirationTime,
+            Status,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            "dkgId" | "dkg_id" => Ok(GeneratedField::DkgId),
+                            "pubKey" | "pub_key" => Ok(GeneratedField::PubKey),
+                            "participants" => Ok(GeneratedField::Participants),
+                            "expirationTime" | "expiration_time" => {
+                                Ok(GeneratedField::ExpirationTime)
+                            }
+                            "status" => Ok(GeneratedField::Status),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = ResharingRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.ResharingRequest")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<ResharingRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                let mut dkg_id__ = None;
+                let mut pub_key__ = None;
+                let mut participants__ = None;
+                let mut expiration_time__ = None;
+                let mut status__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::DkgId => {
+                            if dkg_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dkgId"));
+                            }
+                            dkg_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::PubKey => {
+                            if pub_key__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pubKey"));
+                            }
+                            pub_key__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Participants => {
+                            if participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("participants"));
+                            }
+                            participants__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::ExpirationTime => {
+                            if expiration_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("expirationTime"));
+                            }
+                            expiration_time__ = map_.next_value()?;
+                        }
+                        GeneratedField::Status => {
+                            if status__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("status"));
+                            }
+                            status__ = Some(map_.next_value::<ResharingStatus>()? as i32);
+                        }
+                    }
+                }
+                Ok(ResharingRequest {
+                    id: id__.unwrap_or_default(),
+                    dkg_id: dkg_id__.unwrap_or_default(),
+                    pub_key: pub_key__.unwrap_or_default(),
+                    participants: participants__.unwrap_or_default(),
+                    expiration_time: expiration_time__,
+                    status: status__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.tss.ResharingRequest", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for ResharingStatus {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let variant = match self {
+            Self::Unspecified => "RESHARING_STATUS_UNSPECIFIED",
+            Self::Pending => "RESHARING_STATUS_PENDING",
+            Self::Completed => "RESHARING_STATUS_COMPLETED",
+            Self::Timedout => "RESHARING_STATUS_TIMEDOUT",
+        };
+        serializer.serialize_str(variant)
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for ResharingStatus {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "RESHARING_STATUS_UNSPECIFIED",
+            "RESHARING_STATUS_PENDING",
+            "RESHARING_STATUS_COMPLETED",
+            "RESHARING_STATUS_TIMEDOUT",
+        ];
+
+        struct GeneratedVisitor;
+
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = ResharingStatus;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                write!(formatter, "expected one of: {:?}", &FIELDS)
+            }
+
+            fn visit_i64<E>(self, v: i64) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                i32::try_from(v)
+                    .ok()
+                    .and_then(|x| x.try_into().ok())
+                    .ok_or_else(|| {
+                        serde::de::Error::invalid_value(serde::de::Unexpected::Signed(v), &self)
+                    })
+            }
+
+            fn visit_u64<E>(self, v: u64) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                i32::try_from(v)
+                    .ok()
+                    .and_then(|x| x.try_into().ok())
+                    .ok_or_else(|| {
+                        serde::de::Error::invalid_value(serde::de::Unexpected::Unsigned(v), &self)
+                    })
+            }
+
+            fn visit_str<E>(self, value: &str) -> core::result::Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                match value {
+                    "RESHARING_STATUS_UNSPECIFIED" => Ok(ResharingStatus::Unspecified),
+                    "RESHARING_STATUS_PENDING" => Ok(ResharingStatus::Pending),
+                    "RESHARING_STATUS_COMPLETED" => Ok(ResharingStatus::Completed),
+                    "RESHARING_STATUS_TIMEDOUT" => Ok(ResharingStatus::Timedout),
+                    _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
+                }
+            }
+        }
+        deserializer.deserialize_any(GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]

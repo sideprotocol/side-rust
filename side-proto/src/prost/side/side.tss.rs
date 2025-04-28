@@ -139,6 +139,60 @@ impl ::prost::Name for SigningRequest {
         ::prost::alloc::format!("side.tss.{}", Self::NAME)
     }
 }
+/// Resharing Request
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResharingRequest {
+    /// request id
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    /// dkg request id
+    #[prost(uint64, tag = "2")]
+    pub dkg_id: u64,
+    /// pub key corresponding to shares to be refreshed
+    #[prost(string, tag = "3")]
+    pub pub_key: ::prost::alloc::string::String,
+    /// participant set
+    #[prost(string, repeated, tag = "4")]
+    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// expiration time
+    #[prost(message, optional, tag = "5")]
+    pub expiration_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    /// status
+    #[prost(enumeration = "ResharingStatus", tag = "6")]
+    pub status: i32,
+}
+impl ::prost::Name for ResharingRequest {
+    const NAME: &'static str = "ResharingRequest";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+/// Resharing Completion
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ResharingCompletion {
+    /// request id
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    /// sender
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    /// participant consensus pub key
+    #[prost(string, tag = "3")]
+    pub consensus_pubkey: ::prost::alloc::string::String,
+    /// hex encoded participant signature
+    #[prost(string, tag = "4")]
+    pub signature: ::prost::alloc::string::String,
+}
+impl ::prost::Name for ResharingCompletion {
+    const NAME: &'static str = "ResharingCompletion";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
 /// DKG Status
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -246,6 +300,43 @@ impl SigningType {
             "SIGNING_TYPE_SCHNORR" => Some(Self::Schnorr),
             "SIGNING_TYPE_SCHNORR_WITH_COMMITMENT" => Some(Self::SchnorrWithCommitment),
             "SIGNING_TYPE_SCHNORR_ADAPTOR" => Some(Self::SchnorrAdaptor),
+            _ => None,
+        }
+    }
+}
+/// Resharing Status
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ResharingStatus {
+    /// RESHARING_STATUS_UNSPECIFIED defines the unknown resharing status
+    Unspecified = 0,
+    /// RESHARING_STATUS_PENDING defines the status of the resharing request which is pending
+    Pending = 1,
+    /// RESHARING_STATUS_COMPLETED defines the status of the resharing request which is completed
+    Completed = 2,
+    /// RESHARING_STATUS_TIMEDOUT defines the status of the resharing request which timed out
+    Timedout = 3,
+}
+impl ResharingStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            ResharingStatus::Unspecified => "RESHARING_STATUS_UNSPECIFIED",
+            ResharingStatus::Pending => "RESHARING_STATUS_PENDING",
+            ResharingStatus::Completed => "RESHARING_STATUS_COMPLETED",
+            ResharingStatus::Timedout => "RESHARING_STATUS_TIMEDOUT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "RESHARING_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "RESHARING_STATUS_PENDING" => Some(Self::Pending),
+            "RESHARING_STATUS_COMPLETED" => Some(Self::Completed),
+            "RESHARING_STATUS_TIMEDOUT" => Some(Self::Timedout),
             _ => None,
         }
     }
@@ -417,6 +508,94 @@ impl ::prost::Name for QuerySigningRequestsResponse {
         ::prost::alloc::format!("side.tss.{}", Self::NAME)
     }
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryResharingRequestRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+}
+impl ::prost::Name for QueryResharingRequestRequest {
+    const NAME: &'static str = "QueryResharingRequestRequest";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryResharingRequestResponse {
+    #[prost(message, optional, tag = "1")]
+    pub request: ::core::option::Option<ResharingRequest>,
+}
+impl ::prost::Name for QueryResharingRequestResponse {
+    const NAME: &'static str = "QueryResharingRequestResponse";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryResharingRequestsRequest {
+    #[prost(enumeration = "ResharingStatus", tag = "1")]
+    pub status: i32,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryResharingRequestsRequest {
+    const NAME: &'static str = "QueryResharingRequestsRequest";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryResharingRequestsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub requests: ::prost::alloc::vec::Vec<ResharingRequest>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryResharingRequestsResponse {
+    const NAME: &'static str = "QueryResharingRequestsResponse";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryResharingCompletionsRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryResharingCompletionsRequest {
+    const NAME: &'static str = "QueryResharingCompletionsRequest";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryResharingCompletionsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub completions: ::prost::alloc::vec::Vec<ResharingCompletion>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryResharingCompletionsResponse {
+    const NAME: &'static str = "QueryResharingCompletionsResponse";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
 /// QueryParamsRequest is request type for the Query/Params RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -504,6 +683,76 @@ impl ::prost::Name for MsgSubmitSignatures {
 pub struct MsgSubmitSignaturesResponse {}
 impl ::prost::Name for MsgSubmitSignaturesResponse {
     const NAME: &'static str = "MsgSubmitSignaturesResponse";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+/// MsgRefreshShares defines the Msg/RefreshShares request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgRefreshShares {
+    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
+    #[prost(string, tag = "1")]
+    pub authority: ::prost::alloc::string::String,
+    /// dkg request id
+    #[prost(uint64, tag = "2")]
+    pub dkg_id: u64,
+    /// public key corresponding to shares to be refreshed
+    #[prost(string, tag = "3")]
+    pub pub_key: ::prost::alloc::string::String,
+    /// participant set
+    #[prost(string, repeated, tag = "4")]
+    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for MsgRefreshShares {
+    const NAME: &'static str = "MsgRefreshShares";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+/// MsgRefreshSharesResponse defines the Msg/RefreshShares response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgRefreshSharesResponse {}
+impl ::prost::Name for MsgRefreshSharesResponse {
+    const NAME: &'static str = "MsgRefreshSharesResponse";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+/// MsgCompleteResharing defines the Msg/CompleteResharing request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCompleteResharing {
+    /// sender
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    /// request id
+    #[prost(uint64, tag = "2")]
+    pub id: u64,
+    /// participant consensus pub key
+    #[prost(string, tag = "3")]
+    pub consensus_pubkey: ::prost::alloc::string::String,
+    /// hex encoded participant signature
+    #[prost(string, tag = "4")]
+    pub signature: ::prost::alloc::string::String,
+}
+impl ::prost::Name for MsgCompleteResharing {
+    const NAME: &'static str = "MsgCompleteResharing";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+/// MsgCompleteResharingResponse defines the Msg/CompleteResharing response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCompleteResharingResponse {}
+impl ::prost::Name for MsgCompleteResharingResponse {
+    const NAME: &'static str = "MsgCompleteResharingResponse";
     const PACKAGE: &'static str = "side.tss";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.tss.{}", Self::NAME)

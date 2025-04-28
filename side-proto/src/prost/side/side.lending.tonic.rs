@@ -290,11 +290,11 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.lending.Query", "LoanDlcMeta"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn loan_cancellation(
+        pub async fn loan_authorization(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryLoanCancellationRequest>,
+            request: impl tonic::IntoRequest<super::QueryLoanAuthorizationRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryLoanCancellationResponse>,
+            tonic::Response<super::QueryLoanAuthorizationResponse>,
             tonic::Status,
         > {
             self.inner.ready().await.map_err(|e| {
@@ -304,10 +304,29 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LoanCancellation");
+            let path =
+                http::uri::PathAndQuery::from_static("/side.lending.Query/LoanAuthorization");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.lending.Query", "LoanCancellation"));
+                .insert(GrpcMethod::new("side.lending.Query", "LoanAuthorization"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn redemption(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryRedemptionRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryRedemptionResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/Redemption");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Query", "Redemption"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn repayment(
@@ -427,13 +446,17 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryLoanDlcMetaRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryLoanDlcMetaResponse>, tonic::Status>;
-        async fn loan_cancellation(
+        async fn loan_authorization(
             &self,
-            request: tonic::Request<super::QueryLoanCancellationRequest>,
+            request: tonic::Request<super::QueryLoanAuthorizationRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryLoanCancellationResponse>,
+            tonic::Response<super::QueryLoanAuthorizationResponse>,
             tonic::Status,
         >;
+        async fn redemption(
+            &self,
+            request: tonic::Request<super::QueryRedemptionRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryRedemptionResponse>, tonic::Status>;
         async fn repayment(
             &self,
             request: tonic::Request<super::QueryRepaymentRequest>,
@@ -949,20 +972,20 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.lending.Query/LoanCancellation" => {
+                "/side.lending.Query/LoanAuthorization" => {
                     #[allow(non_camel_case_types)]
-                    struct LoanCancellationSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanCancellationRequest>
-                        for LoanCancellationSvc<T>
+                    struct LoanAuthorizationSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanAuthorizationRequest>
+                        for LoanAuthorizationSvc<T>
                     {
-                        type Response = super::QueryLoanCancellationResponse;
+                        type Response = super::QueryLoanAuthorizationResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryLoanCancellationRequest>,
+                            request: tonic::Request<super::QueryLoanAuthorizationRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).loan_cancellation(request).await };
+                            let fut = async move { (*inner).loan_authorization(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -973,7 +996,45 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = LoanCancellationSvc(inner);
+                        let method = LoanAuthorizationSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Query/Redemption" => {
+                    #[allow(non_camel_case_types)]
+                    struct RedemptionSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryRedemptionRequest> for RedemptionSvc<T> {
+                        type Response = super::QueryRedemptionResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryRedemptionRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).redemption(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RedemptionSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1350,10 +1411,10 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.lending.Msg", "Approve"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn cancel(
+        pub async fn redeem(
             &mut self,
-            request: impl tonic::IntoRequest<super::MsgCancel>,
-        ) -> core::result::Result<tonic::Response<super::MsgCancelResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::MsgRedeem>,
+        ) -> core::result::Result<tonic::Response<super::MsgRedeemResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -1362,10 +1423,10 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.lending.Msg/Cancel");
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Msg/Redeem");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.lending.Msg", "Cancel"));
+                .insert(GrpcMethod::new("side.lending.Msg", "Redeem"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn repay(
@@ -1459,10 +1520,10 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgApprove>,
         ) -> core::result::Result<tonic::Response<super::MsgApproveResponse>, tonic::Status>;
-        async fn cancel(
+        async fn redeem(
             &self,
-            request: tonic::Request<super::MsgCancel>,
-        ) -> core::result::Result<tonic::Response<super::MsgCancelResponse>, tonic::Status>;
+            request: tonic::Request<super::MsgRedeem>,
+        ) -> core::result::Result<tonic::Response<super::MsgRedeemResponse>, tonic::Status>;
         async fn repay(
             &self,
             request: tonic::Request<super::MsgRepay>,
@@ -1818,18 +1879,18 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.lending.Msg/Cancel" => {
+                "/side.lending.Msg/Redeem" => {
                     #[allow(non_camel_case_types)]
-                    struct CancelSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgCancel> for CancelSvc<T> {
-                        type Response = super::MsgCancelResponse;
+                    struct RedeemSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgRedeem> for RedeemSvc<T> {
+                        type Response = super::MsgRedeemResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MsgCancel>,
+                            request: tonic::Request<super::MsgRedeem>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).cancel(request).await };
+                            let fut = async move { (*inner).redeem(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1840,7 +1901,7 @@ pub mod msg_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = CancelSvc(inner);
+                        let method = RedeemSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

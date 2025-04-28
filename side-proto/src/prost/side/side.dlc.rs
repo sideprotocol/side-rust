@@ -79,10 +79,12 @@ pub struct DlcEvent {
     pub outcomes: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(bool, tag = "7")]
     pub has_triggered: bool,
-    #[prost(uint32, tag = "8")]
-    pub outcome_index: u32,
+    #[prost(int32, tag = "8")]
+    pub outcome_index: i32,
     #[prost(message, optional, tag = "9")]
     pub publish_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(message, optional, tag = "10")]
+    pub trigger_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
 }
 impl ::prost::Name for DlcEvent {
     const NAME: &'static str = "DLCEvent";
@@ -260,8 +262,8 @@ impl DkgIntent {
 pub struct PriceInterval {
     #[prost(string, tag = "1")]
     pub price_pair: ::prost::alloc::string::String,
-    #[prost(int32, tag = "2")]
-    pub interval: i32,
+    #[prost(string, tag = "2")]
+    pub interval: ::prost::alloc::string::String,
 }
 impl ::prost::Name for PriceInterval {
     const NAME: &'static str = "PriceInterval";

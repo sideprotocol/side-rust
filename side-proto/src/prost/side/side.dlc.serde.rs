@@ -546,6 +546,9 @@ impl serde::Serialize for DlcEvent {
         if self.publish_at.is_some() {
             len += 1;
         }
+        if self.trigger_at.is_some() {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("side.dlc.DLCEvent", len)?;
         if self.id != 0 {
             #[allow(clippy::needless_borrow)]
@@ -579,6 +582,9 @@ impl serde::Serialize for DlcEvent {
         if let Some(v) = self.publish_at.as_ref() {
             struct_ser.serialize_field("publishAt", v)?;
         }
+        if let Some(v) = self.trigger_at.as_ref() {
+            struct_ser.serialize_field("triggerAt", v)?;
+        }
         struct_ser.end()
     }
 }
@@ -602,6 +608,8 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
             "outcomeIndex",
             "publish_at",
             "publishAt",
+            "trigger_at",
+            "triggerAt",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -615,6 +623,7 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
             HasTriggered,
             OutcomeIndex,
             PublishAt,
+            TriggerAt,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -649,6 +658,7 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
                             "hasTriggered" | "has_triggered" => Ok(GeneratedField::HasTriggered),
                             "outcomeIndex" | "outcome_index" => Ok(GeneratedField::OutcomeIndex),
                             "publishAt" | "publish_at" => Ok(GeneratedField::PublishAt),
+                            "triggerAt" | "trigger_at" => Ok(GeneratedField::TriggerAt),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -677,6 +687,7 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
                 let mut has_triggered__ = None;
                 let mut outcome_index__ = None;
                 let mut publish_at__ = None;
+                let mut trigger_at__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Id => {
@@ -739,6 +750,12 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
                             }
                             publish_at__ = map_.next_value()?;
                         }
+                        GeneratedField::TriggerAt => {
+                            if trigger_at__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("triggerAt"));
+                            }
+                            trigger_at__ = map_.next_value()?;
+                        }
                     }
                 }
                 Ok(DlcEvent {
@@ -751,6 +768,7 @@ impl<'de> serde::Deserialize<'de> for DlcEvent {
                     has_triggered: has_triggered__.unwrap_or_default(),
                     outcome_index: outcome_index__.unwrap_or_default(),
                     publish_at: publish_at__,
+                    trigger_at: trigger_at__,
                 })
             }
         }
@@ -2070,14 +2088,14 @@ impl serde::Serialize for PriceInterval {
         if !self.price_pair.is_empty() {
             len += 1;
         }
-        if self.interval != 0 {
+        if !self.interval.is_empty() {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.dlc.PriceInterval", len)?;
         if !self.price_pair.is_empty() {
             struct_ser.serialize_field("pricePair", &self.price_pair)?;
         }
-        if self.interval != 0 {
+        if !self.interval.is_empty() {
             struct_ser.serialize_field("interval", &self.interval)?;
         }
         struct_ser.end()
@@ -2156,10 +2174,7 @@ impl<'de> serde::Deserialize<'de> for PriceInterval {
                             if interval__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("interval"));
                             }
-                            interval__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            interval__ = Some(map_.next_value()?);
                         }
                     }
                 }

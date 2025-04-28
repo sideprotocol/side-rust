@@ -3,47 +3,50 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
-    /// The minimum number of confirmations required for a block to be accepted
+    /// The minimum number of confirmations required for the deposit transactions
     #[prost(int32, tag = "1")]
-    pub confirmations: i32,
+    pub deposit_confirmation_depth: i32,
+    /// The minimum number of confirmations required for the withdrawal transactions
+    #[prost(int32, tag = "2")]
+    pub withdraw_confirmation_depth: i32,
+    /// The allowed maximum depth for bitcoin block reorganization
+    #[prost(int32, tag = "3")]
+    pub max_reorg_depth: i32,
     /// Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
-    #[prost(uint64, tag = "2")]
+    #[prost(uint64, tag = "4")]
     pub max_acceptable_block_depth: u64,
     /// The denomination of the voucher
-    #[prost(string, tag = "3")]
+    #[prost(string, tag = "5")]
     pub btc_voucher_denom: ::prost::alloc::string::String,
     /// Indicates if deposit is enabled
-    #[prost(bool, tag = "4")]
+    #[prost(bool, tag = "6")]
     pub deposit_enabled: bool,
     /// Indicates if withdrawal is enabled
-    #[prost(bool, tag = "5")]
+    #[prost(bool, tag = "7")]
     pub withdraw_enabled: bool,
-    /// Trusted relayers to submit bitcoin block headers
-    #[prost(string, repeated, tag = "6")]
-    pub trusted_btc_relayers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// Trusted relayers for non-btc asset deposit
-    #[prost(string, repeated, tag = "7")]
-    pub trusted_non_btc_relayers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// Trusted oracles for providing offchain data, e.g. bitcoin fee rate
     #[prost(string, repeated, tag = "8")]
-    pub trusted_oracles: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub trusted_non_btc_relayers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Trusted fee providers to submit bitcoin fee rate
+    #[prost(string, repeated, tag = "9")]
+    pub trusted_fee_providers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// Period of validity for the fee rate
-    #[prost(int64, tag = "9")]
+    #[prost(int64, tag = "10")]
     pub fee_rate_validity_period: i64,
     /// Asset vaults
-    #[prost(message, repeated, tag = "10")]
+    #[prost(message, repeated, tag = "11")]
     pub vaults: ::prost::alloc::vec::Vec<Vault>,
     /// Withdrawal params
-    #[prost(message, optional, tag = "11")]
+    #[prost(message, optional, tag = "12")]
     pub withdraw_params: ::core::option::Option<WithdrawParams>,
     /// Protocol limitations
-    #[prost(message, optional, tag = "12")]
+    #[prost(message, optional, tag = "13")]
     pub protocol_limits: ::core::option::Option<ProtocolLimits>,
     /// Protocol fees
-    #[prost(message, optional, tag = "13")]
+    #[prost(message, optional, tag = "14")]
     pub protocol_fees: ::core::option::Option<ProtocolFees>,
     /// TSS params
-    #[prost(message, optional, tag = "14")]
+    #[prost(message, optional, tag = "15")]
     pub tss_params: ::core::option::Option<TssParams>,
 }
 impl ::prost::Name for Params {
@@ -195,36 +198,6 @@ impl AssetType {
         }
     }
 }
-/// Bitcoin Block Header
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct BlockHeader {
-    #[prost(uint64, tag = "1")]
-    pub version: u64,
-    #[prost(string, tag = "2")]
-    pub hash: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "3")]
-    pub height: u64,
-    #[prost(string, tag = "4")]
-    pub previous_block_hash: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub merkle_root: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "6")]
-    pub nonce: u64,
-    #[prost(string, tag = "7")]
-    pub bits: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "8")]
-    pub time: u64,
-    #[prost(uint64, tag = "9")]
-    pub ntx: u64,
-}
-impl ::prost::Name for BlockHeader {
-    const NAME: &'static str = "BlockHeader";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
 /// Fee rate
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -251,13 +224,15 @@ pub struct SigningRequest {
     pub address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
     pub sequence: u64,
-    #[prost(string, tag = "3")]
-    pub txid: ::prost::alloc::string::String,
+    #[prost(enumeration = "AssetType", tag = "3")]
+    pub r#type: i32,
     #[prost(string, tag = "4")]
+    pub txid: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
     pub psbt: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "5")]
+    #[prost(message, optional, tag = "6")]
     pub creation_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "SigningStatus", tag = "6")]
+    #[prost(enumeration = "SigningStatus", tag = "7")]
     pub status: i32,
 }
 impl ::prost::Name for SigningRequest {
@@ -580,13 +555,10 @@ impl DkgRequestStatus {
 pub struct GenesisState {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
-    /// the chain tip of the bitcoin chain
-    #[prost(message, optional, tag = "2")]
-    pub best_block_header: ::core::option::Option<BlockHeader>,
-    #[prost(message, repeated, tag = "3")]
-    pub block_headers: ::prost::alloc::vec::Vec<BlockHeader>,
-    #[prost(message, repeated, tag = "4")]
+    #[prost(message, repeated, tag = "2")]
     pub utxos: ::prost::alloc::vec::Vec<Utxo>,
+    #[prost(message, optional, tag = "3")]
+    pub dkg_request: ::core::option::Option<DkgRequest>,
 }
 impl ::prost::Name for GenesisState {
     const NAME: &'static str = "GenesisState";
@@ -682,6 +654,34 @@ pub struct QueryPendingBtcWithdrawRequestsResponse {
 }
 impl ::prost::Name for QueryPendingBtcWithdrawRequestsResponse {
     const NAME: &'static str = "QueryPendingBtcWithdrawRequestsResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QuerySigningRequestRequest {
+    #[prost(uint64, tag = "1")]
+    pub sequence: u64,
+}
+impl ::prost::Name for QuerySigningRequestRequest {
+    const NAME: &'static str = "QuerySigningRequestRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QuerySigningRequestResponse {
+    #[prost(message, optional, tag = "1")]
+    pub request: ::core::option::Option<SigningRequest>,
+}
+impl ::prost::Name for QuerySigningRequestResponse {
+    const NAME: &'static str = "QuerySigningRequestResponse";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
@@ -861,89 +861,6 @@ pub struct QueryParamsResponse {
 }
 impl ::prost::Name for QueryParamsResponse {
     const NAME: &'static str = "QueryParamsResponse";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
-/// QueryChainTipRequest is request type for the Query/ChainTip RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryChainTipRequest {}
-impl ::prost::Name for QueryChainTipRequest {
-    const NAME: &'static str = "QueryChainTipRequest";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
-/// QueryChainTipResponse is response type for the Query/ChainTip RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryChainTipResponse {
-    #[prost(string, tag = "1")]
-    pub hash: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    pub height: u64,
-}
-impl ::prost::Name for QueryChainTipResponse {
-    const NAME: &'static str = "QueryChainTipResponse";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
-/// QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryBlockHeaderByHeightRequest {
-    #[prost(uint64, tag = "1")]
-    pub height: u64,
-}
-impl ::prost::Name for QueryBlockHeaderByHeightRequest {
-    const NAME: &'static str = "QueryBlockHeaderByHeightRequest";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
-/// QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryBlockHeaderByHeightResponse {
-    #[prost(message, optional, tag = "1")]
-    pub block_header: ::core::option::Option<BlockHeader>,
-}
-impl ::prost::Name for QueryBlockHeaderByHeightResponse {
-    const NAME: &'static str = "QueryBlockHeaderByHeightResponse";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
-/// QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryBlockHeaderByHashRequest {
-    #[prost(string, tag = "1")]
-    pub hash: ::prost::alloc::string::String,
-}
-impl ::prost::Name for QueryBlockHeaderByHashRequest {
-    const NAME: &'static str = "QueryBlockHeaderByHashRequest";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
-/// QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryBlockHeaderByHashResponse {
-    #[prost(message, optional, tag = "1")]
-    pub block_header: ::core::option::Option<BlockHeader>,
-}
-impl ::prost::Name for QueryBlockHeaderByHashResponse {
-    const NAME: &'static str = "QueryBlockHeaderByHashResponse";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
@@ -1143,33 +1060,6 @@ impl ::prost::Name for QueryDkgCompletionRequestsResponse {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
     }
 }
-/// MsgSubmitBlockHeaders defines the Msg/SubmitBlockHeaders request type.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitBlockHeaders {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "2")]
-    pub block_headers: ::prost::alloc::vec::Vec<BlockHeader>,
-}
-impl ::prost::Name for MsgSubmitBlockHeaders {
-    const NAME: &'static str = "MsgSubmitBlockHeaders";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
-/// MsgSubmitBlockHeadersResponse defines the Msg/SubmitBlockHeaders response type.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitBlockHeadersResponse {}
-impl ::prost::Name for MsgSubmitBlockHeadersResponse {
-    const NAME: &'static str = "MsgSubmitBlockHeadersResponse";
-    const PACKAGE: &'static str = "side.btcbridge";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
-    }
-}
 /// MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1294,28 +1184,28 @@ impl ::prost::Name for MsgUpdateTrustedNonBtcRelayersResponse {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
     }
 }
-/// MsgUpdateTrustedOracles defines the Msg/UpdateTrustedOracles request type.
+/// MsgUpdateTrustedFeeProviders defines the Msg/UpdateTrustedFeeProviders request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgUpdateTrustedOracles {
+pub struct MsgUpdateTrustedFeeProviders {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(string, repeated, tag = "2")]
-    pub oracles: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub fee_providers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-impl ::prost::Name for MsgUpdateTrustedOracles {
-    const NAME: &'static str = "MsgUpdateTrustedOracles";
+impl ::prost::Name for MsgUpdateTrustedFeeProviders {
+    const NAME: &'static str = "MsgUpdateTrustedFeeProviders";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
     }
 }
-/// MsgUpdateTrustedOraclesResponse defines the Msg/UpdateTrustedOracles response type.
+/// MsgUpdateTrustedFeeProvidersResponse defines the Msg/UpdateTrustedFeeProviders response type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgUpdateTrustedOraclesResponse {}
-impl ::prost::Name for MsgUpdateTrustedOraclesResponse {
-    const NAME: &'static str = "MsgUpdateTrustedOraclesResponse";
+pub struct MsgUpdateTrustedFeeProvidersResponse {}
+impl ::prost::Name for MsgUpdateTrustedFeeProvidersResponse {
+    const NAME: &'static str = "MsgUpdateTrustedFeeProvidersResponse";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
@@ -1357,8 +1247,8 @@ pub struct MsgSubmitSignatures {
     pub sender: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub txid: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub psbt: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "3")]
+    pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 impl ::prost::Name for MsgSubmitSignatures {
     const NAME: &'static str = "MsgSubmitSignatures";
