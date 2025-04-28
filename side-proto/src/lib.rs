@@ -37,6 +37,9 @@ pub mod side {
     pub mod lending {
         include!("prost/side/side.lending.rs");
     }
+    pub mod oracle {
+        include!("prost/side/side.oracle.rs");
+    }
     pub mod tss {
         include!("prost/side/side.tss.rs");
     }
