@@ -458,7 +458,7 @@ impl serde::Serialize for DkgCompletionRequest {
         if !self.vaults.is_empty() {
             len += 1;
         }
-        if !self.consensus_address.is_empty() {
+        if !self.consensus_pubkey.is_empty() {
             len += 1;
         }
         if !self.signature.is_empty() {
@@ -477,8 +477,8 @@ impl serde::Serialize for DkgCompletionRequest {
         if !self.vaults.is_empty() {
             struct_ser.serialize_field("vaults", &self.vaults)?;
         }
-        if !self.consensus_address.is_empty() {
-            struct_ser.serialize_field("consensusAddress", &self.consensus_address)?;
+        if !self.consensus_pubkey.is_empty() {
+            struct_ser.serialize_field("consensusPubkey", &self.consensus_pubkey)?;
         }
         if !self.signature.is_empty() {
             struct_ser.serialize_field("signature", &self.signature)?;
@@ -497,8 +497,8 @@ impl<'de> serde::Deserialize<'de> for DkgCompletionRequest {
             "id",
             "sender",
             "vaults",
-            "consensus_address",
-            "consensusAddress",
+            "consensus_pubkey",
+            "consensusPubkey",
             "signature",
         ];
 
@@ -507,7 +507,7 @@ impl<'de> serde::Deserialize<'de> for DkgCompletionRequest {
             Id,
             Sender,
             Vaults,
-            ConsensusAddress,
+            ConsensusPubkey,
             Signature,
         }
         #[cfg(feature = "serde")]
@@ -537,8 +537,8 @@ impl<'de> serde::Deserialize<'de> for DkgCompletionRequest {
                             "id" => Ok(GeneratedField::Id),
                             "sender" => Ok(GeneratedField::Sender),
                             "vaults" => Ok(GeneratedField::Vaults),
-                            "consensusAddress" | "consensus_address" => {
-                                Ok(GeneratedField::ConsensusAddress)
+                            "consensusPubkey" | "consensus_pubkey" => {
+                                Ok(GeneratedField::ConsensusPubkey)
                             }
                             "signature" => Ok(GeneratedField::Signature),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -566,7 +566,7 @@ impl<'de> serde::Deserialize<'de> for DkgCompletionRequest {
                 let mut id__ = None;
                 let mut sender__ = None;
                 let mut vaults__ = None;
-                let mut consensus_address__ = None;
+                let mut consensus_pubkey__ = None;
                 let mut signature__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -591,11 +591,11 @@ impl<'de> serde::Deserialize<'de> for DkgCompletionRequest {
                             }
                             vaults__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::ConsensusAddress => {
-                            if consensus_address__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("consensusAddress"));
+                        GeneratedField::ConsensusPubkey => {
+                            if consensus_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("consensusPubkey"));
                             }
-                            consensus_address__ = Some(map_.next_value()?);
+                            consensus_pubkey__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Signature => {
                             if signature__.is_some() {
@@ -609,7 +609,7 @@ impl<'de> serde::Deserialize<'de> for DkgCompletionRequest {
                     id: id__.unwrap_or_default(),
                     sender: sender__.unwrap_or_default(),
                     vaults: vaults__.unwrap_or_default(),
-                    consensus_address: consensus_address__.unwrap_or_default(),
+                    consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
                     signature: signature__.unwrap_or_default(),
                 })
             }
@@ -1492,7 +1492,7 @@ impl serde::Serialize for MsgCompleteDkg {
         if !self.vaults.is_empty() {
             len += 1;
         }
-        if !self.consensus_address.is_empty() {
+        if !self.consensus_pubkey.is_empty() {
             len += 1;
         }
         if !self.signature.is_empty() {
@@ -1510,8 +1510,8 @@ impl serde::Serialize for MsgCompleteDkg {
         if !self.vaults.is_empty() {
             struct_ser.serialize_field("vaults", &self.vaults)?;
         }
-        if !self.consensus_address.is_empty() {
-            struct_ser.serialize_field("consensusAddress", &self.consensus_address)?;
+        if !self.consensus_pubkey.is_empty() {
+            struct_ser.serialize_field("consensusPubkey", &self.consensus_pubkey)?;
         }
         if !self.signature.is_empty() {
             struct_ser.serialize_field("signature", &self.signature)?;
@@ -1530,8 +1530,8 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteDkg {
             "sender",
             "id",
             "vaults",
-            "consensus_address",
-            "consensusAddress",
+            "consensus_pubkey",
+            "consensusPubkey",
             "signature",
         ];
 
@@ -1540,7 +1540,7 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteDkg {
             Sender,
             Id,
             Vaults,
-            ConsensusAddress,
+            ConsensusPubkey,
             Signature,
         }
         #[cfg(feature = "serde")]
@@ -1570,8 +1570,8 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteDkg {
                             "sender" => Ok(GeneratedField::Sender),
                             "id" => Ok(GeneratedField::Id),
                             "vaults" => Ok(GeneratedField::Vaults),
-                            "consensusAddress" | "consensus_address" => {
-                                Ok(GeneratedField::ConsensusAddress)
+                            "consensusPubkey" | "consensus_pubkey" => {
+                                Ok(GeneratedField::ConsensusPubkey)
                             }
                             "signature" => Ok(GeneratedField::Signature),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -1596,7 +1596,7 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteDkg {
                 let mut sender__ = None;
                 let mut id__ = None;
                 let mut vaults__ = None;
-                let mut consensus_address__ = None;
+                let mut consensus_pubkey__ = None;
                 let mut signature__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -1621,11 +1621,11 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteDkg {
                             }
                             vaults__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::ConsensusAddress => {
-                            if consensus_address__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("consensusAddress"));
+                        GeneratedField::ConsensusPubkey => {
+                            if consensus_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("consensusPubkey"));
                             }
-                            consensus_address__ = Some(map_.next_value()?);
+                            consensus_pubkey__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Signature => {
                             if signature__.is_some() {
@@ -1639,7 +1639,7 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteDkg {
                     sender: sender__.unwrap_or_default(),
                     id: id__.unwrap_or_default(),
                     vaults: vaults__.unwrap_or_default(),
-                    consensus_address: consensus_address__.unwrap_or_default(),
+                    consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
                     signature: signature__.unwrap_or_default(),
                 })
             }
