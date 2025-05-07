@@ -1792,10 +1792,16 @@ impl serde::Serialize for Params {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
+        if !self.allowed_dkg_participants.is_empty() {
+            len += 1;
+        }
         if self.dkg_timeout_period.is_some() {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.tss.Params", len)?;
+        if !self.allowed_dkg_participants.is_empty() {
+            struct_ser.serialize_field("allowedDkgParticipants", &self.allowed_dkg_participants)?;
+        }
         if let Some(v) = self.dkg_timeout_period.as_ref() {
             struct_ser.serialize_field("dkgTimeoutPeriod", v)?;
         }
@@ -1809,10 +1815,16 @@ impl<'de> serde::Deserialize<'de> for Params {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["dkg_timeout_period", "dkgTimeoutPeriod"];
+        const FIELDS: &[&str] = &[
+            "allowed_dkg_participants",
+            "allowedDkgParticipants",
+            "dkg_timeout_period",
+            "dkgTimeoutPeriod",
+        ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
+            AllowedDkgParticipants,
             DkgTimeoutPeriod,
         }
         #[cfg(feature = "serde")]
@@ -1839,6 +1851,9 @@ impl<'de> serde::Deserialize<'de> for Params {
                         E: serde::de::Error,
                     {
                         match value {
+                            "allowedDkgParticipants" | "allowed_dkg_participants" => {
+                                Ok(GeneratedField::AllowedDkgParticipants)
+                            }
                             "dkgTimeoutPeriod" | "dkg_timeout_period" => {
                                 Ok(GeneratedField::DkgTimeoutPeriod)
                             }
@@ -1861,9 +1876,18 @@ impl<'de> serde::Deserialize<'de> for Params {
             where
                 V: serde::de::MapAccess<'de>,
             {
+                let mut allowed_dkg_participants__ = None;
                 let mut dkg_timeout_period__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
+                        GeneratedField::AllowedDkgParticipants => {
+                            if allowed_dkg_participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "allowedDkgParticipants",
+                                ));
+                            }
+                            allowed_dkg_participants__ = Some(map_.next_value()?);
+                        }
                         GeneratedField::DkgTimeoutPeriod => {
                             if dkg_timeout_period__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("dkgTimeoutPeriod"));
@@ -1873,6 +1897,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                     }
                 }
                 Ok(Params {
+                    allowed_dkg_participants: allowed_dkg_participants__.unwrap_or_default(),
                     dkg_timeout_period: dkg_timeout_period__,
                 })
             }

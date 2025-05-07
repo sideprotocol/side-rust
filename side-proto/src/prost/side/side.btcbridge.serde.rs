@@ -4283,9 +4283,6 @@ impl serde::Serialize for Params {
         if self.withdraw_confirmation_depth != 0 {
             len += 1;
         }
-        if self.max_reorg_depth != 0 {
-            len += 1;
-        }
         if self.max_acceptable_block_depth != 0 {
             len += 1;
         }
@@ -4332,9 +4329,6 @@ impl serde::Serialize for Params {
                 "withdrawConfirmationDepth",
                 &self.withdraw_confirmation_depth,
             )?;
-        }
-        if self.max_reorg_depth != 0 {
-            struct_ser.serialize_field("maxReorgDepth", &self.max_reorg_depth)?;
         }
         if self.max_acceptable_block_depth != 0 {
             #[allow(clippy::needless_borrow)]
@@ -4395,8 +4389,6 @@ impl<'de> serde::Deserialize<'de> for Params {
             "depositConfirmationDepth",
             "withdraw_confirmation_depth",
             "withdrawConfirmationDepth",
-            "max_reorg_depth",
-            "maxReorgDepth",
             "max_acceptable_block_depth",
             "maxAcceptableBlockDepth",
             "btc_voucher_denom",
@@ -4426,7 +4418,6 @@ impl<'de> serde::Deserialize<'de> for Params {
         enum GeneratedField {
             DepositConfirmationDepth,
             WithdrawConfirmationDepth,
-            MaxReorgDepth,
             MaxAcceptableBlockDepth,
             BtcVoucherDenom,
             DepositEnabled,
@@ -4469,9 +4460,6 @@ impl<'de> serde::Deserialize<'de> for Params {
                             }
                             "withdrawConfirmationDepth" | "withdraw_confirmation_depth" => {
                                 Ok(GeneratedField::WithdrawConfirmationDepth)
-                            }
-                            "maxReorgDepth" | "max_reorg_depth" => {
-                                Ok(GeneratedField::MaxReorgDepth)
                             }
                             "maxAcceptableBlockDepth" | "max_acceptable_block_depth" => {
                                 Ok(GeneratedField::MaxAcceptableBlockDepth)
@@ -4524,7 +4512,6 @@ impl<'de> serde::Deserialize<'de> for Params {
             {
                 let mut deposit_confirmation_depth__ = None;
                 let mut withdraw_confirmation_depth__ = None;
-                let mut max_reorg_depth__ = None;
                 let mut max_acceptable_block_depth__ = None;
                 let mut btc_voucher_denom__ = None;
                 let mut deposit_enabled__ = None;
@@ -4557,15 +4544,6 @@ impl<'de> serde::Deserialize<'de> for Params {
                                 ));
                             }
                             withdraw_confirmation_depth__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
-                        }
-                        GeneratedField::MaxReorgDepth => {
-                            if max_reorg_depth__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("maxReorgDepth"));
-                            }
-                            max_reorg_depth__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -4661,7 +4639,6 @@ impl<'de> serde::Deserialize<'de> for Params {
                 Ok(Params {
                     deposit_confirmation_depth: deposit_confirmation_depth__.unwrap_or_default(),
                     withdraw_confirmation_depth: withdraw_confirmation_depth__.unwrap_or_default(),
-                    max_reorg_depth: max_reorg_depth__.unwrap_or_default(),
                     max_acceptable_block_depth: max_acceptable_block_depth__.unwrap_or_default(),
                     btc_voucher_denom: btc_voucher_denom__.unwrap_or_default(),
                     deposit_enabled: deposit_enabled__.unwrap_or_default(),

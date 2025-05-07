@@ -9,44 +9,41 @@ pub struct Params {
     /// The minimum number of confirmations required for the withdrawal transactions
     #[prost(int32, tag = "2")]
     pub withdraw_confirmation_depth: i32,
-    /// The allowed maximum depth for bitcoin block reorganization
-    #[prost(int32, tag = "3")]
-    pub max_reorg_depth: i32,
     /// Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
-    #[prost(uint64, tag = "4")]
+    #[prost(uint64, tag = "3")]
     pub max_acceptable_block_depth: u64,
     /// The denomination of the voucher
-    #[prost(string, tag = "5")]
+    #[prost(string, tag = "4")]
     pub btc_voucher_denom: ::prost::alloc::string::String,
     /// Indicates if deposit is enabled
-    #[prost(bool, tag = "6")]
+    #[prost(bool, tag = "5")]
     pub deposit_enabled: bool,
     /// Indicates if withdrawal is enabled
-    #[prost(bool, tag = "7")]
+    #[prost(bool, tag = "6")]
     pub withdraw_enabled: bool,
     /// Trusted relayers for non-btc asset deposit
-    #[prost(string, repeated, tag = "8")]
+    #[prost(string, repeated, tag = "7")]
     pub trusted_non_btc_relayers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// Trusted fee providers to submit bitcoin fee rate
-    #[prost(string, repeated, tag = "9")]
+    #[prost(string, repeated, tag = "8")]
     pub trusted_fee_providers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// Period of validity for the fee rate
-    #[prost(int64, tag = "10")]
+    #[prost(int64, tag = "9")]
     pub fee_rate_validity_period: i64,
     /// Asset vaults
-    #[prost(message, repeated, tag = "11")]
+    #[prost(message, repeated, tag = "10")]
     pub vaults: ::prost::alloc::vec::Vec<Vault>,
     /// Withdrawal params
-    #[prost(message, optional, tag = "12")]
+    #[prost(message, optional, tag = "11")]
     pub withdraw_params: ::core::option::Option<WithdrawParams>,
     /// Protocol limitations
-    #[prost(message, optional, tag = "13")]
+    #[prost(message, optional, tag = "12")]
     pub protocol_limits: ::core::option::Option<ProtocolLimits>,
     /// Protocol fees
-    #[prost(message, optional, tag = "14")]
+    #[prost(message, optional, tag = "13")]
     pub protocol_fees: ::core::option::Option<ProtocolFees>,
     /// TSS params
-    #[prost(message, optional, tag = "15")]
+    #[prost(message, optional, tag = "14")]
     pub tss_params: ::core::option::Option<TssParams>,
 }
 impl ::prost::Name for Params {
@@ -416,13 +413,13 @@ impl ::prost::Name for RunesConsolidation {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DkgParticipant {
-    /// the moniker of the corresponding validator
+    /// the optional moniker
     #[prost(string, tag = "1")]
     pub moniker: ::prost::alloc::string::String,
-    /// the operator address of the corresponding validator
+    /// the optional operator address
     #[prost(string, tag = "2")]
     pub operator_address: ::prost::alloc::string::String,
-    /// the consensus public key of the corresponding validator
+    /// participant consensus pub key
     #[prost(string, tag = "3")]
     pub consensus_pubkey: ::prost::alloc::string::String,
 }

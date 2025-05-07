@@ -1817,10 +1817,13 @@ impl serde::Serialize for Params {
         if self.lending_event_nonce_queue_size != 0 {
             len += 1;
         }
-        if self.oracle_participant_base_num != 0 {
+        if !self.allowed_oracle_participants.is_empty() {
             len += 1;
         }
         if self.oracle_participant_num != 0 {
+            len += 1;
+        }
+        if self.oracle_participant_threshold != 0 {
             len += 1;
         }
         if self.nonce_generation_batch_size != 0 {
@@ -1849,14 +1852,20 @@ impl serde::Serialize for Params {
                 &self.lending_event_nonce_queue_size,
             )?;
         }
-        if self.oracle_participant_base_num != 0 {
+        if !self.allowed_oracle_participants.is_empty() {
             struct_ser.serialize_field(
-                "oracleParticipantBaseNum",
-                &self.oracle_participant_base_num,
+                "allowedOracleParticipants",
+                &self.allowed_oracle_participants,
             )?;
         }
         if self.oracle_participant_num != 0 {
             struct_ser.serialize_field("oracleParticipantNum", &self.oracle_participant_num)?;
+        }
+        if self.oracle_participant_threshold != 0 {
+            struct_ser.serialize_field(
+                "oracleParticipantThreshold",
+                &self.oracle_participant_threshold,
+            )?;
         }
         if self.nonce_generation_batch_size != 0 {
             struct_ser.serialize_field(
@@ -1885,10 +1894,12 @@ impl<'de> serde::Deserialize<'de> for Params {
             "dateInterval",
             "lending_event_nonce_queue_size",
             "lendingEventNonceQueueSize",
-            "oracle_participant_base_num",
-            "oracleParticipantBaseNum",
+            "allowed_oracle_participants",
+            "allowedOracleParticipants",
             "oracle_participant_num",
             "oracleParticipantNum",
+            "oracle_participant_threshold",
+            "oracleParticipantThreshold",
             "nonce_generation_batch_size",
             "nonceGenerationBatchSize",
         ];
@@ -1900,8 +1911,9 @@ impl<'de> serde::Deserialize<'de> for Params {
             DateEventNonceQueueSize,
             DateInterval,
             LendingEventNonceQueueSize,
-            OracleParticipantBaseNum,
+            AllowedOracleParticipants,
             OracleParticipantNum,
+            OracleParticipantThreshold,
             NonceGenerationBatchSize,
         }
         #[cfg(feature = "serde")]
@@ -1941,11 +1953,14 @@ impl<'de> serde::Deserialize<'de> for Params {
                             "lendingEventNonceQueueSize" | "lending_event_nonce_queue_size" => {
                                 Ok(GeneratedField::LendingEventNonceQueueSize)
                             }
-                            "oracleParticipantBaseNum" | "oracle_participant_base_num" => {
-                                Ok(GeneratedField::OracleParticipantBaseNum)
+                            "allowedOracleParticipants" | "allowed_oracle_participants" => {
+                                Ok(GeneratedField::AllowedOracleParticipants)
                             }
                             "oracleParticipantNum" | "oracle_participant_num" => {
                                 Ok(GeneratedField::OracleParticipantNum)
+                            }
+                            "oracleParticipantThreshold" | "oracle_participant_threshold" => {
+                                Ok(GeneratedField::OracleParticipantThreshold)
                             }
                             "nonceGenerationBatchSize" | "nonce_generation_batch_size" => {
                                 Ok(GeneratedField::NonceGenerationBatchSize)
@@ -1974,8 +1989,9 @@ impl<'de> serde::Deserialize<'de> for Params {
                 let mut date_event_nonce_queue_size__ = None;
                 let mut date_interval__ = None;
                 let mut lending_event_nonce_queue_size__ = None;
-                let mut oracle_participant_base_num__ = None;
+                let mut allowed_oracle_participants__ = None;
                 let mut oracle_participant_num__ = None;
+                let mut oracle_participant_threshold__ = None;
                 let mut nonce_generation_batch_size__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -2024,16 +2040,13 @@ impl<'de> serde::Deserialize<'de> for Params {
                                     .0,
                             );
                         }
-                        GeneratedField::OracleParticipantBaseNum => {
-                            if oracle_participant_base_num__.is_some() {
+                        GeneratedField::AllowedOracleParticipants => {
+                            if allowed_oracle_participants__.is_some() {
                                 return Err(serde::de::Error::duplicate_field(
-                                    "oracleParticipantBaseNum",
+                                    "allowedOracleParticipants",
                                 ));
                             }
-                            oracle_participant_base_num__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            allowed_oracle_participants__ = Some(map_.next_value()?);
                         }
                         GeneratedField::OracleParticipantNum => {
                             if oracle_participant_num__.is_some() {
@@ -2042,6 +2055,17 @@ impl<'de> serde::Deserialize<'de> for Params {
                                 ));
                             }
                             oracle_participant_num__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::OracleParticipantThreshold => {
+                            if oracle_participant_threshold__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "oracleParticipantThreshold",
+                                ));
+                            }
+                            oracle_participant_threshold__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -2067,8 +2091,10 @@ impl<'de> serde::Deserialize<'de> for Params {
                     date_interval: date_interval__,
                     lending_event_nonce_queue_size: lending_event_nonce_queue_size__
                         .unwrap_or_default(),
-                    oracle_participant_base_num: oracle_participant_base_num__.unwrap_or_default(),
+                    allowed_oracle_participants: allowed_oracle_participants__.unwrap_or_default(),
                     oracle_participant_num: oracle_participant_num__.unwrap_or_default(),
+                    oracle_participant_threshold: oracle_participant_threshold__
+                        .unwrap_or_default(),
                     nonce_generation_batch_size: nonce_generation_batch_size__.unwrap_or_default(),
                 })
             }

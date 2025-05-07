@@ -286,11 +286,13 @@ pub struct Params {
     pub date_interval: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
     #[prost(uint32, tag = "5")]
     pub lending_event_nonce_queue_size: u32,
-    #[prost(uint32, tag = "6")]
-    pub oracle_participant_base_num: u32,
+    #[prost(string, repeated, tag = "6")]
+    pub allowed_oracle_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(uint32, tag = "7")]
     pub oracle_participant_num: u32,
     #[prost(uint32, tag = "8")]
+    pub oracle_participant_threshold: u32,
+    #[prost(uint32, tag = "9")]
     pub nonce_generation_batch_size: u32,
 }
 impl ::prost::Name for Params {

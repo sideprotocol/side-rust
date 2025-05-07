@@ -3,7 +3,9 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
-    #[prost(message, optional, tag = "1")]
+    #[prost(string, repeated, tag = "1")]
+    pub allowed_dkg_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "2")]
     pub dkg_timeout_period: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
 }
 impl ::prost::Name for Params {
