@@ -896,7 +896,7 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteDkgResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgCompleteResharing {
+impl serde::Serialize for MsgCompleteRefreshing {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -916,7 +916,7 @@ impl serde::Serialize for MsgCompleteResharing {
         if !self.signature.is_empty() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.tss.MsgCompleteResharing", len)?;
+        let mut struct_ser = serializer.serialize_struct("side.tss.MsgCompleteRefreshing", len)?;
         if !self.sender.is_empty() {
             struct_ser.serialize_field("sender", &self.sender)?;
         }
@@ -935,7 +935,7 @@ impl serde::Serialize for MsgCompleteResharing {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgCompleteResharing {
+impl<'de> serde::Deserialize<'de> for MsgCompleteRefreshing {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -995,16 +995,16 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteResharing {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgCompleteResharing;
+            type Value = MsgCompleteRefreshing;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.MsgCompleteResharing")
+                formatter.write_str("struct side.tss.MsgCompleteRefreshing")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgCompleteResharing, V::Error>
+            ) -> core::result::Result<MsgCompleteRefreshing, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -1043,7 +1043,7 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteResharing {
                         }
                     }
                 }
-                Ok(MsgCompleteResharing {
+                Ok(MsgCompleteRefreshing {
                     sender: sender__.unwrap_or_default(),
                     id: id__.unwrap_or_default(),
                     consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
@@ -1051,11 +1051,11 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteResharing {
                 })
             }
         }
-        deserializer.deserialize_struct("side.tss.MsgCompleteResharing", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct("side.tss.MsgCompleteRefreshing", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgCompleteResharingResponse {
+impl serde::Serialize for MsgCompleteRefreshingResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -1064,12 +1064,12 @@ impl serde::Serialize for MsgCompleteResharingResponse {
         use serde::ser::SerializeStruct;
         let len = 0;
         let struct_ser =
-            serializer.serialize_struct("side.tss.MsgCompleteResharingResponse", len)?;
+            serializer.serialize_struct("side.tss.MsgCompleteRefreshingResponse", len)?;
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgCompleteResharingResponse {
+impl<'de> serde::Deserialize<'de> for MsgCompleteRefreshingResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -1110,34 +1110,34 @@ impl<'de> serde::Deserialize<'de> for MsgCompleteResharingResponse {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgCompleteResharingResponse;
+            type Value = MsgCompleteRefreshingResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.MsgCompleteResharingResponse")
+                formatter.write_str("struct side.tss.MsgCompleteRefreshingResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<MsgCompleteResharingResponse, V::Error>
+            ) -> core::result::Result<MsgCompleteRefreshingResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 while map_.next_key::<GeneratedField>()?.is_some() {
                     let _ = map_.next_value::<serde::de::IgnoredAny>()?;
                 }
-                Ok(MsgCompleteResharingResponse {})
+                Ok(MsgCompleteRefreshingResponse {})
             }
         }
         deserializer.deserialize_struct(
-            "side.tss.MsgCompleteResharingResponse",
+            "side.tss.MsgCompleteRefreshingResponse",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgRefreshShares {
+impl serde::Serialize for MsgRefresh {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -1148,37 +1148,46 @@ impl serde::Serialize for MsgRefreshShares {
         if !self.authority.is_empty() {
             len += 1;
         }
-        if self.dkg_id != 0 {
+        if !self.dkg_ids.is_empty() {
             len += 1;
         }
-        if !self.pub_key.is_empty() {
+        if !self.removed_participants.is_empty() {
             len += 1;
         }
-        if !self.participants.is_empty() {
+        if !self.new_participants.is_empty() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.tss.MsgRefreshShares", len)?;
+        if self.timeout_duration.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.tss.MsgRefresh", len)?;
         if !self.authority.is_empty() {
             struct_ser.serialize_field("authority", &self.authority)?;
         }
-        if self.dkg_id != 0 {
-            #[allow(clippy::needless_borrow)]
+        if !self.dkg_ids.is_empty() {
             struct_ser.serialize_field(
-                "dkgId",
-                alloc::string::ToString::to_string(&self.dkg_id).as_str(),
+                "dkgIds",
+                &self
+                    .dkg_ids
+                    .iter()
+                    .map(alloc::string::ToString::to_string)
+                    .collect::<alloc::vec::Vec<_>>(),
             )?;
         }
-        if !self.pub_key.is_empty() {
-            struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        if !self.removed_participants.is_empty() {
+            struct_ser.serialize_field("removedParticipants", &self.removed_participants)?;
         }
-        if !self.participants.is_empty() {
-            struct_ser.serialize_field("participants", &self.participants)?;
+        if !self.new_participants.is_empty() {
+            struct_ser.serialize_field("newParticipants", &self.new_participants)?;
+        }
+        if let Some(v) = self.timeout_duration.as_ref() {
+            struct_ser.serialize_field("timeoutDuration", v)?;
         }
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgRefreshShares {
+impl<'de> serde::Deserialize<'de> for MsgRefresh {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -1186,19 +1195,23 @@ impl<'de> serde::Deserialize<'de> for MsgRefreshShares {
     {
         const FIELDS: &[&str] = &[
             "authority",
-            "dkg_id",
-            "dkgId",
-            "pub_key",
-            "pubKey",
-            "participants",
+            "dkg_ids",
+            "dkgIds",
+            "removed_participants",
+            "removedParticipants",
+            "new_participants",
+            "newParticipants",
+            "timeout_duration",
+            "timeoutDuration",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Authority,
-            DkgId,
-            PubKey,
-            Participants,
+            DkgIds,
+            RemovedParticipants,
+            NewParticipants,
+            TimeoutDuration,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -1225,9 +1238,16 @@ impl<'de> serde::Deserialize<'de> for MsgRefreshShares {
                     {
                         match value {
                             "authority" => Ok(GeneratedField::Authority),
-                            "dkgId" | "dkg_id" => Ok(GeneratedField::DkgId),
-                            "pubKey" | "pub_key" => Ok(GeneratedField::PubKey),
-                            "participants" => Ok(GeneratedField::Participants),
+                            "dkgIds" | "dkg_ids" => Ok(GeneratedField::DkgIds),
+                            "removedParticipants" | "removed_participants" => {
+                                Ok(GeneratedField::RemovedParticipants)
+                            }
+                            "newParticipants" | "new_participants" => {
+                                Ok(GeneratedField::NewParticipants)
+                            }
+                            "timeoutDuration" | "timeout_duration" => {
+                                Ok(GeneratedField::TimeoutDuration)
+                            }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -1237,20 +1257,21 @@ impl<'de> serde::Deserialize<'de> for MsgRefreshShares {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgRefreshShares;
+            type Value = MsgRefresh;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.MsgRefreshShares")
+                formatter.write_str("struct side.tss.MsgRefresh")
             }
 
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgRefreshShares, V::Error>
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgRefresh, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 let mut authority__ = None;
-                let mut dkg_id__ = None;
-                let mut pub_key__ = None;
-                let mut participants__ = None;
+                let mut dkg_ids__ = None;
+                let mut removed_participants__ = None;
+                let mut new_participants__ = None;
+                let mut timeout_duration__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Authority => {
@@ -1259,42 +1280,51 @@ impl<'de> serde::Deserialize<'de> for MsgRefreshShares {
                             }
                             authority__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::DkgId => {
-                            if dkg_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("dkgId"));
+                        GeneratedField::DkgIds => {
+                            if dkg_ids__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dkgIds"));
                             }
-                            dkg_id__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            dkg_ids__ =
+                                Some(map_.next_value::<alloc::vec::Vec<::pbjson::private::NumberDeserialize<_>>>()?
+                                    .into_iter().map(|x| x.0).collect())
+                            ;
                         }
-                        GeneratedField::PubKey => {
-                            if pub_key__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("pubKey"));
+                        GeneratedField::RemovedParticipants => {
+                            if removed_participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "removedParticipants",
+                                ));
                             }
-                            pub_key__ = Some(map_.next_value()?);
+                            removed_participants__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::Participants => {
-                            if participants__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("participants"));
+                        GeneratedField::NewParticipants => {
+                            if new_participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("newParticipants"));
                             }
-                            participants__ = Some(map_.next_value()?);
+                            new_participants__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::TimeoutDuration => {
+                            if timeout_duration__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("timeoutDuration"));
+                            }
+                            timeout_duration__ = map_.next_value()?;
                         }
                     }
                 }
-                Ok(MsgRefreshShares {
+                Ok(MsgRefresh {
                     authority: authority__.unwrap_or_default(),
-                    dkg_id: dkg_id__.unwrap_or_default(),
-                    pub_key: pub_key__.unwrap_or_default(),
-                    participants: participants__.unwrap_or_default(),
+                    dkg_ids: dkg_ids__.unwrap_or_default(),
+                    removed_participants: removed_participants__.unwrap_or_default(),
+                    new_participants: new_participants__.unwrap_or_default(),
+                    timeout_duration: timeout_duration__,
                 })
             }
         }
-        deserializer.deserialize_struct("side.tss.MsgRefreshShares", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct("side.tss.MsgRefresh", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgRefreshSharesResponse {
+impl serde::Serialize for MsgRefreshResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -1302,12 +1332,12 @@ impl serde::Serialize for MsgRefreshSharesResponse {
     {
         use serde::ser::SerializeStruct;
         let len = 0;
-        let struct_ser = serializer.serialize_struct("side.tss.MsgRefreshSharesResponse", len)?;
+        let struct_ser = serializer.serialize_struct("side.tss.MsgRefreshResponse", len)?;
         struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgRefreshSharesResponse {
+impl<'de> serde::Deserialize<'de> for MsgRefreshResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -1348,30 +1378,23 @@ impl<'de> serde::Deserialize<'de> for MsgRefreshSharesResponse {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgRefreshSharesResponse;
+            type Value = MsgRefreshResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.MsgRefreshSharesResponse")
+                formatter.write_str("struct side.tss.MsgRefreshResponse")
             }
 
-            fn visit_map<V>(
-                self,
-                mut map_: V,
-            ) -> core::result::Result<MsgRefreshSharesResponse, V::Error>
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgRefreshResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 while map_.next_key::<GeneratedField>()?.is_some() {
                     let _ = map_.next_value::<serde::de::IgnoredAny>()?;
                 }
-                Ok(MsgRefreshSharesResponse {})
+                Ok(MsgRefreshResponse {})
             }
         }
-        deserializer.deserialize_struct(
-            "side.tss.MsgRefreshSharesResponse",
-            FIELDS,
-            GeneratedVisitor,
-        )
+        deserializer.deserialize_struct("side.tss.MsgRefreshResponse", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
@@ -1795,15 +1818,15 @@ impl serde::Serialize for Params {
         if !self.allowed_dkg_participants.is_empty() {
             len += 1;
         }
-        if self.dkg_timeout_period.is_some() {
+        if self.dkg_timeout_duration.is_some() {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.tss.Params", len)?;
         if !self.allowed_dkg_participants.is_empty() {
             struct_ser.serialize_field("allowedDkgParticipants", &self.allowed_dkg_participants)?;
         }
-        if let Some(v) = self.dkg_timeout_period.as_ref() {
-            struct_ser.serialize_field("dkgTimeoutPeriod", v)?;
+        if let Some(v) = self.dkg_timeout_duration.as_ref() {
+            struct_ser.serialize_field("dkgTimeoutDuration", v)?;
         }
         struct_ser.end()
     }
@@ -1818,14 +1841,14 @@ impl<'de> serde::Deserialize<'de> for Params {
         const FIELDS: &[&str] = &[
             "allowed_dkg_participants",
             "allowedDkgParticipants",
-            "dkg_timeout_period",
-            "dkgTimeoutPeriod",
+            "dkg_timeout_duration",
+            "dkgTimeoutDuration",
         ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             AllowedDkgParticipants,
-            DkgTimeoutPeriod,
+            DkgTimeoutDuration,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -1854,8 +1877,8 @@ impl<'de> serde::Deserialize<'de> for Params {
                             "allowedDkgParticipants" | "allowed_dkg_participants" => {
                                 Ok(GeneratedField::AllowedDkgParticipants)
                             }
-                            "dkgTimeoutPeriod" | "dkg_timeout_period" => {
-                                Ok(GeneratedField::DkgTimeoutPeriod)
+                            "dkgTimeoutDuration" | "dkg_timeout_duration" => {
+                                Ok(GeneratedField::DkgTimeoutDuration)
                             }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -1877,7 +1900,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut allowed_dkg_participants__ = None;
-                let mut dkg_timeout_period__ = None;
+                let mut dkg_timeout_duration__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::AllowedDkgParticipants => {
@@ -1888,17 +1911,19 @@ impl<'de> serde::Deserialize<'de> for Params {
                             }
                             allowed_dkg_participants__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::DkgTimeoutPeriod => {
-                            if dkg_timeout_period__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("dkgTimeoutPeriod"));
+                        GeneratedField::DkgTimeoutDuration => {
+                            if dkg_timeout_duration__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "dkgTimeoutDuration",
+                                ));
                             }
-                            dkg_timeout_period__ = map_.next_value()?;
+                            dkg_timeout_duration__ = map_.next_value()?;
                         }
                     }
                 }
                 Ok(Params {
                     allowed_dkg_participants: allowed_dkg_participants__.unwrap_or_default(),
-                    dkg_timeout_period: dkg_timeout_period__,
+                    dkg_timeout_duration: dkg_timeout_duration__,
                 })
             }
         }
@@ -2780,7 +2805,7 @@ impl<'de> serde::Deserialize<'de> for QueryParamsResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryResharingCompletionsRequest {
+impl serde::Serialize for QueryRefreshingCompletionsRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -2795,7 +2820,7 @@ impl serde::Serialize for QueryResharingCompletionsRequest {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.tss.QueryResharingCompletionsRequest", len)?;
+            serializer.serialize_struct("side.tss.QueryRefreshingCompletionsRequest", len)?;
         if self.id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser
@@ -2808,7 +2833,7 @@ impl serde::Serialize for QueryResharingCompletionsRequest {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryResharingCompletionsRequest {
+impl<'de> serde::Deserialize<'de> for QueryRefreshingCompletionsRequest {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -2856,16 +2881,16 @@ impl<'de> serde::Deserialize<'de> for QueryResharingCompletionsRequest {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryResharingCompletionsRequest;
+            type Value = QueryRefreshingCompletionsRequest;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.QueryResharingCompletionsRequest")
+                formatter.write_str("struct side.tss.QueryRefreshingCompletionsRequest")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryResharingCompletionsRequest, V::Error>
+            ) -> core::result::Result<QueryRefreshingCompletionsRequest, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -2890,21 +2915,21 @@ impl<'de> serde::Deserialize<'de> for QueryResharingCompletionsRequest {
                         }
                     }
                 }
-                Ok(QueryResharingCompletionsRequest {
+                Ok(QueryRefreshingCompletionsRequest {
                     id: id__.unwrap_or_default(),
                     pagination: pagination__,
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.tss.QueryResharingCompletionsRequest",
+            "side.tss.QueryRefreshingCompletionsRequest",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryResharingCompletionsResponse {
+impl serde::Serialize for QueryRefreshingCompletionsResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -2919,7 +2944,7 @@ impl serde::Serialize for QueryResharingCompletionsResponse {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.tss.QueryResharingCompletionsResponse", len)?;
+            serializer.serialize_struct("side.tss.QueryRefreshingCompletionsResponse", len)?;
         if !self.completions.is_empty() {
             struct_ser.serialize_field("completions", &self.completions)?;
         }
@@ -2930,7 +2955,7 @@ impl serde::Serialize for QueryResharingCompletionsResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryResharingCompletionsResponse {
+impl<'de> serde::Deserialize<'de> for QueryRefreshingCompletionsResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -2978,16 +3003,16 @@ impl<'de> serde::Deserialize<'de> for QueryResharingCompletionsResponse {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryResharingCompletionsResponse;
+            type Value = QueryRefreshingCompletionsResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.QueryResharingCompletionsResponse")
+                formatter.write_str("struct side.tss.QueryRefreshingCompletionsResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryResharingCompletionsResponse, V::Error>
+            ) -> core::result::Result<QueryRefreshingCompletionsResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -3009,21 +3034,21 @@ impl<'de> serde::Deserialize<'de> for QueryResharingCompletionsResponse {
                         }
                     }
                 }
-                Ok(QueryResharingCompletionsResponse {
+                Ok(QueryRefreshingCompletionsResponse {
                     completions: completions__.unwrap_or_default(),
                     pagination: pagination__,
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.tss.QueryResharingCompletionsResponse",
+            "side.tss.QueryRefreshingCompletionsResponse",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryResharingRequestRequest {
+impl serde::Serialize for QueryRefreshingRequestRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3035,7 +3060,7 @@ impl serde::Serialize for QueryResharingRequestRequest {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.tss.QueryResharingRequestRequest", len)?;
+            serializer.serialize_struct("side.tss.QueryRefreshingRequestRequest", len)?;
         if self.id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser
@@ -3045,7 +3070,7 @@ impl serde::Serialize for QueryResharingRequestRequest {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryResharingRequestRequest {
+impl<'de> serde::Deserialize<'de> for QueryRefreshingRequestRequest {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3091,16 +3116,16 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestRequest {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryResharingRequestRequest;
+            type Value = QueryRefreshingRequestRequest;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.QueryResharingRequestRequest")
+                formatter.write_str("struct side.tss.QueryRefreshingRequestRequest")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryResharingRequestRequest, V::Error>
+            ) -> core::result::Result<QueryRefreshingRequestRequest, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -3118,20 +3143,20 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestRequest {
                         }
                     }
                 }
-                Ok(QueryResharingRequestRequest {
+                Ok(QueryRefreshingRequestRequest {
                     id: id__.unwrap_or_default(),
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.tss.QueryResharingRequestRequest",
+            "side.tss.QueryRefreshingRequestRequest",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryResharingRequestResponse {
+impl serde::Serialize for QueryRefreshingRequestResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3143,7 +3168,7 @@ impl serde::Serialize for QueryResharingRequestResponse {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.tss.QueryResharingRequestResponse", len)?;
+            serializer.serialize_struct("side.tss.QueryRefreshingRequestResponse", len)?;
         if let Some(v) = self.request.as_ref() {
             struct_ser.serialize_field("request", v)?;
         }
@@ -3151,7 +3176,7 @@ impl serde::Serialize for QueryResharingRequestResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryResharingRequestResponse {
+impl<'de> serde::Deserialize<'de> for QueryRefreshingRequestResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3197,16 +3222,16 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestResponse {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryResharingRequestResponse;
+            type Value = QueryRefreshingRequestResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.QueryResharingRequestResponse")
+                formatter.write_str("struct side.tss.QueryRefreshingRequestResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryResharingRequestResponse, V::Error>
+            ) -> core::result::Result<QueryRefreshingRequestResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -3221,18 +3246,18 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestResponse {
                         }
                     }
                 }
-                Ok(QueryResharingRequestResponse { request: request__ })
+                Ok(QueryRefreshingRequestResponse { request: request__ })
             }
         }
         deserializer.deserialize_struct(
-            "side.tss.QueryResharingRequestResponse",
+            "side.tss.QueryRefreshingRequestResponse",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryResharingRequestsRequest {
+impl serde::Serialize for QueryRefreshingRequestsRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3247,9 +3272,9 @@ impl serde::Serialize for QueryResharingRequestsRequest {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.tss.QueryResharingRequestsRequest", len)?;
+            serializer.serialize_struct("side.tss.QueryRefreshingRequestsRequest", len)?;
         if self.status != 0 {
-            let v = ResharingStatus::try_from(self.status).map_err(|_| {
+            let v = RefreshingStatus::try_from(self.status).map_err(|_| {
                 serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
             })?;
             struct_ser.serialize_field("status", &v)?;
@@ -3261,7 +3286,7 @@ impl serde::Serialize for QueryResharingRequestsRequest {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryResharingRequestsRequest {
+impl<'de> serde::Deserialize<'de> for QueryRefreshingRequestsRequest {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3309,16 +3334,16 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestsRequest {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryResharingRequestsRequest;
+            type Value = QueryRefreshingRequestsRequest;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.QueryResharingRequestsRequest")
+                formatter.write_str("struct side.tss.QueryRefreshingRequestsRequest")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryResharingRequestsRequest, V::Error>
+            ) -> core::result::Result<QueryRefreshingRequestsRequest, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -3330,7 +3355,7 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestsRequest {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
                             }
-                            status__ = Some(map_.next_value::<ResharingStatus>()? as i32);
+                            status__ = Some(map_.next_value::<RefreshingStatus>()? as i32);
                         }
                         GeneratedField::Pagination => {
                             if pagination__.is_some() {
@@ -3340,21 +3365,21 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestsRequest {
                         }
                     }
                 }
-                Ok(QueryResharingRequestsRequest {
+                Ok(QueryRefreshingRequestsRequest {
                     status: status__.unwrap_or_default(),
                     pagination: pagination__,
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.tss.QueryResharingRequestsRequest",
+            "side.tss.QueryRefreshingRequestsRequest",
             FIELDS,
             GeneratedVisitor,
         )
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for QueryResharingRequestsResponse {
+impl serde::Serialize for QueryRefreshingRequestsResponse {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3369,7 +3394,7 @@ impl serde::Serialize for QueryResharingRequestsResponse {
             len += 1;
         }
         let mut struct_ser =
-            serializer.serialize_struct("side.tss.QueryResharingRequestsResponse", len)?;
+            serializer.serialize_struct("side.tss.QueryRefreshingRequestsResponse", len)?;
         if !self.requests.is_empty() {
             struct_ser.serialize_field("requests", &self.requests)?;
         }
@@ -3380,7 +3405,7 @@ impl serde::Serialize for QueryResharingRequestsResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for QueryResharingRequestsResponse {
+impl<'de> serde::Deserialize<'de> for QueryRefreshingRequestsResponse {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -3428,16 +3453,16 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestsResponse {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = QueryResharingRequestsResponse;
+            type Value = QueryRefreshingRequestsResponse;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.QueryResharingRequestsResponse")
+                formatter.write_str("struct side.tss.QueryRefreshingRequestsResponse")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<QueryResharingRequestsResponse, V::Error>
+            ) -> core::result::Result<QueryRefreshingRequestsResponse, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -3459,14 +3484,14 @@ impl<'de> serde::Deserialize<'de> for QueryResharingRequestsResponse {
                         }
                     }
                 }
-                Ok(QueryResharingRequestsResponse {
+                Ok(QueryRefreshingRequestsResponse {
                     requests: requests__.unwrap_or_default(),
                     pagination: pagination__,
                 })
             }
         }
         deserializer.deserialize_struct(
-            "side.tss.QueryResharingRequestsResponse",
+            "side.tss.QueryRefreshingRequestsResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -3939,7 +3964,7 @@ impl<'de> serde::Deserialize<'de> for QuerySigningRequestsResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for ResharingCompletion {
+impl serde::Serialize for RefreshingCompletion {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -3959,7 +3984,7 @@ impl serde::Serialize for ResharingCompletion {
         if !self.signature.is_empty() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.tss.ResharingCompletion", len)?;
+        let mut struct_ser = serializer.serialize_struct("side.tss.RefreshingCompletion", len)?;
         if self.id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser
@@ -3978,7 +4003,7 @@ impl serde::Serialize for ResharingCompletion {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for ResharingCompletion {
+impl<'de> serde::Deserialize<'de> for RefreshingCompletion {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -4038,16 +4063,16 @@ impl<'de> serde::Deserialize<'de> for ResharingCompletion {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = ResharingCompletion;
+            type Value = RefreshingCompletion;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.ResharingCompletion")
+                formatter.write_str("struct side.tss.RefreshingCompletion")
             }
 
             fn visit_map<V>(
                 self,
                 mut map_: V,
-            ) -> core::result::Result<ResharingCompletion, V::Error>
+            ) -> core::result::Result<RefreshingCompletion, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
@@ -4086,7 +4111,7 @@ impl<'de> serde::Deserialize<'de> for ResharingCompletion {
                         }
                     }
                 }
-                Ok(ResharingCompletion {
+                Ok(RefreshingCompletion {
                     id: id__.unwrap_or_default(),
                     sender: sender__.unwrap_or_default(),
                     consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
@@ -4094,11 +4119,11 @@ impl<'de> serde::Deserialize<'de> for ResharingCompletion {
                 })
             }
         }
-        deserializer.deserialize_struct("side.tss.ResharingCompletion", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct("side.tss.RefreshingCompletion", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for ResharingRequest {
+impl serde::Serialize for RefreshingRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -4112,10 +4137,10 @@ impl serde::Serialize for ResharingRequest {
         if self.dkg_id != 0 {
             len += 1;
         }
-        if !self.pub_key.is_empty() {
+        if !self.removed_participants.is_empty() {
             len += 1;
         }
-        if !self.participants.is_empty() {
+        if !self.new_participants.is_empty() {
             len += 1;
         }
         if self.expiration_time.is_some() {
@@ -4124,7 +4149,7 @@ impl serde::Serialize for ResharingRequest {
         if self.status != 0 {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.tss.ResharingRequest", len)?;
+        let mut struct_ser = serializer.serialize_struct("side.tss.RefreshingRequest", len)?;
         if self.id != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser
@@ -4137,17 +4162,17 @@ impl serde::Serialize for ResharingRequest {
                 alloc::string::ToString::to_string(&self.dkg_id).as_str(),
             )?;
         }
-        if !self.pub_key.is_empty() {
-            struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        if !self.removed_participants.is_empty() {
+            struct_ser.serialize_field("removedParticipants", &self.removed_participants)?;
         }
-        if !self.participants.is_empty() {
-            struct_ser.serialize_field("participants", &self.participants)?;
+        if !self.new_participants.is_empty() {
+            struct_ser.serialize_field("newParticipants", &self.new_participants)?;
         }
         if let Some(v) = self.expiration_time.as_ref() {
             struct_ser.serialize_field("expirationTime", v)?;
         }
         if self.status != 0 {
-            let v = ResharingStatus::try_from(self.status).map_err(|_| {
+            let v = RefreshingStatus::try_from(self.status).map_err(|_| {
                 serde::ser::Error::custom(alloc::format!("Invalid variant {}", self.status))
             })?;
             struct_ser.serialize_field("status", &v)?;
@@ -4156,7 +4181,7 @@ impl serde::Serialize for ResharingRequest {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for ResharingRequest {
+impl<'de> serde::Deserialize<'de> for RefreshingRequest {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
@@ -4166,9 +4191,10 @@ impl<'de> serde::Deserialize<'de> for ResharingRequest {
             "id",
             "dkg_id",
             "dkgId",
-            "pub_key",
-            "pubKey",
-            "participants",
+            "removed_participants",
+            "removedParticipants",
+            "new_participants",
+            "newParticipants",
             "expiration_time",
             "expirationTime",
             "status",
@@ -4178,8 +4204,8 @@ impl<'de> serde::Deserialize<'de> for ResharingRequest {
         enum GeneratedField {
             Id,
             DkgId,
-            PubKey,
-            Participants,
+            RemovedParticipants,
+            NewParticipants,
             ExpirationTime,
             Status,
         }
@@ -4209,8 +4235,12 @@ impl<'de> serde::Deserialize<'de> for ResharingRequest {
                         match value {
                             "id" => Ok(GeneratedField::Id),
                             "dkgId" | "dkg_id" => Ok(GeneratedField::DkgId),
-                            "pubKey" | "pub_key" => Ok(GeneratedField::PubKey),
-                            "participants" => Ok(GeneratedField::Participants),
+                            "removedParticipants" | "removed_participants" => {
+                                Ok(GeneratedField::RemovedParticipants)
+                            }
+                            "newParticipants" | "new_participants" => {
+                                Ok(GeneratedField::NewParticipants)
+                            }
                             "expirationTime" | "expiration_time" => {
                                 Ok(GeneratedField::ExpirationTime)
                             }
@@ -4224,20 +4254,20 @@ impl<'de> serde::Deserialize<'de> for ResharingRequest {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = ResharingRequest;
+            type Value = RefreshingRequest;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.tss.ResharingRequest")
+                formatter.write_str("struct side.tss.RefreshingRequest")
             }
 
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<ResharingRequest, V::Error>
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<RefreshingRequest, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
                 let mut id__ = None;
                 let mut dkg_id__ = None;
-                let mut pub_key__ = None;
-                let mut participants__ = None;
+                let mut removed_participants__ = None;
+                let mut new_participants__ = None;
                 let mut expiration_time__ = None;
                 let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -4260,17 +4290,19 @@ impl<'de> serde::Deserialize<'de> for ResharingRequest {
                                     .0,
                             );
                         }
-                        GeneratedField::PubKey => {
-                            if pub_key__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("pubKey"));
+                        GeneratedField::RemovedParticipants => {
+                            if removed_participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "removedParticipants",
+                                ));
                             }
-                            pub_key__ = Some(map_.next_value()?);
+                            removed_participants__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::Participants => {
-                            if participants__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("participants"));
+                        GeneratedField::NewParticipants => {
+                            if new_participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("newParticipants"));
                             }
-                            participants__ = Some(map_.next_value()?);
+                            new_participants__ = Some(map_.next_value()?);
                         }
                         GeneratedField::ExpirationTime => {
                             if expiration_time__.is_some() {
@@ -4282,57 +4314,57 @@ impl<'de> serde::Deserialize<'de> for ResharingRequest {
                             if status__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("status"));
                             }
-                            status__ = Some(map_.next_value::<ResharingStatus>()? as i32);
+                            status__ = Some(map_.next_value::<RefreshingStatus>()? as i32);
                         }
                     }
                 }
-                Ok(ResharingRequest {
+                Ok(RefreshingRequest {
                     id: id__.unwrap_or_default(),
                     dkg_id: dkg_id__.unwrap_or_default(),
-                    pub_key: pub_key__.unwrap_or_default(),
-                    participants: participants__.unwrap_or_default(),
+                    removed_participants: removed_participants__.unwrap_or_default(),
+                    new_participants: new_participants__.unwrap_or_default(),
                     expiration_time: expiration_time__,
                     status: status__.unwrap_or_default(),
                 })
             }
         }
-        deserializer.deserialize_struct("side.tss.ResharingRequest", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct("side.tss.RefreshingRequest", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for ResharingStatus {
+impl serde::Serialize for RefreshingStatus {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
         let variant = match self {
-            Self::Unspecified => "RESHARING_STATUS_UNSPECIFIED",
-            Self::Pending => "RESHARING_STATUS_PENDING",
-            Self::Completed => "RESHARING_STATUS_COMPLETED",
-            Self::Timedout => "RESHARING_STATUS_TIMEDOUT",
+            Self::Unspecified => "REFRESHING_STATUS_UNSPECIFIED",
+            Self::Pending => "REFRESHING_STATUS_PENDING",
+            Self::Completed => "REFRESHING_STATUS_COMPLETED",
+            Self::Timedout => "REFRESHING_STATUS_TIMEDOUT",
         };
         serializer.serialize_str(variant)
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for ResharingStatus {
+impl<'de> serde::Deserialize<'de> for RefreshingStatus {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
         const FIELDS: &[&str] = &[
-            "RESHARING_STATUS_UNSPECIFIED",
-            "RESHARING_STATUS_PENDING",
-            "RESHARING_STATUS_COMPLETED",
-            "RESHARING_STATUS_TIMEDOUT",
+            "REFRESHING_STATUS_UNSPECIFIED",
+            "REFRESHING_STATUS_PENDING",
+            "REFRESHING_STATUS_COMPLETED",
+            "REFRESHING_STATUS_TIMEDOUT",
         ];
 
         struct GeneratedVisitor;
 
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = ResharingStatus;
+            type Value = RefreshingStatus;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
                 write!(formatter, "expected one of: {:?}", &FIELDS)
@@ -4367,10 +4399,10 @@ impl<'de> serde::Deserialize<'de> for ResharingStatus {
                 E: serde::de::Error,
             {
                 match value {
-                    "RESHARING_STATUS_UNSPECIFIED" => Ok(ResharingStatus::Unspecified),
-                    "RESHARING_STATUS_PENDING" => Ok(ResharingStatus::Pending),
-                    "RESHARING_STATUS_COMPLETED" => Ok(ResharingStatus::Completed),
-                    "RESHARING_STATUS_TIMEDOUT" => Ok(ResharingStatus::Timedout),
+                    "REFRESHING_STATUS_UNSPECIFIED" => Ok(RefreshingStatus::Unspecified),
+                    "REFRESHING_STATUS_PENDING" => Ok(RefreshingStatus::Pending),
+                    "REFRESHING_STATUS_COMPLETED" => Ok(RefreshingStatus::Completed),
+                    "REFRESHING_STATUS_TIMEDOUT" => Ok(RefreshingStatus::Timedout),
                     _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
                 }
             }

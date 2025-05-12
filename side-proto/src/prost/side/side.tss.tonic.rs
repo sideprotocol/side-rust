@@ -193,11 +193,11 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.tss.Query", "SigningRequests"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn resharing_request(
+        pub async fn refreshing_request(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryResharingRequestRequest>,
+            request: impl tonic::IntoRequest<super::QueryRefreshingRequestRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryResharingRequestResponse>,
+            tonic::Response<super::QueryRefreshingRequestResponse>,
             tonic::Status,
         > {
             self.inner.ready().await.map_err(|e| {
@@ -207,17 +207,17 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.tss.Query/ResharingRequest");
+            let path = http::uri::PathAndQuery::from_static("/side.tss.Query/RefreshingRequest");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.tss.Query", "ResharingRequest"));
+                .insert(GrpcMethod::new("side.tss.Query", "RefreshingRequest"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn resharing_requests(
+        pub async fn refreshing_requests(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryResharingRequestsRequest>,
+            request: impl tonic::IntoRequest<super::QueryRefreshingRequestsRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryResharingRequestsResponse>,
+            tonic::Response<super::QueryRefreshingRequestsResponse>,
             tonic::Status,
         > {
             self.inner.ready().await.map_err(|e| {
@@ -227,17 +227,17 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.tss.Query/ResharingRequests");
+            let path = http::uri::PathAndQuery::from_static("/side.tss.Query/RefreshingRequests");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.tss.Query", "ResharingRequests"));
+                .insert(GrpcMethod::new("side.tss.Query", "RefreshingRequests"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn resharing_completions(
+        pub async fn refreshing_completions(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryResharingCompletionsRequest>,
+            request: impl tonic::IntoRequest<super::QueryRefreshingCompletionsRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryResharingCompletionsResponse>,
+            tonic::Response<super::QueryRefreshingCompletionsResponse>,
             tonic::Status,
         > {
             self.inner.ready().await.map_err(|e| {
@@ -247,10 +247,11 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.tss.Query/ResharingCompletions");
+            let path =
+                http::uri::PathAndQuery::from_static("/side.tss.Query/RefreshingCompletions");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.tss.Query", "ResharingCompletions"));
+                .insert(GrpcMethod::new("side.tss.Query", "RefreshingCompletions"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -287,25 +288,25 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QuerySigningRequestsRequest>,
         ) -> core::result::Result<tonic::Response<super::QuerySigningRequestsResponse>, tonic::Status>;
-        async fn resharing_request(
+        async fn refreshing_request(
             &self,
-            request: tonic::Request<super::QueryResharingRequestRequest>,
+            request: tonic::Request<super::QueryRefreshingRequestRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryResharingRequestResponse>,
+            tonic::Response<super::QueryRefreshingRequestResponse>,
             tonic::Status,
         >;
-        async fn resharing_requests(
+        async fn refreshing_requests(
             &self,
-            request: tonic::Request<super::QueryResharingRequestsRequest>,
+            request: tonic::Request<super::QueryRefreshingRequestsRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryResharingRequestsResponse>,
+            tonic::Response<super::QueryRefreshingRequestsResponse>,
             tonic::Status,
         >;
-        async fn resharing_completions(
+        async fn refreshing_completions(
             &self,
-            request: tonic::Request<super::QueryResharingCompletionsRequest>,
+            request: tonic::Request<super::QueryRefreshingCompletionsRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryResharingCompletionsResponse>,
+            tonic::Response<super::QueryRefreshingCompletionsResponse>,
             tonic::Status,
         >;
     }
@@ -619,20 +620,20 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.tss.Query/ResharingRequest" => {
+                "/side.tss.Query/RefreshingRequest" => {
                     #[allow(non_camel_case_types)]
-                    struct ResharingRequestSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryResharingRequestRequest>
-                        for ResharingRequestSvc<T>
+                    struct RefreshingRequestSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryRefreshingRequestRequest>
+                        for RefreshingRequestSvc<T>
                     {
-                        type Response = super::QueryResharingRequestResponse;
+                        type Response = super::QueryRefreshingRequestResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryResharingRequestRequest>,
+                            request: tonic::Request<super::QueryRefreshingRequestRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).resharing_request(request).await };
+                            let fut = async move { (*inner).refreshing_request(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -643,7 +644,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = ResharingRequestSvc(inner);
+                        let method = RefreshingRequestSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -659,61 +660,21 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.tss.Query/ResharingRequests" => {
+                "/side.tss.Query/RefreshingRequests" => {
                     #[allow(non_camel_case_types)]
-                    struct ResharingRequestsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryResharingRequestsRequest>
-                        for ResharingRequestsSvc<T>
-                    {
-                        type Response = super::QueryResharingRequestsResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::QueryResharingRequestsRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).resharing_requests(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = ResharingRequestsSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.tss.Query/ResharingCompletions" => {
-                    #[allow(non_camel_case_types)]
-                    struct ResharingCompletionsSvc<T: Query>(pub Arc<T>);
+                    struct RefreshingRequestsSvc<T: Query>(pub Arc<T>);
                     impl<T: Query>
-                        tonic::server::UnaryService<super::QueryResharingCompletionsRequest>
-                        for ResharingCompletionsSvc<T>
+                        tonic::server::UnaryService<super::QueryRefreshingRequestsRequest>
+                        for RefreshingRequestsSvc<T>
                     {
-                        type Response = super::QueryResharingCompletionsResponse;
+                        type Response = super::QueryRefreshingRequestsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryResharingCompletionsRequest>,
+                            request: tonic::Request<super::QueryRefreshingRequestsRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).resharing_completions(request).await };
+                            let fut = async move { (*inner).refreshing_requests(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -724,7 +685,48 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = ResharingCompletionsSvc(inner);
+                        let method = RefreshingRequestsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.tss.Query/RefreshingCompletions" => {
+                    #[allow(non_camel_case_types)]
+                    struct RefreshingCompletionsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query>
+                        tonic::server::UnaryService<super::QueryRefreshingCompletionsRequest>
+                        for RefreshingCompletionsSvc<T>
+                    {
+                        type Response = super::QueryRefreshingCompletionsResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryRefreshingCompletionsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).refreshing_completions(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RefreshingCompletionsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -896,10 +898,10 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.tss.Msg", "SubmitSignatures"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn refresh_shares(
+        pub async fn refresh(
             &mut self,
-            request: impl tonic::IntoRequest<super::MsgRefreshShares>,
-        ) -> core::result::Result<tonic::Response<super::MsgRefreshSharesResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::MsgRefresh>,
+        ) -> core::result::Result<tonic::Response<super::MsgRefreshResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -908,17 +910,19 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.tss.Msg/RefreshShares");
+            let path = http::uri::PathAndQuery::from_static("/side.tss.Msg/Refresh");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.tss.Msg", "RefreshShares"));
+                .insert(GrpcMethod::new("side.tss.Msg", "Refresh"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn complete_resharing(
+        pub async fn complete_refreshing(
             &mut self,
-            request: impl tonic::IntoRequest<super::MsgCompleteResharing>,
-        ) -> core::result::Result<tonic::Response<super::MsgCompleteResharingResponse>, tonic::Status>
-        {
+            request: impl tonic::IntoRequest<super::MsgCompleteRefreshing>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgCompleteRefreshingResponse>,
+            tonic::Status,
+        > {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -926,10 +930,10 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.tss.Msg/CompleteResharing");
+            let path = http::uri::PathAndQuery::from_static("/side.tss.Msg/CompleteRefreshing");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.tss.Msg", "CompleteResharing"));
+                .insert(GrpcMethod::new("side.tss.Msg", "CompleteRefreshing"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn update_params(
@@ -968,14 +972,17 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgSubmitSignatures>,
         ) -> core::result::Result<tonic::Response<super::MsgSubmitSignaturesResponse>, tonic::Status>;
-        async fn refresh_shares(
+        async fn refresh(
             &self,
-            request: tonic::Request<super::MsgRefreshShares>,
-        ) -> core::result::Result<tonic::Response<super::MsgRefreshSharesResponse>, tonic::Status>;
-        async fn complete_resharing(
+            request: tonic::Request<super::MsgRefresh>,
+        ) -> core::result::Result<tonic::Response<super::MsgRefreshResponse>, tonic::Status>;
+        async fn complete_refreshing(
             &self,
-            request: tonic::Request<super::MsgCompleteResharing>,
-        ) -> core::result::Result<tonic::Response<super::MsgCompleteResharingResponse>, tonic::Status>;
+            request: tonic::Request<super::MsgCompleteRefreshing>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgCompleteRefreshingResponse>,
+            tonic::Status,
+        >;
         async fn update_params(
             &self,
             request: tonic::Request<super::MsgUpdateParams>,
@@ -1133,18 +1140,18 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.tss.Msg/RefreshShares" => {
+                "/side.tss.Msg/Refresh" => {
                     #[allow(non_camel_case_types)]
-                    struct RefreshSharesSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgRefreshShares> for RefreshSharesSvc<T> {
-                        type Response = super::MsgRefreshSharesResponse;
+                    struct RefreshSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgRefresh> for RefreshSvc<T> {
+                        type Response = super::MsgRefreshResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MsgRefreshShares>,
+                            request: tonic::Request<super::MsgRefresh>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).refresh_shares(request).await };
+                            let fut = async move { (*inner).refresh(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1155,7 +1162,7 @@ pub mod msg_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = RefreshSharesSvc(inner);
+                        let method = RefreshSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1171,18 +1178,20 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.tss.Msg/CompleteResharing" => {
+                "/side.tss.Msg/CompleteRefreshing" => {
                     #[allow(non_camel_case_types)]
-                    struct CompleteResharingSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgCompleteResharing> for CompleteResharingSvc<T> {
-                        type Response = super::MsgCompleteResharingResponse;
+                    struct CompleteRefreshingSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgCompleteRefreshing>
+                        for CompleteRefreshingSvc<T>
+                    {
+                        type Response = super::MsgCompleteRefreshingResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MsgCompleteResharing>,
+                            request: tonic::Request<super::MsgCompleteRefreshing>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).complete_resharing(request).await };
+                            let fut = async move { (*inner).complete_refreshing(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1193,7 +1202,7 @@ pub mod msg_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = CompleteResharingSvc(inner);
+                        let method = CompleteRefreshingSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

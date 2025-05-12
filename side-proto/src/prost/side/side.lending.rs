@@ -448,16 +448,20 @@ pub enum LoanStatus {
     Unspecified = 0,
     /// Loan Requested
     Requested = 1,
+    /// Loan Authorized
+    Authorized = 2,
+    /// Loan Rejected
+    Rejected = 3,
     /// Loan Open
-    Open = 2,
+    Open = 4,
     /// Loan Repaid
-    Repaid = 3,
+    Repaid = 5,
     /// Loan Defaulted
-    Defaulted = 4,
+    Defaulted = 6,
     /// Loan Liquidated
-    Liquidated = 5,
+    Liquidated = 7,
     /// Loan Closed
-    Closed = 6,
+    Closed = 8,
 }
 impl LoanStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -468,6 +472,8 @@ impl LoanStatus {
         match self {
             LoanStatus::Unspecified => "Unspecified",
             LoanStatus::Requested => "Requested",
+            LoanStatus::Authorized => "Authorized",
+            LoanStatus::Rejected => "Rejected",
             LoanStatus::Open => "Open",
             LoanStatus::Repaid => "Repaid",
             LoanStatus::Defaulted => "Defaulted",
@@ -480,6 +486,8 @@ impl LoanStatus {
         match value {
             "Unspecified" => Some(Self::Unspecified),
             "Requested" => Some(Self::Requested),
+            "Authorized" => Some(Self::Authorized),
+            "Rejected" => Some(Self::Rejected),
             "Open" => Some(Self::Open),
             "Repaid" => Some(Self::Repaid),
             "Defaulted" => Some(Self::Defaulted),

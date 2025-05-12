@@ -2311,6 +2311,8 @@ impl serde::Serialize for LoanStatus {
         let variant = match self {
             Self::Unspecified => "Unspecified",
             Self::Requested => "Requested",
+            Self::Authorized => "Authorized",
+            Self::Rejected => "Rejected",
             Self::Open => "Open",
             Self::Repaid => "Repaid",
             Self::Defaulted => "Defaulted",
@@ -2330,6 +2332,8 @@ impl<'de> serde::Deserialize<'de> for LoanStatus {
         const FIELDS: &[&str] = &[
             "Unspecified",
             "Requested",
+            "Authorized",
+            "Rejected",
             "Open",
             "Repaid",
             "Defaulted",
@@ -2377,6 +2381,8 @@ impl<'de> serde::Deserialize<'de> for LoanStatus {
                 match value {
                     "Unspecified" => Ok(LoanStatus::Unspecified),
                     "Requested" => Ok(LoanStatus::Requested),
+                    "Authorized" => Ok(LoanStatus::Authorized),
+                    "Rejected" => Ok(LoanStatus::Rejected),
                     "Open" => Ok(LoanStatus::Open),
                     "Repaid" => Ok(LoanStatus::Repaid),
                     "Defaulted" => Ok(LoanStatus::Defaulted),
