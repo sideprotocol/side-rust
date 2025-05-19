@@ -1829,6 +1829,9 @@ impl serde::Serialize for Params {
         if self.nonce_generation_batch_size != 0 {
             len += 1;
         }
+        if self.nonce_generation_interval != 0 {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("side.dlc.Params", len)?;
         if self.price_event_nonce_queue_size != 0 {
             struct_ser.serialize_field(
@@ -1873,6 +1876,13 @@ impl serde::Serialize for Params {
                 &self.nonce_generation_batch_size,
             )?;
         }
+        if self.nonce_generation_interval != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "nonceGenerationInterval",
+                alloc::string::ToString::to_string(&self.nonce_generation_interval).as_str(),
+            )?;
+        }
         struct_ser.end()
     }
 }
@@ -1902,6 +1912,8 @@ impl<'de> serde::Deserialize<'de> for Params {
             "oracleParticipantThreshold",
             "nonce_generation_batch_size",
             "nonceGenerationBatchSize",
+            "nonce_generation_interval",
+            "nonceGenerationInterval",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -1915,6 +1927,7 @@ impl<'de> serde::Deserialize<'de> for Params {
             OracleParticipantNum,
             OracleParticipantThreshold,
             NonceGenerationBatchSize,
+            NonceGenerationInterval,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -1965,6 +1978,9 @@ impl<'de> serde::Deserialize<'de> for Params {
                             "nonceGenerationBatchSize" | "nonce_generation_batch_size" => {
                                 Ok(GeneratedField::NonceGenerationBatchSize)
                             }
+                            "nonceGenerationInterval" | "nonce_generation_interval" => {
+                                Ok(GeneratedField::NonceGenerationInterval)
+                            }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -1993,6 +2009,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                 let mut oracle_participant_num__ = None;
                 let mut oracle_participant_threshold__ = None;
                 let mut nonce_generation_batch_size__ = None;
+                let mut nonce_generation_interval__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::PriceEventNonceQueueSize => {
@@ -2081,6 +2098,17 @@ impl<'de> serde::Deserialize<'de> for Params {
                                     .0,
                             );
                         }
+                        GeneratedField::NonceGenerationInterval => {
+                            if nonce_generation_interval__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "nonceGenerationInterval",
+                                ));
+                            }
+                            nonce_generation_interval__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
                     }
                 }
                 Ok(Params {
@@ -2096,6 +2124,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                     oracle_participant_threshold: oracle_participant_threshold__
                         .unwrap_or_default(),
                     nonce_generation_batch_size: nonce_generation_batch_size__.unwrap_or_default(),
+                    nonce_generation_interval: nonce_generation_interval__.unwrap_or_default(),
                 })
             }
         }

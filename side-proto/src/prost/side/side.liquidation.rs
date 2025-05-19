@@ -1,6 +1,25 @@
 // @generated
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AssetMetadata {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub symbol: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub price_symbol: ::prost::alloc::string::String,
+    #[prost(int32, tag = "4")]
+    pub decimals: i32,
+}
+impl ::prost::Name for AssetMetadata {
+    const NAME: &'static str = "AssetMetadata";
+    const PACKAGE: &'static str = "side.liquidation";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.liquidation.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Liquidation {
     #[prost(uint64, tag = "1")]
     pub id: u64,
@@ -16,29 +35,33 @@ pub struct Liquidation {
     pub actual_collateral_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "7")]
     pub debt_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "8")]
-    pub liquidated_price: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "8")]
+    pub collateral_asset: ::core::option::Option<AssetMetadata>,
     #[prost(message, optional, tag = "9")]
-    pub liquidated_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(message, optional, tag = "10")]
+    pub debt_asset: ::core::option::Option<AssetMetadata>,
+    #[prost(string, tag = "10")]
+    pub liquidation_price: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "11")]
+    pub liquidation_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(message, optional, tag = "12")]
     pub liquidated_collateral_amount:
         ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(message, optional, tag = "11")]
-    pub liquidated_debt_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(message, optional, tag = "12")]
-    pub liquidation_bonus_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "13")]
-    pub protocol_liquidation_fee: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    pub liquidated_debt_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "14")]
+    pub liquidation_bonus_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "15")]
+    pub protocol_liquidation_fee: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "16")]
     pub unliquidated_collateral_amount:
         ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "15")]
-    pub liquidation_cet: ::prost::alloc::string::String,
-    #[prost(string, tag = "16")]
-    pub settlement_tx: ::prost::alloc::string::String,
     #[prost(string, tag = "17")]
+    pub liquidation_cet: ::prost::alloc::string::String,
+    #[prost(string, tag = "18")]
+    pub settlement_tx: ::prost::alloc::string::String,
+    #[prost(string, tag = "19")]
     pub settlement_tx_id: ::prost::alloc::string::String,
-    #[prost(enumeration = "LiquidationStatus", tag = "18")]
+    #[prost(enumeration = "LiquidationStatus", tag = "20")]
     pub status: i32,
 }
 impl ::prost::Name for Liquidation {
@@ -71,29 +94,6 @@ impl ::prost::Name for LiquidationRecord {
     const PACKAGE: &'static str = "side.liquidation";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.liquidation.{}", Self::NAME)
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum AssetType {
-    Bitcoin = 0,
-}
-impl AssetType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            AssetType::Bitcoin => "ASSET_TYPE_BITCOIN",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "ASSET_TYPE_BITCOIN" => Some(Self::Bitcoin),
-            _ => None,
-        }
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

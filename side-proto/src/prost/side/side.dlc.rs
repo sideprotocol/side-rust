@@ -294,6 +294,8 @@ pub struct Params {
     pub oracle_participant_threshold: u32,
     #[prost(uint32, tag = "9")]
     pub nonce_generation_batch_size: u32,
+    #[prost(int64, tag = "10")]
+    pub nonce_generation_interval: i64,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";

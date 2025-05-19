@@ -1475,6 +1475,308 @@ impl<'de> serde::Deserialize<'de> for GenesisState {
     }
 }
 #[cfg(feature = "serde")]
+impl serde::Serialize for IbcParams {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.port_id.is_empty() {
+            len += 1;
+        }
+        if self.timeout_height_offset != 0 {
+            len += 1;
+        }
+        if self.timeout_duration.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.btcbridge.IBCParams", len)?;
+        if !self.port_id.is_empty() {
+            struct_ser.serialize_field("portId", &self.port_id)?;
+        }
+        if self.timeout_height_offset != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "timeoutHeightOffset",
+                alloc::string::ToString::to_string(&self.timeout_height_offset).as_str(),
+            )?;
+        }
+        if let Some(v) = self.timeout_duration.as_ref() {
+            struct_ser.serialize_field("timeoutDuration", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for IbcParams {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "port_id",
+            "portId",
+            "timeout_height_offset",
+            "timeoutHeightOffset",
+            "timeout_duration",
+            "timeoutDuration",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            PortId,
+            TimeoutHeightOffset,
+            TimeoutDuration,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "portId" | "port_id" => Ok(GeneratedField::PortId),
+                            "timeoutHeightOffset" | "timeout_height_offset" => {
+                                Ok(GeneratedField::TimeoutHeightOffset)
+                            }
+                            "timeoutDuration" | "timeout_duration" => {
+                                Ok(GeneratedField::TimeoutDuration)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = IbcParams;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.IBCParams")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<IbcParams, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut port_id__ = None;
+                let mut timeout_height_offset__ = None;
+                let mut timeout_duration__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::PortId => {
+                            if port_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("portId"));
+                            }
+                            port_id__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::TimeoutHeightOffset => {
+                            if timeout_height_offset__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "timeoutHeightOffset",
+                                ));
+                            }
+                            timeout_height_offset__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::TimeoutDuration => {
+                            if timeout_duration__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("timeoutDuration"));
+                            }
+                            timeout_duration__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(IbcParams {
+                    port_id: port_id__.unwrap_or_default(),
+                    timeout_height_offset: timeout_height_offset__.unwrap_or_default(),
+                    timeout_duration: timeout_duration__,
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.btcbridge.IBCParams", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for IbcWithdrawRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.channel_id.is_empty() {
+            len += 1;
+        }
+        if self.sequence != 0 {
+            len += 1;
+        }
+        if !self.address.is_empty() {
+            len += 1;
+        }
+        if !self.amount.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.IBCWithdrawRequest", len)?;
+        if !self.channel_id.is_empty() {
+            struct_ser.serialize_field("channelId", &self.channel_id)?;
+        }
+        if self.sequence != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "sequence",
+                alloc::string::ToString::to_string(&self.sequence).as_str(),
+            )?;
+        }
+        if !self.address.is_empty() {
+            struct_ser.serialize_field("address", &self.address)?;
+        }
+        if !self.amount.is_empty() {
+            struct_ser.serialize_field("amount", &self.amount)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for IbcWithdrawRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["channel_id", "channelId", "sequence", "address", "amount"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            ChannelId,
+            Sequence,
+            Address,
+            Amount,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "channelId" | "channel_id" => Ok(GeneratedField::ChannelId),
+                            "sequence" => Ok(GeneratedField::Sequence),
+                            "address" => Ok(GeneratedField::Address),
+                            "amount" => Ok(GeneratedField::Amount),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = IbcWithdrawRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.IBCWithdrawRequest")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<IbcWithdrawRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut channel_id__ = None;
+                let mut sequence__ = None;
+                let mut address__ = None;
+                let mut amount__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::ChannelId => {
+                            if channel_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("channelId"));
+                            }
+                            channel_id__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Sequence => {
+                            if sequence__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("sequence"));
+                            }
+                            sequence__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Address => {
+                            if address__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("address"));
+                            }
+                            address__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Amount => {
+                            if amount__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("amount"));
+                            }
+                            amount__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(IbcWithdrawRequest {
+                    channel_id: channel_id__.unwrap_or_default(),
+                    sequence: sequence__.unwrap_or_default(),
+                    address: address__.unwrap_or_default(),
+                    amount: amount__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.IBCWithdrawRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for MsgCompleteDkg {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -4319,6 +4621,9 @@ impl serde::Serialize for Params {
         if self.tss_params.is_some() {
             len += 1;
         }
+        if self.ibc_params.is_some() {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("side.btcbridge.Params", len)?;
         if self.deposit_confirmation_depth != 0 {
             struct_ser
@@ -4374,6 +4679,9 @@ impl serde::Serialize for Params {
         if let Some(v) = self.tss_params.as_ref() {
             struct_ser.serialize_field("tssParams", v)?;
         }
+        if let Some(v) = self.ibc_params.as_ref() {
+            struct_ser.serialize_field("ibcParams", v)?;
+        }
         struct_ser.end()
     }
 }
@@ -4412,6 +4720,8 @@ impl<'de> serde::Deserialize<'de> for Params {
             "protocolFees",
             "tss_params",
             "tssParams",
+            "ibc_params",
+            "ibcParams",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -4430,6 +4740,7 @@ impl<'de> serde::Deserialize<'de> for Params {
             ProtocolLimits,
             ProtocolFees,
             TssParams,
+            IbcParams,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -4491,6 +4802,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                             }
                             "protocolFees" | "protocol_fees" => Ok(GeneratedField::ProtocolFees),
                             "tssParams" | "tss_params" => Ok(GeneratedField::TssParams),
+                            "ibcParams" | "ibc_params" => Ok(GeneratedField::IbcParams),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -4524,6 +4836,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                 let mut protocol_limits__ = None;
                 let mut protocol_fees__ = None;
                 let mut tss_params__ = None;
+                let mut ibc_params__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::DepositConfirmationDepth => {
@@ -4634,6 +4947,12 @@ impl<'de> serde::Deserialize<'de> for Params {
                             }
                             tss_params__ = map_.next_value()?;
                         }
+                        GeneratedField::IbcParams => {
+                            if ibc_params__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("ibcParams"));
+                            }
+                            ibc_params__ = map_.next_value()?;
+                        }
                     }
                 }
                 Ok(Params {
@@ -4651,6 +4970,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                     protocol_limits: protocol_limits__,
                     protocol_fees: protocol_fees__,
                     tss_params: tss_params__,
+                    ibc_params: ibc_params__,
                 })
             }
         }
@@ -5958,6 +6278,235 @@ impl<'de> serde::Deserialize<'de> for QueryFeeRateResponse {
         }
         deserializer.deserialize_struct(
             "side.btcbridge.QueryFeeRateResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryIbcDepositScriptRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.channel_id.is_empty() {
+            len += 1;
+        }
+        if !self.recipient_address.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.QueryIBCDepositScriptRequest", len)?;
+        if !self.channel_id.is_empty() {
+            struct_ser.serialize_field("channelId", &self.channel_id)?;
+        }
+        if !self.recipient_address.is_empty() {
+            struct_ser.serialize_field("recipientAddress", &self.recipient_address)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryIbcDepositScriptRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "channel_id",
+            "channelId",
+            "recipient_address",
+            "recipientAddress",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            ChannelId,
+            RecipientAddress,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "channelId" | "channel_id" => Ok(GeneratedField::ChannelId),
+                            "recipientAddress" | "recipient_address" => {
+                                Ok(GeneratedField::RecipientAddress)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryIbcDepositScriptRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.QueryIBCDepositScriptRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryIbcDepositScriptRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut channel_id__ = None;
+                let mut recipient_address__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::ChannelId => {
+                            if channel_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("channelId"));
+                            }
+                            channel_id__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::RecipientAddress => {
+                            if recipient_address__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("recipientAddress"));
+                            }
+                            recipient_address__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryIbcDepositScriptRequest {
+                    channel_id: channel_id__.unwrap_or_default(),
+                    recipient_address: recipient_address__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.QueryIBCDepositScriptRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryIbcDepositScriptResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.script.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.QueryIBCDepositScriptResponse", len)?;
+        if !self.script.is_empty() {
+            struct_ser.serialize_field("script", &self.script)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryIbcDepositScriptResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["script"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Script,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "script" => Ok(GeneratedField::Script),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryIbcDepositScriptResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.QueryIBCDepositScriptResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryIbcDepositScriptResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut script__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Script => {
+                            if script__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("script"));
+                            }
+                            script__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryIbcDepositScriptResponse {
+                    script: script__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.QueryIBCDepositScriptResponse",
             FIELDS,
             GeneratedVisitor,
         )

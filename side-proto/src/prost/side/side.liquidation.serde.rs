@@ -1,70 +1,148 @@
 // @generated
 #[cfg(feature = "serde")]
-impl serde::Serialize for AssetType {
+impl serde::Serialize for AssetMetadata {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
-        let variant = match self {
-            Self::Bitcoin => "ASSET_TYPE_BITCOIN",
-        };
-        serializer.serialize_str(variant)
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.denom.is_empty() {
+            len += 1;
+        }
+        if !self.symbol.is_empty() {
+            len += 1;
+        }
+        if !self.price_symbol.is_empty() {
+            len += 1;
+        }
+        if self.decimals != 0 {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.liquidation.AssetMetadata", len)?;
+        if !self.denom.is_empty() {
+            struct_ser.serialize_field("denom", &self.denom)?;
+        }
+        if !self.symbol.is_empty() {
+            struct_ser.serialize_field("symbol", &self.symbol)?;
+        }
+        if !self.price_symbol.is_empty() {
+            struct_ser.serialize_field("priceSymbol", &self.price_symbol)?;
+        }
+        if self.decimals != 0 {
+            struct_ser.serialize_field("decimals", &self.decimals)?;
+        }
+        struct_ser.end()
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for AssetType {
+impl<'de> serde::Deserialize<'de> for AssetMetadata {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["ASSET_TYPE_BITCOIN"];
+        const FIELDS: &[&str] = &["denom", "symbol", "price_symbol", "priceSymbol", "decimals"];
 
-        struct GeneratedVisitor;
-
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = AssetType;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                write!(formatter, "expected one of: {:?}", &FIELDS)
-            }
-
-            fn visit_i64<E>(self, v: i64) -> core::result::Result<Self::Value, E>
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Denom,
+            Symbol,
+            PriceSymbol,
+            Decimals,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
             where
-                E: serde::de::Error,
+                D: serde::Deserializer<'de>,
             {
-                i32::try_from(v)
-                    .ok()
-                    .and_then(|x| x.try_into().ok())
-                    .ok_or_else(|| {
-                        serde::de::Error::invalid_value(serde::de::Unexpected::Signed(v), &self)
-                    })
-            }
+                struct GeneratedVisitor;
 
-            fn visit_u64<E>(self, v: u64) -> core::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {
-                i32::try_from(v)
-                    .ok()
-                    .and_then(|x| x.try_into().ok())
-                    .ok_or_else(|| {
-                        serde::de::Error::invalid_value(serde::de::Unexpected::Unsigned(v), &self)
-                    })
-            }
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
 
-            fn visit_str<E>(self, value: &str) -> core::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {
-                match value {
-                    "ASSET_TYPE_BITCOIN" => Ok(AssetType::Bitcoin),
-                    _ => Err(serde::de::Error::unknown_variant(value, FIELDS)),
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "denom" => Ok(GeneratedField::Denom),
+                            "symbol" => Ok(GeneratedField::Symbol),
+                            "priceSymbol" | "price_symbol" => Ok(GeneratedField::PriceSymbol),
+                            "decimals" => Ok(GeneratedField::Decimals),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
                 }
+                deserializer.deserialize_identifier(GeneratedVisitor)
             }
         }
-        deserializer.deserialize_any(GeneratedVisitor)
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = AssetMetadata;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.liquidation.AssetMetadata")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<AssetMetadata, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut denom__ = None;
+                let mut symbol__ = None;
+                let mut price_symbol__ = None;
+                let mut decimals__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Denom => {
+                            if denom__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("denom"));
+                            }
+                            denom__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Symbol => {
+                            if symbol__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("symbol"));
+                            }
+                            symbol__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::PriceSymbol => {
+                            if price_symbol__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("priceSymbol"));
+                            }
+                            price_symbol__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Decimals => {
+                            if decimals__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("decimals"));
+                            }
+                            decimals__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(AssetMetadata {
+                    denom: denom__.unwrap_or_default(),
+                    symbol: symbol__.unwrap_or_default(),
+                    price_symbol: price_symbol__.unwrap_or_default(),
+                    decimals: decimals__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.liquidation.AssetMetadata", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
@@ -226,10 +304,16 @@ impl serde::Serialize for Liquidation {
         if self.debt_amount.is_some() {
             len += 1;
         }
-        if !self.liquidated_price.is_empty() {
+        if self.collateral_asset.is_some() {
             len += 1;
         }
-        if self.liquidated_time.is_some() {
+        if self.debt_asset.is_some() {
+            len += 1;
+        }
+        if !self.liquidation_price.is_empty() {
+            len += 1;
+        }
+        if self.liquidation_time.is_some() {
             len += 1;
         }
         if self.liquidated_collateral_amount.is_some() {
@@ -283,11 +367,17 @@ impl serde::Serialize for Liquidation {
         if let Some(v) = self.debt_amount.as_ref() {
             struct_ser.serialize_field("debtAmount", v)?;
         }
-        if !self.liquidated_price.is_empty() {
-            struct_ser.serialize_field("liquidatedPrice", &self.liquidated_price)?;
+        if let Some(v) = self.collateral_asset.as_ref() {
+            struct_ser.serialize_field("collateralAsset", v)?;
         }
-        if let Some(v) = self.liquidated_time.as_ref() {
-            struct_ser.serialize_field("liquidatedTime", v)?;
+        if let Some(v) = self.debt_asset.as_ref() {
+            struct_ser.serialize_field("debtAsset", v)?;
+        }
+        if !self.liquidation_price.is_empty() {
+            struct_ser.serialize_field("liquidationPrice", &self.liquidation_price)?;
+        }
+        if let Some(v) = self.liquidation_time.as_ref() {
+            struct_ser.serialize_field("liquidationTime", v)?;
         }
         if let Some(v) = self.liquidated_collateral_amount.as_ref() {
             struct_ser.serialize_field("liquidatedCollateralAmount", v)?;
@@ -341,10 +431,14 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
             "actualCollateralAmount",
             "debt_amount",
             "debtAmount",
-            "liquidated_price",
-            "liquidatedPrice",
-            "liquidated_time",
-            "liquidatedTime",
+            "collateral_asset",
+            "collateralAsset",
+            "debt_asset",
+            "debtAsset",
+            "liquidation_price",
+            "liquidationPrice",
+            "liquidation_time",
+            "liquidationTime",
             "liquidated_collateral_amount",
             "liquidatedCollateralAmount",
             "liquidated_debt_amount",
@@ -373,8 +467,10 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
             CollateralAmount,
             ActualCollateralAmount,
             DebtAmount,
-            LiquidatedPrice,
-            LiquidatedTime,
+            CollateralAsset,
+            DebtAsset,
+            LiquidationPrice,
+            LiquidationTime,
             LiquidatedCollateralAmount,
             LiquidatedDebtAmount,
             LiquidationBonusAmount,
@@ -420,11 +516,15 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
                                 Ok(GeneratedField::ActualCollateralAmount)
                             }
                             "debtAmount" | "debt_amount" => Ok(GeneratedField::DebtAmount),
-                            "liquidatedPrice" | "liquidated_price" => {
-                                Ok(GeneratedField::LiquidatedPrice)
+                            "collateralAsset" | "collateral_asset" => {
+                                Ok(GeneratedField::CollateralAsset)
                             }
-                            "liquidatedTime" | "liquidated_time" => {
-                                Ok(GeneratedField::LiquidatedTime)
+                            "debtAsset" | "debt_asset" => Ok(GeneratedField::DebtAsset),
+                            "liquidationPrice" | "liquidation_price" => {
+                                Ok(GeneratedField::LiquidationPrice)
+                            }
+                            "liquidationTime" | "liquidation_time" => {
+                                Ok(GeneratedField::LiquidationTime)
                             }
                             "liquidatedCollateralAmount" | "liquidated_collateral_amount" => {
                                 Ok(GeneratedField::LiquidatedCollateralAmount)
@@ -475,8 +575,10 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
                 let mut collateral_amount__ = None;
                 let mut actual_collateral_amount__ = None;
                 let mut debt_amount__ = None;
-                let mut liquidated_price__ = None;
-                let mut liquidated_time__ = None;
+                let mut collateral_asset__ = None;
+                let mut debt_asset__ = None;
+                let mut liquidation_price__ = None;
+                let mut liquidation_time__ = None;
                 let mut liquidated_collateral_amount__ = None;
                 let mut liquidated_debt_amount__ = None;
                 let mut liquidation_bonus_amount__ = None;
@@ -535,17 +637,29 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
                             }
                             debt_amount__ = map_.next_value()?;
                         }
-                        GeneratedField::LiquidatedPrice => {
-                            if liquidated_price__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("liquidatedPrice"));
+                        GeneratedField::CollateralAsset => {
+                            if collateral_asset__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("collateralAsset"));
                             }
-                            liquidated_price__ = Some(map_.next_value()?);
+                            collateral_asset__ = map_.next_value()?;
                         }
-                        GeneratedField::LiquidatedTime => {
-                            if liquidated_time__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("liquidatedTime"));
+                        GeneratedField::DebtAsset => {
+                            if debt_asset__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("debtAsset"));
                             }
-                            liquidated_time__ = map_.next_value()?;
+                            debt_asset__ = map_.next_value()?;
+                        }
+                        GeneratedField::LiquidationPrice => {
+                            if liquidation_price__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("liquidationPrice"));
+                            }
+                            liquidation_price__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::LiquidationTime => {
+                            if liquidation_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("liquidationTime"));
+                            }
+                            liquidation_time__ = map_.next_value()?;
                         }
                         GeneratedField::LiquidatedCollateralAmount => {
                             if liquidated_collateral_amount__.is_some() {
@@ -621,8 +735,10 @@ impl<'de> serde::Deserialize<'de> for Liquidation {
                     collateral_amount: collateral_amount__,
                     actual_collateral_amount: actual_collateral_amount__,
                     debt_amount: debt_amount__,
-                    liquidated_price: liquidated_price__.unwrap_or_default(),
-                    liquidated_time: liquidated_time__,
+                    collateral_asset: collateral_asset__,
+                    debt_asset: debt_asset__,
+                    liquidation_price: liquidation_price__.unwrap_or_default(),
+                    liquidation_time: liquidation_time__,
                     liquidated_collateral_amount: liquidated_collateral_amount__,
                     liquidated_debt_amount: liquidated_debt_amount__,
                     liquidation_bonus_amount: liquidation_bonus_amount__,

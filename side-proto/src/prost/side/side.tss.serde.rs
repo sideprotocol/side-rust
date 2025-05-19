@@ -1154,7 +1154,7 @@ impl serde::Serialize for MsgRefresh {
         if !self.removed_participants.is_empty() {
             len += 1;
         }
-        if !self.new_participants.is_empty() {
+        if !self.thresholds.is_empty() {
             len += 1;
         }
         if self.timeout_duration.is_some() {
@@ -1177,8 +1177,8 @@ impl serde::Serialize for MsgRefresh {
         if !self.removed_participants.is_empty() {
             struct_ser.serialize_field("removedParticipants", &self.removed_participants)?;
         }
-        if !self.new_participants.is_empty() {
-            struct_ser.serialize_field("newParticipants", &self.new_participants)?;
+        if !self.thresholds.is_empty() {
+            struct_ser.serialize_field("thresholds", &self.thresholds)?;
         }
         if let Some(v) = self.timeout_duration.as_ref() {
             struct_ser.serialize_field("timeoutDuration", v)?;
@@ -1199,8 +1199,7 @@ impl<'de> serde::Deserialize<'de> for MsgRefresh {
             "dkgIds",
             "removed_participants",
             "removedParticipants",
-            "new_participants",
-            "newParticipants",
+            "thresholds",
             "timeout_duration",
             "timeoutDuration",
         ];
@@ -1210,7 +1209,7 @@ impl<'de> serde::Deserialize<'de> for MsgRefresh {
             Authority,
             DkgIds,
             RemovedParticipants,
-            NewParticipants,
+            Thresholds,
             TimeoutDuration,
         }
         #[cfg(feature = "serde")]
@@ -1242,9 +1241,7 @@ impl<'de> serde::Deserialize<'de> for MsgRefresh {
                             "removedParticipants" | "removed_participants" => {
                                 Ok(GeneratedField::RemovedParticipants)
                             }
-                            "newParticipants" | "new_participants" => {
-                                Ok(GeneratedField::NewParticipants)
-                            }
+                            "thresholds" => Ok(GeneratedField::Thresholds),
                             "timeoutDuration" | "timeout_duration" => {
                                 Ok(GeneratedField::TimeoutDuration)
                             }
@@ -1270,7 +1267,7 @@ impl<'de> serde::Deserialize<'de> for MsgRefresh {
                 let mut authority__ = None;
                 let mut dkg_ids__ = None;
                 let mut removed_participants__ = None;
-                let mut new_participants__ = None;
+                let mut thresholds__ = None;
                 let mut timeout_duration__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -1297,11 +1294,14 @@ impl<'de> serde::Deserialize<'de> for MsgRefresh {
                             }
                             removed_participants__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::NewParticipants => {
-                            if new_participants__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("newParticipants"));
+                        GeneratedField::Thresholds => {
+                            if thresholds__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("thresholds"));
                             }
-                            new_participants__ = Some(map_.next_value()?);
+                            thresholds__ =
+                                Some(map_.next_value::<alloc::vec::Vec<::pbjson::private::NumberDeserialize<_>>>()?
+                                    .into_iter().map(|x| x.0).collect())
+                            ;
                         }
                         GeneratedField::TimeoutDuration => {
                             if timeout_duration__.is_some() {
@@ -1315,7 +1315,7 @@ impl<'de> serde::Deserialize<'de> for MsgRefresh {
                     authority: authority__.unwrap_or_default(),
                     dkg_ids: dkg_ids__.unwrap_or_default(),
                     removed_participants: removed_participants__.unwrap_or_default(),
-                    new_participants: new_participants__.unwrap_or_default(),
+                    thresholds: thresholds__.unwrap_or_default(),
                     timeout_duration: timeout_duration__,
                 })
             }
@@ -4140,7 +4140,7 @@ impl serde::Serialize for RefreshingRequest {
         if !self.removed_participants.is_empty() {
             len += 1;
         }
-        if !self.new_participants.is_empty() {
+        if self.threshold != 0 {
             len += 1;
         }
         if self.expiration_time.is_some() {
@@ -4165,8 +4165,8 @@ impl serde::Serialize for RefreshingRequest {
         if !self.removed_participants.is_empty() {
             struct_ser.serialize_field("removedParticipants", &self.removed_participants)?;
         }
-        if !self.new_participants.is_empty() {
-            struct_ser.serialize_field("newParticipants", &self.new_participants)?;
+        if self.threshold != 0 {
+            struct_ser.serialize_field("threshold", &self.threshold)?;
         }
         if let Some(v) = self.expiration_time.as_ref() {
             struct_ser.serialize_field("expirationTime", v)?;
@@ -4193,8 +4193,7 @@ impl<'de> serde::Deserialize<'de> for RefreshingRequest {
             "dkgId",
             "removed_participants",
             "removedParticipants",
-            "new_participants",
-            "newParticipants",
+            "threshold",
             "expiration_time",
             "expirationTime",
             "status",
@@ -4205,7 +4204,7 @@ impl<'de> serde::Deserialize<'de> for RefreshingRequest {
             Id,
             DkgId,
             RemovedParticipants,
-            NewParticipants,
+            Threshold,
             ExpirationTime,
             Status,
         }
@@ -4238,9 +4237,7 @@ impl<'de> serde::Deserialize<'de> for RefreshingRequest {
                             "removedParticipants" | "removed_participants" => {
                                 Ok(GeneratedField::RemovedParticipants)
                             }
-                            "newParticipants" | "new_participants" => {
-                                Ok(GeneratedField::NewParticipants)
-                            }
+                            "threshold" => Ok(GeneratedField::Threshold),
                             "expirationTime" | "expiration_time" => {
                                 Ok(GeneratedField::ExpirationTime)
                             }
@@ -4267,7 +4264,7 @@ impl<'de> serde::Deserialize<'de> for RefreshingRequest {
                 let mut id__ = None;
                 let mut dkg_id__ = None;
                 let mut removed_participants__ = None;
-                let mut new_participants__ = None;
+                let mut threshold__ = None;
                 let mut expiration_time__ = None;
                 let mut status__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -4298,11 +4295,14 @@ impl<'de> serde::Deserialize<'de> for RefreshingRequest {
                             }
                             removed_participants__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::NewParticipants => {
-                            if new_participants__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("newParticipants"));
+                        GeneratedField::Threshold => {
+                            if threshold__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("threshold"));
                             }
-                            new_participants__ = Some(map_.next_value()?);
+                            threshold__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::ExpirationTime => {
                             if expiration_time__.is_some() {
@@ -4322,7 +4322,7 @@ impl<'de> serde::Deserialize<'de> for RefreshingRequest {
                     id: id__.unwrap_or_default(),
                     dkg_id: dkg_id__.unwrap_or_default(),
                     removed_participants: removed_participants__.unwrap_or_default(),
-                    new_participants: new_participants__.unwrap_or_default(),
+                    threshold: threshold__.unwrap_or_default(),
                     expiration_time: expiration_time__,
                     status: status__.unwrap_or_default(),
                 })

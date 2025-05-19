@@ -155,9 +155,9 @@ pub struct RefreshingRequest {
     /// removed participant set
     #[prost(string, repeated, tag = "3")]
     pub removed_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// new participant set
-    #[prost(string, repeated, tag = "4")]
-    pub new_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// new threshold
+    #[prost(uint32, tag = "4")]
+    pub threshold: u32,
     /// expiration time
     #[prost(message, optional, tag = "5")]
     pub expiration_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
@@ -704,10 +704,10 @@ pub struct MsgRefresh {
     /// removed participant set
     #[prost(string, repeated, tag = "3")]
     pub removed_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// new participant set
-    #[prost(string, repeated, tag = "4")]
-    pub new_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// timeout duration
+    /// new threshold set corresponding to the DKGs
+    #[prost(uint32, repeated, tag = "4")]
+    pub thresholds: ::prost::alloc::vec::Vec<u32>,
+    /// timeout duration per DKG refreshing
     #[prost(message, optional, tag = "5")]
     pub timeout_duration: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
 }

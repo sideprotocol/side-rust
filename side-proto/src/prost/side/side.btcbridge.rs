@@ -45,6 +45,9 @@ pub struct Params {
     /// TSS params
     #[prost(message, optional, tag = "14")]
     pub tss_params: ::core::option::Option<TssParams>,
+    /// IBC params
+    #[prost(message, optional, tag = "15")]
+    pub ibc_params: ::core::option::Option<IbcParams>,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
@@ -153,6 +156,27 @@ pub struct TssParams {
 }
 impl ::prost::Name for TssParams {
     const NAME: &'static str = "TSSParams";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// IBCParams defines the params related to IBC
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IbcParams {
+    /// Id of the IBC port used to transfer sBTC
+    #[prost(string, tag = "1")]
+    pub port_id: ::prost::alloc::string::String,
+    /// Timeout height offset relative to the current client height
+    #[prost(uint64, tag = "2")]
+    pub timeout_height_offset: u64,
+    /// Timeout duration relative to the current time
+    #[prost(message, optional, tag = "3")]
+    pub timeout_duration: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+}
+impl ::prost::Name for IbcParams {
+    const NAME: &'static str = "IBCParams";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
@@ -282,6 +306,26 @@ pub struct WithdrawRequest {
 }
 impl ::prost::Name for WithdrawRequest {
     const NAME: &'static str = "WithdrawRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// Withdrawal request via IBC
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IbcWithdrawRequest {
+    #[prost(string, tag = "1")]
+    pub channel_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub sequence: u64,
+    #[prost(string, tag = "3")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub amount: ::prost::alloc::string::String,
+}
+impl ::prost::Name for IbcWithdrawRequest {
+    const NAME: &'static str = "IBCWithdrawRequest";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
@@ -1111,6 +1155,36 @@ pub struct QueryDkgCompletionRequestsResponse {
 }
 impl ::prost::Name for QueryDkgCompletionRequestsResponse {
     const NAME: &'static str = "QueryDKGCompletionRequestsResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QueryIBCDepositScriptRequest is the request type for the Query/IBCDepositScript RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryIbcDepositScriptRequest {
+    #[prost(string, tag = "1")]
+    pub channel_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub recipient_address: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryIbcDepositScriptRequest {
+    const NAME: &'static str = "QueryIBCDepositScriptRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QueryIBCDepositScriptResponse is the response type for the Query/IBCDepositScript RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryIbcDepositScriptResponse {
+    #[prost(string, tag = "1")]
+    pub script: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryIbcDepositScriptResponse {
+    const NAME: &'static str = "QueryIBCDepositScriptResponse";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
