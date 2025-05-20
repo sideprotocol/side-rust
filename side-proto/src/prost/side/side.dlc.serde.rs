@@ -1805,7 +1805,7 @@ impl serde::Serialize for Params {
         if self.price_event_nonce_queue_size != 0 {
             len += 1;
         }
-        if !self.price_intervals.is_empty() {
+        if !self.price_pairs.is_empty() {
             len += 1;
         }
         if self.date_event_nonce_queue_size != 0 {
@@ -1839,8 +1839,8 @@ impl serde::Serialize for Params {
                 &self.price_event_nonce_queue_size,
             )?;
         }
-        if !self.price_intervals.is_empty() {
-            struct_ser.serialize_field("priceIntervals", &self.price_intervals)?;
+        if !self.price_pairs.is_empty() {
+            struct_ser.serialize_field("pricePairs", &self.price_pairs)?;
         }
         if self.date_event_nonce_queue_size != 0 {
             struct_ser
@@ -1896,8 +1896,8 @@ impl<'de> serde::Deserialize<'de> for Params {
         const FIELDS: &[&str] = &[
             "price_event_nonce_queue_size",
             "priceEventNonceQueueSize",
-            "price_intervals",
-            "priceIntervals",
+            "price_pairs",
+            "pricePairs",
             "date_event_nonce_queue_size",
             "dateEventNonceQueueSize",
             "date_interval",
@@ -1919,7 +1919,7 @@ impl<'de> serde::Deserialize<'de> for Params {
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             PriceEventNonceQueueSize,
-            PriceIntervals,
+            PricePairs,
             DateEventNonceQueueSize,
             DateInterval,
             LendingEventNonceQueueSize,
@@ -1956,9 +1956,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                             "priceEventNonceQueueSize" | "price_event_nonce_queue_size" => {
                                 Ok(GeneratedField::PriceEventNonceQueueSize)
                             }
-                            "priceIntervals" | "price_intervals" => {
-                                Ok(GeneratedField::PriceIntervals)
-                            }
+                            "pricePairs" | "price_pairs" => Ok(GeneratedField::PricePairs),
                             "dateEventNonceQueueSize" | "date_event_nonce_queue_size" => {
                                 Ok(GeneratedField::DateEventNonceQueueSize)
                             }
@@ -2001,7 +1999,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut price_event_nonce_queue_size__ = None;
-                let mut price_intervals__ = None;
+                let mut price_pairs__ = None;
                 let mut date_event_nonce_queue_size__ = None;
                 let mut date_interval__ = None;
                 let mut lending_event_nonce_queue_size__ = None;
@@ -2023,11 +2021,11 @@ impl<'de> serde::Deserialize<'de> for Params {
                                     .0,
                             );
                         }
-                        GeneratedField::PriceIntervals => {
-                            if price_intervals__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("priceIntervals"));
+                        GeneratedField::PricePairs => {
+                            if price_pairs__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pricePairs"));
                             }
-                            price_intervals__ = Some(map_.next_value()?);
+                            price_pairs__ = Some(map_.next_value()?);
                         }
                         GeneratedField::DateEventNonceQueueSize => {
                             if date_event_nonce_queue_size__.is_some() {
@@ -2114,7 +2112,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                 Ok(Params {
                     price_event_nonce_queue_size: price_event_nonce_queue_size__
                         .unwrap_or_default(),
-                    price_intervals: price_intervals__.unwrap_or_default(),
+                    price_pairs: price_pairs__.unwrap_or_default(),
                     date_event_nonce_queue_size: date_event_nonce_queue_size__.unwrap_or_default(),
                     date_interval: date_interval__,
                     lending_event_nonce_queue_size: lending_event_nonce_queue_size__
@@ -2132,7 +2130,7 @@ impl<'de> serde::Deserialize<'de> for Params {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for PriceInterval {
+impl serde::Serialize for PricePair {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
@@ -2140,15 +2138,21 @@ impl serde::Serialize for PriceInterval {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if !self.price_pair.is_empty() {
+        if !self.pair.is_empty() {
+            len += 1;
+        }
+        if self.decimals != 0 {
             len += 1;
         }
         if !self.interval.is_empty() {
             len += 1;
         }
-        let mut struct_ser = serializer.serialize_struct("side.dlc.PriceInterval", len)?;
-        if !self.price_pair.is_empty() {
-            struct_ser.serialize_field("pricePair", &self.price_pair)?;
+        let mut struct_ser = serializer.serialize_struct("side.dlc.PricePair", len)?;
+        if !self.pair.is_empty() {
+            struct_ser.serialize_field("pair", &self.pair)?;
+        }
+        if self.decimals != 0 {
+            struct_ser.serialize_field("decimals", &self.decimals)?;
         }
         if !self.interval.is_empty() {
             struct_ser.serialize_field("interval", &self.interval)?;
@@ -2157,17 +2161,18 @@ impl serde::Serialize for PriceInterval {
     }
 }
 #[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for PriceInterval {
+impl<'de> serde::Deserialize<'de> for PricePair {
     #[allow(deprecated)]
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["price_pair", "pricePair", "interval"];
+        const FIELDS: &[&str] = &["pair", "decimals", "interval"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            PricePair,
+            Pair,
+            Decimals,
             Interval,
         }
         #[cfg(feature = "serde")]
@@ -2194,7 +2199,8 @@ impl<'de> serde::Deserialize<'de> for PriceInterval {
                         E: serde::de::Error,
                     {
                         match value {
-                            "pricePair" | "price_pair" => Ok(GeneratedField::PricePair),
+                            "pair" => Ok(GeneratedField::Pair),
+                            "decimals" => Ok(GeneratedField::Decimals),
                             "interval" => Ok(GeneratedField::Interval),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
@@ -2205,25 +2211,35 @@ impl<'de> serde::Deserialize<'de> for PriceInterval {
         }
         struct GeneratedVisitor;
         impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = PriceInterval;
+            type Value = PricePair;
 
             fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.dlc.PriceInterval")
+                formatter.write_str("struct side.dlc.PricePair")
             }
 
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<PriceInterval, V::Error>
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<PricePair, V::Error>
             where
                 V: serde::de::MapAccess<'de>,
             {
-                let mut price_pair__ = None;
+                let mut pair__ = None;
+                let mut decimals__ = None;
                 let mut interval__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
-                        GeneratedField::PricePair => {
-                            if price_pair__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("pricePair"));
+                        GeneratedField::Pair => {
+                            if pair__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pair"));
                             }
-                            price_pair__ = Some(map_.next_value()?);
+                            pair__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Decimals => {
+                            if decimals__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("decimals"));
+                            }
+                            decimals__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
                         }
                         GeneratedField::Interval => {
                             if interval__.is_some() {
@@ -2233,13 +2249,14 @@ impl<'de> serde::Deserialize<'de> for PriceInterval {
                         }
                     }
                 }
-                Ok(PriceInterval {
-                    price_pair: price_pair__.unwrap_or_default(),
+                Ok(PricePair {
+                    pair: pair__.unwrap_or_default(),
+                    decimals: decimals__.unwrap_or_default(),
                     interval: interval__.unwrap_or_default(),
                 })
             }
         }
-        deserializer.deserialize_struct("side.dlc.PriceInterval", FIELDS, GeneratedVisitor)
+        deserializer.deserialize_struct("side.dlc.PricePair", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]

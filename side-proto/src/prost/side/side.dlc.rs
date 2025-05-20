@@ -259,14 +259,16 @@ impl DkgIntent {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PriceInterval {
+pub struct PricePair {
     #[prost(string, tag = "1")]
-    pub price_pair: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
+    pub pair: ::prost::alloc::string::String,
+    #[prost(int32, tag = "2")]
+    pub decimals: i32,
+    #[prost(string, tag = "3")]
     pub interval: ::prost::alloc::string::String,
 }
-impl ::prost::Name for PriceInterval {
-    const NAME: &'static str = "PriceInterval";
+impl ::prost::Name for PricePair {
+    const NAME: &'static str = "PricePair";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -279,7 +281,7 @@ pub struct Params {
     #[prost(uint32, tag = "1")]
     pub price_event_nonce_queue_size: u32,
     #[prost(message, repeated, tag = "2")]
-    pub price_intervals: ::prost::alloc::vec::Vec<PriceInterval>,
+    pub price_pairs: ::prost::alloc::vec::Vec<PricePair>,
     #[prost(uint32, tag = "3")]
     pub date_event_nonce_queue_size: u32,
     #[prost(message, optional, tag = "4")]

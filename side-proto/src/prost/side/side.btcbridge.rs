@@ -537,6 +537,60 @@ impl ::prost::Name for DkgCompletionRequest {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
     }
 }
+/// Refreshing Request
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RefreshingRequest {
+    /// request id
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    /// request id of the DKG corresponding to the key shares to be refreshed
+    #[prost(uint64, tag = "2")]
+    pub dkg_id: u64,
+    /// removed participant set
+    #[prost(string, repeated, tag = "3")]
+    pub removed_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// new threshold
+    #[prost(uint32, tag = "4")]
+    pub threshold: u32,
+    /// expiration time
+    #[prost(message, optional, tag = "5")]
+    pub expiration_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    /// status
+    #[prost(enumeration = "RefreshingStatus", tag = "6")]
+    pub status: i32,
+}
+impl ::prost::Name for RefreshingRequest {
+    const NAME: &'static str = "RefreshingRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// Refreshing Completion
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RefreshingCompletion {
+    /// request id
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    /// sender
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    /// participant consensus pub key
+    #[prost(string, tag = "3")]
+    pub consensus_pubkey: ::prost::alloc::string::String,
+    /// hex encoded participant signature
+    #[prost(string, tag = "4")]
+    pub signature: ::prost::alloc::string::String,
+}
+impl ::prost::Name for RefreshingCompletion {
+    const NAME: &'static str = "RefreshingCompletion";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
 /// Bitcoin Signing Status
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -614,6 +668,43 @@ impl DkgRequestStatus {
             "DKG_REQUEST_STATUS_COMPLETED" => Some(Self::Completed),
             "DKG_REQUEST_STATUS_FAILED" => Some(Self::Failed),
             "DKG_REQUEST_STATUS_TIMEDOUT" => Some(Self::Timedout),
+            _ => None,
+        }
+    }
+}
+/// Refreshing Status
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum RefreshingStatus {
+    /// REFRESHING_STATUS_UNSPECIFIED defines the unknown refreshing status
+    Unspecified = 0,
+    /// REFRESHING_STATUS_PENDING defines the status of the refreshing request which is pending
+    Pending = 1,
+    /// REFRESHING_STATUS_COMPLETED defines the status of the refreshing request which is completed
+    Completed = 2,
+    /// REFRESHING_STATUS_TIMEDOUT defines the status of the refreshing request which timed out
+    Timedout = 3,
+}
+impl RefreshingStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            RefreshingStatus::Unspecified => "REFRESHING_STATUS_UNSPECIFIED",
+            RefreshingStatus::Pending => "REFRESHING_STATUS_PENDING",
+            RefreshingStatus::Completed => "REFRESHING_STATUS_COMPLETED",
+            RefreshingStatus::Timedout => "REFRESHING_STATUS_TIMEDOUT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "REFRESHING_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "REFRESHING_STATUS_PENDING" => Some(Self::Pending),
+            "REFRESHING_STATUS_COMPLETED" => Some(Self::Completed),
+            "REFRESHING_STATUS_TIMEDOUT" => Some(Self::Timedout),
             _ => None,
         }
     }
@@ -1160,6 +1251,94 @@ impl ::prost::Name for QueryDkgCompletionRequestsResponse {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
     }
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRefreshingRequestRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+}
+impl ::prost::Name for QueryRefreshingRequestRequest {
+    const NAME: &'static str = "QueryRefreshingRequestRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRefreshingRequestResponse {
+    #[prost(message, optional, tag = "1")]
+    pub request: ::core::option::Option<RefreshingRequest>,
+}
+impl ::prost::Name for QueryRefreshingRequestResponse {
+    const NAME: &'static str = "QueryRefreshingRequestResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRefreshingRequestsRequest {
+    #[prost(enumeration = "RefreshingStatus", tag = "1")]
+    pub status: i32,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryRefreshingRequestsRequest {
+    const NAME: &'static str = "QueryRefreshingRequestsRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRefreshingRequestsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub requests: ::prost::alloc::vec::Vec<RefreshingRequest>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryRefreshingRequestsResponse {
+    const NAME: &'static str = "QueryRefreshingRequestsResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRefreshingCompletionsRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryRefreshingCompletionsRequest {
+    const NAME: &'static str = "QueryRefreshingCompletionsRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRefreshingCompletionsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub completions: ::prost::alloc::vec::Vec<RefreshingCompletion>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryRefreshingCompletionsResponse {
+    const NAME: &'static str = "QueryRefreshingCompletionsResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
 /// QueryIBCDepositScriptRequest is the request type for the Query/IBCDepositScript RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1507,6 +1686,79 @@ impl ::prost::Name for MsgCompleteDkg {
 pub struct MsgCompleteDkgResponse {}
 impl ::prost::Name for MsgCompleteDkgResponse {
     const NAME: &'static str = "MsgCompleteDKGResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// MsgRefresh defines the Msg/Refresh request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgRefresh {
+    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
+    #[prost(string, tag = "1")]
+    pub authority: ::prost::alloc::string::String,
+    /// list of DKGs corresponding to key shares to be refreshed
+    #[prost(uint64, repeated, tag = "2")]
+    pub dkg_ids: ::prost::alloc::vec::Vec<u64>,
+    /// removed participant set
+    #[prost(string, repeated, tag = "3")]
+    pub removed_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// new threshold set corresponding to the DKGs
+    #[prost(uint32, repeated, tag = "4")]
+    pub thresholds: ::prost::alloc::vec::Vec<u32>,
+    /// timeout duration per DKG refreshing
+    #[prost(message, optional, tag = "5")]
+    pub timeout_duration: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+}
+impl ::prost::Name for MsgRefresh {
+    const NAME: &'static str = "MsgRefresh";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// MsgRefreshResponse defines the Msg/Refresh response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgRefreshResponse {}
+impl ::prost::Name for MsgRefreshResponse {
+    const NAME: &'static str = "MsgRefreshResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// MsgCompleteRefreshing defines the Msg/CompleteRefreshing request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCompleteRefreshing {
+    /// sender
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    /// request id
+    #[prost(uint64, tag = "2")]
+    pub id: u64,
+    /// participant consensus pub key
+    #[prost(string, tag = "3")]
+    pub consensus_pubkey: ::prost::alloc::string::String,
+    /// hex encoded participant signature
+    #[prost(string, tag = "4")]
+    pub signature: ::prost::alloc::string::String,
+}
+impl ::prost::Name for MsgCompleteRefreshing {
+    const NAME: &'static str = "MsgCompleteRefreshing";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// MsgCompleteRefreshingResponse defines the Msg/CompleteRefreshing response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgCompleteRefreshingResponse {}
+impl ::prost::Name for MsgCompleteRefreshingResponse {
+    const NAME: &'static str = "MsgCompleteRefreshingResponse";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)

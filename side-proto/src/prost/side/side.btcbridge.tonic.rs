@@ -477,6 +477,78 @@ pub mod query_client {
             ));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn query_refreshing_request(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryRefreshingRequestRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryRefreshingRequestResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.btcbridge.Query/QueryRefreshingRequest",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.btcbridge.Query",
+                "QueryRefreshingRequest",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn query_refreshing_requests(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryRefreshingRequestsRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryRefreshingRequestsResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.btcbridge.Query/QueryRefreshingRequests",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.btcbridge.Query",
+                "QueryRefreshingRequests",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn query_refreshing_completions(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryRefreshingCompletionsRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryRefreshingCompletionsResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.btcbridge.Query/QueryRefreshingCompletions",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.btcbridge.Query",
+                "QueryRefreshingCompletions",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn query_ibc_deposit_script(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryIbcDepositScriptRequest>,
@@ -607,6 +679,27 @@ pub mod query_server {
             request: tonic::Request<super::QueryDkgCompletionRequestsRequest>,
         ) -> core::result::Result<
             tonic::Response<super::QueryDkgCompletionRequestsResponse>,
+            tonic::Status,
+        >;
+        async fn query_refreshing_request(
+            &self,
+            request: tonic::Request<super::QueryRefreshingRequestRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryRefreshingRequestResponse>,
+            tonic::Status,
+        >;
+        async fn query_refreshing_requests(
+            &self,
+            request: tonic::Request<super::QueryRefreshingRequestsRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryRefreshingRequestsResponse>,
+            tonic::Status,
+        >;
+        async fn query_refreshing_completions(
+            &self,
+            request: tonic::Request<super::QueryRefreshingCompletionsRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryRefreshingCompletionsResponse>,
             tonic::Status,
         >;
         async fn query_ibc_deposit_script(
@@ -1439,6 +1532,131 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
+                "/side.btcbridge.Query/QueryRefreshingRequest" => {
+                    #[allow(non_camel_case_types)]
+                    struct QueryRefreshingRequestSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryRefreshingRequestRequest>
+                        for QueryRefreshingRequestSvc<T>
+                    {
+                        type Response = super::QueryRefreshingRequestResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryRefreshingRequestRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut =
+                                async move { (*inner).query_refreshing_request(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = QueryRefreshingRequestSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.btcbridge.Query/QueryRefreshingRequests" => {
+                    #[allow(non_camel_case_types)]
+                    struct QueryRefreshingRequestsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query>
+                        tonic::server::UnaryService<super::QueryRefreshingRequestsRequest>
+                        for QueryRefreshingRequestsSvc<T>
+                    {
+                        type Response = super::QueryRefreshingRequestsResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryRefreshingRequestsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut =
+                                async move { (*inner).query_refreshing_requests(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = QueryRefreshingRequestsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.btcbridge.Query/QueryRefreshingCompletions" => {
+                    #[allow(non_camel_case_types)]
+                    struct QueryRefreshingCompletionsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query>
+                        tonic::server::UnaryService<super::QueryRefreshingCompletionsRequest>
+                        for QueryRefreshingCompletionsSvc<T>
+                    {
+                        type Response = super::QueryRefreshingCompletionsResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryRefreshingCompletionsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut =
+                                async move { (*inner).query_refreshing_completions(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = QueryRefreshingCompletionsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 "/side.btcbridge.Query/QueryIBCDepositScript" => {
                     #[allow(non_camel_case_types)]
                     struct QueryIBCDepositScriptSvc<T: Query>(pub Arc<T>);
@@ -1806,6 +2024,45 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.btcbridge.Msg", "CompleteDKG"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn refresh(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgRefresh>,
+        ) -> core::result::Result<tonic::Response<super::MsgRefreshResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.btcbridge.Msg/Refresh");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.btcbridge.Msg", "Refresh"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn complete_refreshing(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgCompleteRefreshing>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgCompleteRefreshingResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path =
+                http::uri::PathAndQuery::from_static("/side.btcbridge.Msg/CompleteRefreshing");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.btcbridge.Msg", "CompleteRefreshing"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn transfer_vault(
             &mut self,
             request: impl tonic::IntoRequest<super::MsgTransferVault>,
@@ -1904,6 +2161,17 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgCompleteDkg>,
         ) -> core::result::Result<tonic::Response<super::MsgCompleteDkgResponse>, tonic::Status>;
+        async fn refresh(
+            &self,
+            request: tonic::Request<super::MsgRefresh>,
+        ) -> core::result::Result<tonic::Response<super::MsgRefreshResponse>, tonic::Status>;
+        async fn complete_refreshing(
+            &self,
+            request: tonic::Request<super::MsgCompleteRefreshing>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgCompleteRefreshingResponse>,
+            tonic::Status,
+        >;
         async fn transfer_vault(
             &self,
             request: tonic::Request<super::MsgTransferVault>,
@@ -2367,6 +2635,84 @@ pub mod msg_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = CompleteDKGSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.btcbridge.Msg/Refresh" => {
+                    #[allow(non_camel_case_types)]
+                    struct RefreshSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgRefresh> for RefreshSvc<T> {
+                        type Response = super::MsgRefreshResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgRefresh>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).refresh(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RefreshSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.btcbridge.Msg/CompleteRefreshing" => {
+                    #[allow(non_camel_case_types)]
+                    struct CompleteRefreshingSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgCompleteRefreshing>
+                        for CompleteRefreshingSvc<T>
+                    {
+                        type Response = super::MsgCompleteRefreshingResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgCompleteRefreshing>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).complete_refreshing(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CompleteRefreshingSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

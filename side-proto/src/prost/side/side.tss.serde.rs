@@ -174,6 +174,119 @@ impl<'de> serde::Deserialize<'de> for DkgCompletion {
     }
 }
 #[cfg(feature = "serde")]
+impl serde::Serialize for DkgParticipant {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.moniker.is_empty() {
+            len += 1;
+        }
+        if !self.consensus_pubkey.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.tss.DKGParticipant", len)?;
+        if !self.moniker.is_empty() {
+            struct_ser.serialize_field("moniker", &self.moniker)?;
+        }
+        if !self.consensus_pubkey.is_empty() {
+            struct_ser.serialize_field("consensusPubkey", &self.consensus_pubkey)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for DkgParticipant {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["moniker", "consensus_pubkey", "consensusPubkey"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Moniker,
+            ConsensusPubkey,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "moniker" => Ok(GeneratedField::Moniker),
+                            "consensusPubkey" | "consensus_pubkey" => {
+                                Ok(GeneratedField::ConsensusPubkey)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = DkgParticipant;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.tss.DKGParticipant")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<DkgParticipant, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut moniker__ = None;
+                let mut consensus_pubkey__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Moniker => {
+                            if moniker__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("moniker"));
+                            }
+                            moniker__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::ConsensusPubkey => {
+                            if consensus_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("consensusPubkey"));
+                            }
+                            consensus_pubkey__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(DkgParticipant {
+                    moniker: moniker__.unwrap_or_default(),
+                    consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.tss.DKGParticipant", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for DkgRequest {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>

@@ -3,14 +3,32 @@
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
-    #[prost(string, repeated, tag = "1")]
-    pub allowed_dkg_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, repeated, tag = "1")]
+    pub allowed_dkg_participants: ::prost::alloc::vec::Vec<DkgParticipant>,
     #[prost(message, optional, tag = "2")]
     pub dkg_timeout_duration:
         ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
+    const PACKAGE: &'static str = "side.tss";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.tss.{}", Self::NAME)
+    }
+}
+/// DKG Participant
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DkgParticipant {
+    /// the optional moniker
+    #[prost(string, tag = "1")]
+    pub moniker: ::prost::alloc::string::String,
+    /// participant consensus pub key
+    #[prost(string, tag = "2")]
+    pub consensus_pubkey: ::prost::alloc::string::String,
+}
+impl ::prost::Name for DkgParticipant {
+    const NAME: &'static str = "DKGParticipant";
     const PACKAGE: &'static str = "side.tss";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.tss.{}", Self::NAME)
