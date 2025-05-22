@@ -1090,34 +1090,6 @@ impl ::prost::Name for QueryCurrentInterestResponse {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
     }
 }
-/// QueryPriceRequest is request type for the Query/Price RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceRequest {
-    #[prost(string, tag = "1")]
-    pub pair: ::prost::alloc::string::String,
-}
-impl ::prost::Name for QueryPriceRequest {
-    const NAME: &'static str = "QueryPriceRequest";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-/// QueryPriceResponse is response type for the Query/Price RPC method.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryPriceResponse {
-    #[prost(string, tag = "1")]
-    pub price: ::prost::alloc::string::String,
-}
-impl ::prost::Name for QueryPriceResponse {
-    const NAME: &'static str = "QueryPriceResponse";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgCreatePool {
@@ -1383,31 +1355,6 @@ impl ::prost::Name for MsgRedeem {
 pub struct MsgRedeemResponse {}
 impl ::prost::Name for MsgRedeemResponse {
     const NAME: &'static str = "MsgRedeemResponse";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitPrice {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub price: ::prost::alloc::string::String,
-}
-impl ::prost::Name for MsgSubmitPrice {
-    const NAME: &'static str = "MsgSubmitPrice";
-    const PACKAGE: &'static str = "side.lending";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.lending.{}", Self::NAME)
-    }
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgSubmitPriceResponse {}
-impl ::prost::Name for MsgSubmitPriceResponse {
-    const NAME: &'static str = "MsgSubmitPriceResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)

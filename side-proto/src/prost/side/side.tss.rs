@@ -104,11 +104,14 @@ impl ::prost::Name for DkgCompletion {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SigningOptions {
-    /// optional public nonce, i.e. commitment
+    /// optional tweak
     #[prost(string, tag = "1")]
+    pub tweak: ::prost::alloc::string::String,
+    /// optional public nonce, i.e. commitment
+    #[prost(string, tag = "2")]
     pub nonce: ::prost::alloc::string::String,
     /// optional adaptor point
-    #[prost(string, tag = "2")]
+    #[prost(string, tag = "3")]
     pub adaptor_point: ::prost::alloc::string::String,
 }
 impl ::prost::Name for SigningOptions {
@@ -298,10 +301,12 @@ impl SigningStatus {
 pub enum SigningType {
     /// SIGNING_TYPE_SCHNORR defines the common schnorr signing
     Schnorr = 0,
+    /// SIGNING_TYPE_SCHNORR_WITH_TWEAK defines the schnorr signing with tweak
+    SchnorrWithTweak = 1,
     /// SIGNING_TYPE_SCHNORR_WITH_COMMITMENT defines the schnorr signing with commitment
-    SchnorrWithCommitment = 1,
+    SchnorrWithCommitment = 2,
     /// SIGNING_TYPE_SCHNORR_ADAPTOR defines the schnorr adaptor signing
-    SchnorrAdaptor = 2,
+    SchnorrAdaptor = 3,
 }
 impl SigningType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -311,6 +316,7 @@ impl SigningType {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             SigningType::Schnorr => "SIGNING_TYPE_SCHNORR",
+            SigningType::SchnorrWithTweak => "SIGNING_TYPE_SCHNORR_WITH_TWEAK",
             SigningType::SchnorrWithCommitment => "SIGNING_TYPE_SCHNORR_WITH_COMMITMENT",
             SigningType::SchnorrAdaptor => "SIGNING_TYPE_SCHNORR_ADAPTOR",
         }
@@ -319,6 +325,7 @@ impl SigningType {
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "SIGNING_TYPE_SCHNORR" => Some(Self::Schnorr),
+            "SIGNING_TYPE_SCHNORR_WITH_TWEAK" => Some(Self::SchnorrWithTweak),
             "SIGNING_TYPE_SCHNORR_WITH_COMMITMENT" => Some(Self::SchnorrWithCommitment),
             "SIGNING_TYPE_SCHNORR_ADAPTOR" => Some(Self::SchnorrAdaptor),
             _ => None,

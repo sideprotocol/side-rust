@@ -5489,6 +5489,440 @@ impl<'de> serde::Deserialize<'de> for Params {
     }
 }
 #[cfg(feature = "serde")]
+impl serde::Serialize for ParamsV1 {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.deposit_confirmation_depth != 0 {
+            len += 1;
+        }
+        if self.withdraw_confirmation_depth != 0 {
+            len += 1;
+        }
+        if self.max_reorg_depth != 0 {
+            len += 1;
+        }
+        if self.max_acceptable_block_depth != 0 {
+            len += 1;
+        }
+        if !self.btc_voucher_denom.is_empty() {
+            len += 1;
+        }
+        if self.deposit_enabled {
+            len += 1;
+        }
+        if self.withdraw_enabled {
+            len += 1;
+        }
+        if !self.trusted_btc_relayers.is_empty() {
+            len += 1;
+        }
+        if !self.trusted_non_btc_relayers.is_empty() {
+            len += 1;
+        }
+        if !self.trusted_fee_providers.is_empty() {
+            len += 1;
+        }
+        if self.fee_rate_validity_period != 0 {
+            len += 1;
+        }
+        if !self.vaults.is_empty() {
+            len += 1;
+        }
+        if self.withdraw_params.is_some() {
+            len += 1;
+        }
+        if self.protocol_limits.is_some() {
+            len += 1;
+        }
+        if self.protocol_fees.is_some() {
+            len += 1;
+        }
+        if self.tss_params.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.btcbridge.ParamsV1", len)?;
+        if self.deposit_confirmation_depth != 0 {
+            struct_ser
+                .serialize_field("depositConfirmationDepth", &self.deposit_confirmation_depth)?;
+        }
+        if self.withdraw_confirmation_depth != 0 {
+            struct_ser.serialize_field(
+                "withdrawConfirmationDepth",
+                &self.withdraw_confirmation_depth,
+            )?;
+        }
+        if self.max_reorg_depth != 0 {
+            struct_ser.serialize_field("maxReorgDepth", &self.max_reorg_depth)?;
+        }
+        if self.max_acceptable_block_depth != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "maxAcceptableBlockDepth",
+                alloc::string::ToString::to_string(&self.max_acceptable_block_depth).as_str(),
+            )?;
+        }
+        if !self.btc_voucher_denom.is_empty() {
+            struct_ser.serialize_field("btcVoucherDenom", &self.btc_voucher_denom)?;
+        }
+        if self.deposit_enabled {
+            struct_ser.serialize_field("depositEnabled", &self.deposit_enabled)?;
+        }
+        if self.withdraw_enabled {
+            struct_ser.serialize_field("withdrawEnabled", &self.withdraw_enabled)?;
+        }
+        if !self.trusted_btc_relayers.is_empty() {
+            struct_ser.serialize_field("trustedBtcRelayers", &self.trusted_btc_relayers)?;
+        }
+        if !self.trusted_non_btc_relayers.is_empty() {
+            struct_ser.serialize_field("trustedNonBtcRelayers", &self.trusted_non_btc_relayers)?;
+        }
+        if !self.trusted_fee_providers.is_empty() {
+            struct_ser.serialize_field("trustedFeeProviders", &self.trusted_fee_providers)?;
+        }
+        if self.fee_rate_validity_period != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "feeRateValidityPeriod",
+                alloc::string::ToString::to_string(&self.fee_rate_validity_period).as_str(),
+            )?;
+        }
+        if !self.vaults.is_empty() {
+            struct_ser.serialize_field("vaults", &self.vaults)?;
+        }
+        if let Some(v) = self.withdraw_params.as_ref() {
+            struct_ser.serialize_field("withdrawParams", v)?;
+        }
+        if let Some(v) = self.protocol_limits.as_ref() {
+            struct_ser.serialize_field("protocolLimits", v)?;
+        }
+        if let Some(v) = self.protocol_fees.as_ref() {
+            struct_ser.serialize_field("protocolFees", v)?;
+        }
+        if let Some(v) = self.tss_params.as_ref() {
+            struct_ser.serialize_field("tssParams", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for ParamsV1 {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "deposit_confirmation_depth",
+            "depositConfirmationDepth",
+            "withdraw_confirmation_depth",
+            "withdrawConfirmationDepth",
+            "max_reorg_depth",
+            "maxReorgDepth",
+            "max_acceptable_block_depth",
+            "maxAcceptableBlockDepth",
+            "btc_voucher_denom",
+            "btcVoucherDenom",
+            "deposit_enabled",
+            "depositEnabled",
+            "withdraw_enabled",
+            "withdrawEnabled",
+            "trusted_btc_relayers",
+            "trustedBtcRelayers",
+            "trusted_non_btc_relayers",
+            "trustedNonBtcRelayers",
+            "trusted_fee_providers",
+            "trustedFeeProviders",
+            "fee_rate_validity_period",
+            "feeRateValidityPeriod",
+            "vaults",
+            "withdraw_params",
+            "withdrawParams",
+            "protocol_limits",
+            "protocolLimits",
+            "protocol_fees",
+            "protocolFees",
+            "tss_params",
+            "tssParams",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            DepositConfirmationDepth,
+            WithdrawConfirmationDepth,
+            MaxReorgDepth,
+            MaxAcceptableBlockDepth,
+            BtcVoucherDenom,
+            DepositEnabled,
+            WithdrawEnabled,
+            TrustedBtcRelayers,
+            TrustedNonBtcRelayers,
+            TrustedFeeProviders,
+            FeeRateValidityPeriod,
+            Vaults,
+            WithdrawParams,
+            ProtocolLimits,
+            ProtocolFees,
+            TssParams,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "depositConfirmationDepth" | "deposit_confirmation_depth" => {
+                                Ok(GeneratedField::DepositConfirmationDepth)
+                            }
+                            "withdrawConfirmationDepth" | "withdraw_confirmation_depth" => {
+                                Ok(GeneratedField::WithdrawConfirmationDepth)
+                            }
+                            "maxReorgDepth" | "max_reorg_depth" => {
+                                Ok(GeneratedField::MaxReorgDepth)
+                            }
+                            "maxAcceptableBlockDepth" | "max_acceptable_block_depth" => {
+                                Ok(GeneratedField::MaxAcceptableBlockDepth)
+                            }
+                            "btcVoucherDenom" | "btc_voucher_denom" => {
+                                Ok(GeneratedField::BtcVoucherDenom)
+                            }
+                            "depositEnabled" | "deposit_enabled" => {
+                                Ok(GeneratedField::DepositEnabled)
+                            }
+                            "withdrawEnabled" | "withdraw_enabled" => {
+                                Ok(GeneratedField::WithdrawEnabled)
+                            }
+                            "trustedBtcRelayers" | "trusted_btc_relayers" => {
+                                Ok(GeneratedField::TrustedBtcRelayers)
+                            }
+                            "trustedNonBtcRelayers" | "trusted_non_btc_relayers" => {
+                                Ok(GeneratedField::TrustedNonBtcRelayers)
+                            }
+                            "trustedFeeProviders" | "trusted_fee_providers" => {
+                                Ok(GeneratedField::TrustedFeeProviders)
+                            }
+                            "feeRateValidityPeriod" | "fee_rate_validity_period" => {
+                                Ok(GeneratedField::FeeRateValidityPeriod)
+                            }
+                            "vaults" => Ok(GeneratedField::Vaults),
+                            "withdrawParams" | "withdraw_params" => {
+                                Ok(GeneratedField::WithdrawParams)
+                            }
+                            "protocolLimits" | "protocol_limits" => {
+                                Ok(GeneratedField::ProtocolLimits)
+                            }
+                            "protocolFees" | "protocol_fees" => Ok(GeneratedField::ProtocolFees),
+                            "tssParams" | "tss_params" => Ok(GeneratedField::TssParams),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = ParamsV1;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.ParamsV1")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<ParamsV1, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut deposit_confirmation_depth__ = None;
+                let mut withdraw_confirmation_depth__ = None;
+                let mut max_reorg_depth__ = None;
+                let mut max_acceptable_block_depth__ = None;
+                let mut btc_voucher_denom__ = None;
+                let mut deposit_enabled__ = None;
+                let mut withdraw_enabled__ = None;
+                let mut trusted_btc_relayers__ = None;
+                let mut trusted_non_btc_relayers__ = None;
+                let mut trusted_fee_providers__ = None;
+                let mut fee_rate_validity_period__ = None;
+                let mut vaults__ = None;
+                let mut withdraw_params__ = None;
+                let mut protocol_limits__ = None;
+                let mut protocol_fees__ = None;
+                let mut tss_params__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::DepositConfirmationDepth => {
+                            if deposit_confirmation_depth__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "depositConfirmationDepth",
+                                ));
+                            }
+                            deposit_confirmation_depth__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::WithdrawConfirmationDepth => {
+                            if withdraw_confirmation_depth__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "withdrawConfirmationDepth",
+                                ));
+                            }
+                            withdraw_confirmation_depth__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::MaxReorgDepth => {
+                            if max_reorg_depth__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("maxReorgDepth"));
+                            }
+                            max_reorg_depth__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::MaxAcceptableBlockDepth => {
+                            if max_acceptable_block_depth__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "maxAcceptableBlockDepth",
+                                ));
+                            }
+                            max_acceptable_block_depth__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::BtcVoucherDenom => {
+                            if btc_voucher_denom__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("btcVoucherDenom"));
+                            }
+                            btc_voucher_denom__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::DepositEnabled => {
+                            if deposit_enabled__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("depositEnabled"));
+                            }
+                            deposit_enabled__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::WithdrawEnabled => {
+                            if withdraw_enabled__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("withdrawEnabled"));
+                            }
+                            withdraw_enabled__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::TrustedBtcRelayers => {
+                            if trusted_btc_relayers__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "trustedBtcRelayers",
+                                ));
+                            }
+                            trusted_btc_relayers__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::TrustedNonBtcRelayers => {
+                            if trusted_non_btc_relayers__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "trustedNonBtcRelayers",
+                                ));
+                            }
+                            trusted_non_btc_relayers__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::TrustedFeeProviders => {
+                            if trusted_fee_providers__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "trustedFeeProviders",
+                                ));
+                            }
+                            trusted_fee_providers__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::FeeRateValidityPeriod => {
+                            if fee_rate_validity_period__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "feeRateValidityPeriod",
+                                ));
+                            }
+                            fee_rate_validity_period__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Vaults => {
+                            if vaults__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("vaults"));
+                            }
+                            vaults__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::WithdrawParams => {
+                            if withdraw_params__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("withdrawParams"));
+                            }
+                            withdraw_params__ = map_.next_value()?;
+                        }
+                        GeneratedField::ProtocolLimits => {
+                            if protocol_limits__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("protocolLimits"));
+                            }
+                            protocol_limits__ = map_.next_value()?;
+                        }
+                        GeneratedField::ProtocolFees => {
+                            if protocol_fees__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("protocolFees"));
+                            }
+                            protocol_fees__ = map_.next_value()?;
+                        }
+                        GeneratedField::TssParams => {
+                            if tss_params__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("tssParams"));
+                            }
+                            tss_params__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(ParamsV1 {
+                    deposit_confirmation_depth: deposit_confirmation_depth__.unwrap_or_default(),
+                    withdraw_confirmation_depth: withdraw_confirmation_depth__.unwrap_or_default(),
+                    max_reorg_depth: max_reorg_depth__.unwrap_or_default(),
+                    max_acceptable_block_depth: max_acceptable_block_depth__.unwrap_or_default(),
+                    btc_voucher_denom: btc_voucher_denom__.unwrap_or_default(),
+                    deposit_enabled: deposit_enabled__.unwrap_or_default(),
+                    withdraw_enabled: withdraw_enabled__.unwrap_or_default(),
+                    trusted_btc_relayers: trusted_btc_relayers__.unwrap_or_default(),
+                    trusted_non_btc_relayers: trusted_non_btc_relayers__.unwrap_or_default(),
+                    trusted_fee_providers: trusted_fee_providers__.unwrap_or_default(),
+                    fee_rate_validity_period: fee_rate_validity_period__.unwrap_or_default(),
+                    vaults: vaults__.unwrap_or_default(),
+                    withdraw_params: withdraw_params__,
+                    protocol_limits: protocol_limits__,
+                    protocol_fees: protocol_fees__,
+                    tss_params: tss_params__,
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.btcbridge.ParamsV1", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for ProtocolFees {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>

@@ -1,4 +1,64 @@
 // @generated
+/// ParamsV1 defines the v1 parameters for the module.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ParamsV1 {
+    /// The minimum number of confirmations required for the deposit transactions
+    #[prost(int32, tag = "1")]
+    pub deposit_confirmation_depth: i32,
+    /// The minimum number of confirmations required for the withdrawal transactions
+    #[prost(int32, tag = "2")]
+    pub withdraw_confirmation_depth: i32,
+    /// The allowed maximum depth for bitcoin block reorganization
+    #[prost(int32, tag = "3")]
+    pub max_reorg_depth: i32,
+    /// Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance.
+    #[prost(uint64, tag = "4")]
+    pub max_acceptable_block_depth: u64,
+    /// The denomination of the voucher
+    #[prost(string, tag = "5")]
+    pub btc_voucher_denom: ::prost::alloc::string::String,
+    /// Indicates if deposit is enabled
+    #[prost(bool, tag = "6")]
+    pub deposit_enabled: bool,
+    /// Indicates if withdrawal is enabled
+    #[prost(bool, tag = "7")]
+    pub withdraw_enabled: bool,
+    /// Trusted relayers to submit bitcoin block headers
+    #[prost(string, repeated, tag = "8")]
+    pub trusted_btc_relayers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Trusted relayers for non-btc asset deposit
+    #[prost(string, repeated, tag = "9")]
+    pub trusted_non_btc_relayers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Trusted fee providers to submit bitcoin fee rate
+    #[prost(string, repeated, tag = "10")]
+    pub trusted_fee_providers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Period of validity for the fee rate
+    #[prost(int64, tag = "11")]
+    pub fee_rate_validity_period: i64,
+    /// Asset vaults
+    #[prost(message, repeated, tag = "12")]
+    pub vaults: ::prost::alloc::vec::Vec<Vault>,
+    /// Withdrawal params
+    #[prost(message, optional, tag = "13")]
+    pub withdraw_params: ::core::option::Option<WithdrawParams>,
+    /// Protocol limitations
+    #[prost(message, optional, tag = "14")]
+    pub protocol_limits: ::core::option::Option<ProtocolLimits>,
+    /// Protocol fees
+    #[prost(message, optional, tag = "15")]
+    pub protocol_fees: ::core::option::Option<ProtocolFees>,
+    /// TSS params
+    #[prost(message, optional, tag = "16")]
+    pub tss_params: ::core::option::Option<TssParams>,
+}
+impl ::prost::Name for ParamsV1 {
+    const NAME: &'static str = "ParamsV1";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
 /// Params defines the parameters for the module.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

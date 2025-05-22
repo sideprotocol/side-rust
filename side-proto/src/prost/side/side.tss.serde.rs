@@ -4532,6 +4532,9 @@ impl serde::Serialize for SigningOptions {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
+        if !self.tweak.is_empty() {
+            len += 1;
+        }
         if !self.nonce.is_empty() {
             len += 1;
         }
@@ -4539,6 +4542,9 @@ impl serde::Serialize for SigningOptions {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.tss.SigningOptions", len)?;
+        if !self.tweak.is_empty() {
+            struct_ser.serialize_field("tweak", &self.tweak)?;
+        }
         if !self.nonce.is_empty() {
             struct_ser.serialize_field("nonce", &self.nonce)?;
         }
@@ -4555,10 +4561,11 @@ impl<'de> serde::Deserialize<'de> for SigningOptions {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["nonce", "adaptor_point", "adaptorPoint"];
+        const FIELDS: &[&str] = &["tweak", "nonce", "adaptor_point", "adaptorPoint"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
+            Tweak,
             Nonce,
             AdaptorPoint,
         }
@@ -4586,6 +4593,7 @@ impl<'de> serde::Deserialize<'de> for SigningOptions {
                         E: serde::de::Error,
                     {
                         match value {
+                            "tweak" => Ok(GeneratedField::Tweak),
                             "nonce" => Ok(GeneratedField::Nonce),
                             "adaptorPoint" | "adaptor_point" => Ok(GeneratedField::AdaptorPoint),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -4607,10 +4615,17 @@ impl<'de> serde::Deserialize<'de> for SigningOptions {
             where
                 V: serde::de::MapAccess<'de>,
             {
+                let mut tweak__ = None;
                 let mut nonce__ = None;
                 let mut adaptor_point__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
+                        GeneratedField::Tweak => {
+                            if tweak__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("tweak"));
+                            }
+                            tweak__ = Some(map_.next_value()?);
+                        }
                         GeneratedField::Nonce => {
                             if nonce__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("nonce"));
@@ -4626,6 +4641,7 @@ impl<'de> serde::Deserialize<'de> for SigningOptions {
                     }
                 }
                 Ok(SigningOptions {
+                    tweak: tweak__.unwrap_or_default(),
                     nonce: nonce__.unwrap_or_default(),
                     adaptor_point: adaptor_point__.unwrap_or_default(),
                 })
@@ -4990,6 +5006,7 @@ impl serde::Serialize for SigningType {
     {
         let variant = match self {
             Self::Schnorr => "SIGNING_TYPE_SCHNORR",
+            Self::SchnorrWithTweak => "SIGNING_TYPE_SCHNORR_WITH_TWEAK",
             Self::SchnorrWithCommitment => "SIGNING_TYPE_SCHNORR_WITH_COMMITMENT",
             Self::SchnorrAdaptor => "SIGNING_TYPE_SCHNORR_ADAPTOR",
         };
@@ -5005,6 +5022,7 @@ impl<'de> serde::Deserialize<'de> for SigningType {
     {
         const FIELDS: &[&str] = &[
             "SIGNING_TYPE_SCHNORR",
+            "SIGNING_TYPE_SCHNORR_WITH_TWEAK",
             "SIGNING_TYPE_SCHNORR_WITH_COMMITMENT",
             "SIGNING_TYPE_SCHNORR_ADAPTOR",
         ];
@@ -5048,6 +5066,7 @@ impl<'de> serde::Deserialize<'de> for SigningType {
             {
                 match value {
                     "SIGNING_TYPE_SCHNORR" => Ok(SigningType::Schnorr),
+                    "SIGNING_TYPE_SCHNORR_WITH_TWEAK" => Ok(SigningType::SchnorrWithTweak),
                     "SIGNING_TYPE_SCHNORR_WITH_COMMITMENT" => {
                         Ok(SigningType::SchnorrWithCommitment)
                     }
