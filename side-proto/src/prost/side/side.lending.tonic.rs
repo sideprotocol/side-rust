@@ -1333,11 +1333,13 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.lending.Msg", "SubmitCets"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn approve(
+        pub async fn submit_deposit_transaction(
             &mut self,
-            request: impl tonic::IntoRequest<super::MsgApprove>,
-        ) -> core::result::Result<tonic::Response<super::MsgApproveResponse>, tonic::Status>
-        {
+            request: impl tonic::IntoRequest<super::MsgSubmitDepositTransaction>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitDepositTransactionResponse>,
+            tonic::Status,
+        > {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
                     tonic::Code::Unknown,
@@ -1345,10 +1347,13 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.lending.Msg/Approve");
+            let path =
+                http::uri::PathAndQuery::from_static("/side.lending.Msg/SubmitDepositTransaction");
             let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.lending.Msg", "Approve"));
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.lending.Msg",
+                "SubmitDepositTransaction",
+            ));
             self.inner.unary(req, path, codec).await
         }
         pub async fn redeem(
@@ -1438,10 +1443,13 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgSubmitCets>,
         ) -> core::result::Result<tonic::Response<super::MsgSubmitCetsResponse>, tonic::Status>;
-        async fn approve(
+        async fn submit_deposit_transaction(
             &self,
-            request: tonic::Request<super::MsgApprove>,
-        ) -> core::result::Result<tonic::Response<super::MsgApproveResponse>, tonic::Status>;
+            request: tonic::Request<super::MsgSubmitDepositTransaction>,
+        ) -> core::result::Result<
+            tonic::Response<super::MsgSubmitDepositTransactionResponse>,
+            tonic::Status,
+        >;
         async fn redeem(
             &self,
             request: tonic::Request<super::MsgRedeem>,
@@ -1759,18 +1767,21 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.lending.Msg/Approve" => {
+                "/side.lending.Msg/SubmitDepositTransaction" => {
                     #[allow(non_camel_case_types)]
-                    struct ApproveSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgApprove> for ApproveSvc<T> {
-                        type Response = super::MsgApproveResponse;
+                    struct SubmitDepositTransactionSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgSubmitDepositTransaction>
+                        for SubmitDepositTransactionSvc<T>
+                    {
+                        type Response = super::MsgSubmitDepositTransactionResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MsgApprove>,
+                            request: tonic::Request<super::MsgSubmitDepositTransaction>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).approve(request).await };
+                            let fut =
+                                async move { (*inner).submit_deposit_transaction(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1781,7 +1792,7 @@ pub mod msg_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = ApproveSvc(inner);
+                        let method = SubmitDepositTransactionSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

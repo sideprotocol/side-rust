@@ -1302,7 +1302,7 @@ impl ::prost::Name for MsgSubmitCetsResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgApprove {
+pub struct MsgSubmitDepositTransaction {
     #[prost(string, tag = "1")]
     pub relayer: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -1314,8 +1314,8 @@ pub struct MsgApprove {
     #[prost(string, repeated, tag = "5")]
     pub proof: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-impl ::prost::Name for MsgApprove {
-    const NAME: &'static str = "MsgApprove";
+impl ::prost::Name for MsgSubmitDepositTransaction {
+    const NAME: &'static str = "MsgSubmitDepositTransaction";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -1323,9 +1323,9 @@ impl ::prost::Name for MsgApprove {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MsgApproveResponse {}
-impl ::prost::Name for MsgApproveResponse {
-    const NAME: &'static str = "MsgApproveResponse";
+pub struct MsgSubmitDepositTransactionResponse {}
+impl ::prost::Name for MsgSubmitDepositTransactionResponse {
+    const NAME: &'static str = "MsgSubmitDepositTransactionResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)

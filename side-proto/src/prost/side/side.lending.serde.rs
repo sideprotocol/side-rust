@@ -2898,247 +2898,6 @@ impl<'de> serde::Deserialize<'de> for MsgApplyResponse {
     }
 }
 #[cfg(feature = "serde")]
-impl serde::Serialize for MsgApprove {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let mut len = 0;
-        if !self.relayer.is_empty() {
-            len += 1;
-        }
-        if !self.vault.is_empty() {
-            len += 1;
-        }
-        if !self.deposit_tx.is_empty() {
-            len += 1;
-        }
-        if !self.block_hash.is_empty() {
-            len += 1;
-        }
-        if !self.proof.is_empty() {
-            len += 1;
-        }
-        let mut struct_ser = serializer.serialize_struct("side.lending.MsgApprove", len)?;
-        if !self.relayer.is_empty() {
-            struct_ser.serialize_field("relayer", &self.relayer)?;
-        }
-        if !self.vault.is_empty() {
-            struct_ser.serialize_field("vault", &self.vault)?;
-        }
-        if !self.deposit_tx.is_empty() {
-            struct_ser.serialize_field("depositTx", &self.deposit_tx)?;
-        }
-        if !self.block_hash.is_empty() {
-            struct_ser.serialize_field("blockHash", &self.block_hash)?;
-        }
-        if !self.proof.is_empty() {
-            struct_ser.serialize_field("proof", &self.proof)?;
-        }
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgApprove {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &[
-            "relayer",
-            "vault",
-            "deposit_tx",
-            "depositTx",
-            "block_hash",
-            "blockHash",
-            "proof",
-        ];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {
-            Relayer,
-            Vault,
-            DepositTx,
-            BlockHash,
-            Proof,
-        }
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        match value {
-                            "relayer" => Ok(GeneratedField::Relayer),
-                            "vault" => Ok(GeneratedField::Vault),
-                            "depositTx" | "deposit_tx" => Ok(GeneratedField::DepositTx),
-                            "blockHash" | "block_hash" => Ok(GeneratedField::BlockHash),
-                            "proof" => Ok(GeneratedField::Proof),
-                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
-                        }
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgApprove;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgApprove")
-            }
-
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgApprove, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                let mut relayer__ = None;
-                let mut vault__ = None;
-                let mut deposit_tx__ = None;
-                let mut block_hash__ = None;
-                let mut proof__ = None;
-                while let Some(k) = map_.next_key()? {
-                    match k {
-                        GeneratedField::Relayer => {
-                            if relayer__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("relayer"));
-                            }
-                            relayer__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::Vault => {
-                            if vault__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("vault"));
-                            }
-                            vault__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::DepositTx => {
-                            if deposit_tx__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("depositTx"));
-                            }
-                            deposit_tx__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::BlockHash => {
-                            if block_hash__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("blockHash"));
-                            }
-                            block_hash__ = Some(map_.next_value()?);
-                        }
-                        GeneratedField::Proof => {
-                            if proof__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("proof"));
-                            }
-                            proof__ = Some(map_.next_value()?);
-                        }
-                    }
-                }
-                Ok(MsgApprove {
-                    relayer: relayer__.unwrap_or_default(),
-                    vault: vault__.unwrap_or_default(),
-                    deposit_tx: deposit_tx__.unwrap_or_default(),
-                    block_hash: block_hash__.unwrap_or_default(),
-                    proof: proof__.unwrap_or_default(),
-                })
-            }
-        }
-        deserializer.deserialize_struct("side.lending.MsgApprove", FIELDS, GeneratedVisitor)
-    }
-}
-#[cfg(feature = "serde")]
-impl serde::Serialize for MsgApproveResponse {
-    #[allow(deprecated)]
-    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        use serde::ser::SerializeStruct;
-        let len = 0;
-        let struct_ser = serializer.serialize_struct("side.lending.MsgApproveResponse", len)?;
-        struct_ser.end()
-    }
-}
-#[cfg(feature = "serde")]
-impl<'de> serde::Deserialize<'de> for MsgApproveResponse {
-    #[allow(deprecated)]
-    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        const FIELDS: &[&str] = &[];
-
-        #[allow(clippy::enum_variant_names)]
-        enum GeneratedField {}
-        #[cfg(feature = "serde")]
-        impl<'de> serde::Deserialize<'de> for GeneratedField {
-            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
-            where
-                D: serde::Deserializer<'de>,
-            {
-                struct GeneratedVisitor;
-
-                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-                    type Value = GeneratedField;
-
-                    fn expecting(
-                        &self,
-                        formatter: &mut core::fmt::Formatter<'_>,
-                    ) -> core::fmt::Result {
-                        write!(formatter, "expected one of: {:?}", &FIELDS)
-                    }
-
-                    #[allow(unused_variables)]
-                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
-                    where
-                        E: serde::de::Error,
-                    {
-                        Err(serde::de::Error::unknown_field(value, FIELDS))
-                    }
-                }
-                deserializer.deserialize_identifier(GeneratedVisitor)
-            }
-        }
-        struct GeneratedVisitor;
-        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
-            type Value = MsgApproveResponse;
-
-            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                formatter.write_str("struct side.lending.MsgApproveResponse")
-            }
-
-            fn visit_map<V>(self, mut map_: V) -> core::result::Result<MsgApproveResponse, V::Error>
-            where
-                V: serde::de::MapAccess<'de>,
-            {
-                while map_.next_key::<GeneratedField>()?.is_some() {
-                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
-                }
-                Ok(MsgApproveResponse {})
-            }
-        }
-        deserializer.deserialize_struct("side.lending.MsgApproveResponse", FIELDS, GeneratedVisitor)
-    }
-}
-#[cfg(feature = "serde")]
 impl serde::Serialize for MsgCreatePool {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -4263,6 +4022,263 @@ impl<'de> serde::Deserialize<'de> for MsgSubmitCetsResponse {
         }
         deserializer.deserialize_struct(
             "side.lending.MsgSubmitCetsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgSubmitDepositTransaction {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.relayer.is_empty() {
+            len += 1;
+        }
+        if !self.vault.is_empty() {
+            len += 1;
+        }
+        if !self.deposit_tx.is_empty() {
+            len += 1;
+        }
+        if !self.block_hash.is_empty() {
+            len += 1;
+        }
+        if !self.proof.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.lending.MsgSubmitDepositTransaction", len)?;
+        if !self.relayer.is_empty() {
+            struct_ser.serialize_field("relayer", &self.relayer)?;
+        }
+        if !self.vault.is_empty() {
+            struct_ser.serialize_field("vault", &self.vault)?;
+        }
+        if !self.deposit_tx.is_empty() {
+            struct_ser.serialize_field("depositTx", &self.deposit_tx)?;
+        }
+        if !self.block_hash.is_empty() {
+            struct_ser.serialize_field("blockHash", &self.block_hash)?;
+        }
+        if !self.proof.is_empty() {
+            struct_ser.serialize_field("proof", &self.proof)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgSubmitDepositTransaction {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "relayer",
+            "vault",
+            "deposit_tx",
+            "depositTx",
+            "block_hash",
+            "blockHash",
+            "proof",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Relayer,
+            Vault,
+            DepositTx,
+            BlockHash,
+            Proof,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "relayer" => Ok(GeneratedField::Relayer),
+                            "vault" => Ok(GeneratedField::Vault),
+                            "depositTx" | "deposit_tx" => Ok(GeneratedField::DepositTx),
+                            "blockHash" | "block_hash" => Ok(GeneratedField::BlockHash),
+                            "proof" => Ok(GeneratedField::Proof),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgSubmitDepositTransaction;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.MsgSubmitDepositTransaction")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgSubmitDepositTransaction, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut relayer__ = None;
+                let mut vault__ = None;
+                let mut deposit_tx__ = None;
+                let mut block_hash__ = None;
+                let mut proof__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Relayer => {
+                            if relayer__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("relayer"));
+                            }
+                            relayer__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Vault => {
+                            if vault__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("vault"));
+                            }
+                            vault__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::DepositTx => {
+                            if deposit_tx__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("depositTx"));
+                            }
+                            deposit_tx__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::BlockHash => {
+                            if block_hash__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("blockHash"));
+                            }
+                            block_hash__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Proof => {
+                            if proof__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("proof"));
+                            }
+                            proof__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(MsgSubmitDepositTransaction {
+                    relayer: relayer__.unwrap_or_default(),
+                    vault: vault__.unwrap_or_default(),
+                    deposit_tx: deposit_tx__.unwrap_or_default(),
+                    block_hash: block_hash__.unwrap_or_default(),
+                    proof: proof__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.lending.MsgSubmitDepositTransaction",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for MsgSubmitDepositTransactionResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let len = 0;
+        let struct_ser =
+            serializer.serialize_struct("side.lending.MsgSubmitDepositTransactionResponse", len)?;
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for MsgSubmitDepositTransactionResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {}
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = MsgSubmitDepositTransactionResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.lending.MsgSubmitDepositTransactionResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<MsgSubmitDepositTransactionResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                while map_.next_key::<GeneratedField>()?.is_some() {
+                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                }
+                Ok(MsgSubmitDepositTransactionResponse {})
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.lending.MsgSubmitDepositTransactionResponse",
             FIELDS,
             GeneratedVisitor,
         )
