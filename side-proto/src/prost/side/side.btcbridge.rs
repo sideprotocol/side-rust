@@ -108,6 +108,9 @@ pub struct Params {
     /// IBC params
     #[prost(message, optional, tag = "15")]
     pub ibc_params: ::core::option::Option<IbcParams>,
+    /// Rate limit params
+    #[prost(message, optional, tag = "16")]
+    pub rate_limit_params: ::core::option::Option<RateLimitParams>,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";
@@ -197,6 +200,60 @@ pub struct ProtocolFees {
 }
 impl ::prost::Name for ProtocolFees {
     const NAME: &'static str = "ProtocolFees";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// RateLimitParams defines the params related to the rate limit for BTC withdrawal
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RateLimitParams {
+    /// Global rate limit params
+    #[prost(message, optional, tag = "1")]
+    pub global_rate_limit_params: ::core::option::Option<GlobalRateLimitParams>,
+    /// Per address rate limit params
+    #[prost(message, optional, tag = "2")]
+    pub address_rate_limit_params: ::core::option::Option<AddressRateLimitParams>,
+}
+impl ::prost::Name for RateLimitParams {
+    const NAME: &'static str = "RateLimitParams";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// GlobalRateLimitParams defines the global rate limit params
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GlobalRateLimitParams {
+    /// Duration of each rate limit epoch
+    #[prost(message, optional, tag = "1")]
+    pub period: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+    /// Maximum withdrawable supply percentage during the rate limit period; 100 means no limit
+    #[prost(uint32, tag = "2")]
+    pub supply_percentage_quota: u32,
+}
+impl ::prost::Name for GlobalRateLimitParams {
+    const NAME: &'static str = "GlobalRateLimitParams";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// AddressRateLimitParams defines the per address rate limit params
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddressRateLimitParams {
+    /// Duration of each rate limit epoch
+    #[prost(message, optional, tag = "1")]
+    pub period: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
+    /// Maximum withdrawable amount during the rate limit period; 0 means no limit
+    #[prost(int64, tag = "2")]
+    pub quota: i64,
+}
+impl ::prost::Name for AddressRateLimitParams {
+    const NAME: &'static str = "AddressRateLimitParams";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
@@ -386,6 +443,85 @@ pub struct IbcWithdrawRequest {
 }
 impl ::prost::Name for IbcWithdrawRequest {
     const NAME: &'static str = "IBCWithdrawRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// Rate limit for BTC withdrawal
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RateLimit {
+    #[prost(message, optional, tag = "1")]
+    pub global_rate_limit: ::core::option::Option<GlobalRateLimit>,
+    #[prost(message, optional, tag = "2")]
+    pub address_rate_limit: ::core::option::Option<AddressRateLimit>,
+}
+impl ::prost::Name for RateLimit {
+    const NAME: &'static str = "RateLimit";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// Global rate limit for BTC withdrawal
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GlobalRateLimit {
+    /// Starting time for the current epoch
+    #[prost(message, optional, tag = "1")]
+    pub start_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    /// End time for the current epoch
+    #[prost(message, optional, tag = "2")]
+    pub end_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    /// Maximum withdrawable amount for the current epoch; 0 means no limit
+    #[prost(int64, tag = "3")]
+    pub quota: i64,
+    /// Used quota currently
+    #[prost(int64, tag = "4")]
+    pub used: i64,
+}
+impl ::prost::Name for GlobalRateLimit {
+    const NAME: &'static str = "GlobalRateLimit";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// Per address rate limit for BTC withdrawal
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddressRateLimit {
+    /// Starting time for the current epoch
+    #[prost(message, optional, tag = "1")]
+    pub start_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    /// End time for the current epoch
+    #[prost(message, optional, tag = "2")]
+    pub end_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    /// Maximum withdrawable amount for the current epoch; 0 means no limit
+    #[prost(int64, tag = "3")]
+    pub quota: i64,
+}
+impl ::prost::Name for AddressRateLimit {
+    const NAME: &'static str = "AddressRateLimit";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// Per address rate limit details
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddressRateLimitDetails {
+    /// Address
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+    /// Used quota currently
+    #[prost(int64, tag = "2")]
+    pub used: i64,
+}
+impl ::prost::Name for AddressRateLimitDetails {
+    const NAME: &'static str = "AddressRateLimitDetails";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
@@ -1424,6 +1560,72 @@ pub struct QueryIbcDepositScriptResponse {
 }
 impl ::prost::Name for QueryIbcDepositScriptResponse {
     const NAME: &'static str = "QueryIBCDepositScriptResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QueryRateLimitRequest is the request type for the Query/RateLimit RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRateLimitRequest {}
+impl ::prost::Name for QueryRateLimitRequest {
+    const NAME: &'static str = "QueryRateLimitRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QueryRateLimitResponse is the response type for the Query/RateLimit RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRateLimitResponse {
+    #[prost(message, optional, tag = "1")]
+    pub rate_limit: ::core::option::Option<RateLimit>,
+}
+impl ::prost::Name for QueryRateLimitResponse {
+    const NAME: &'static str = "QueryRateLimitResponse";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QueryRateLimitByAddressRequest is the request type for the Query/RateLimitByAddress RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRateLimitByAddressRequest {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryRateLimitByAddressRequest {
+    const NAME: &'static str = "QueryRateLimitByAddressRequest";
+    const PACKAGE: &'static str = "side.btcbridge";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)
+    }
+}
+/// QueryRateLimitByAddressResponse is the response type for the Query/RateLimitByAddress RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryRateLimitByAddressResponse {
+    /// Address
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+    /// Starting time for the current epoch
+    #[prost(message, optional, tag = "2")]
+    pub start_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    /// End time for the current epoch
+    #[prost(message, optional, tag = "3")]
+    pub end_time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    /// Maximum withdrawable amount for the current epoch; 0 means no limit
+    #[prost(int64, tag = "4")]
+    pub quota: i64,
+    /// Used quota currently
+    #[prost(int64, tag = "5")]
+    pub used: i64,
+}
+impl ::prost::Name for QueryRateLimitByAddressResponse {
+    const NAME: &'static str = "QueryRateLimitByAddressResponse";
     const PACKAGE: &'static str = "side.btcbridge";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.btcbridge.{}", Self::NAME)

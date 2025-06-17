@@ -572,6 +572,48 @@ pub mod query_client {
             ));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn query_rate_limit(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryRateLimitRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryRateLimitResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.btcbridge.Query/QueryRateLimit");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.btcbridge.Query", "QueryRateLimit"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn query_rate_limit_by_address(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryRateLimitByAddressRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryRateLimitByAddressResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/side.btcbridge.Query/QueryRateLimitByAddress",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut().insert(GrpcMethod::new(
+                "side.btcbridge.Query",
+                "QueryRateLimitByAddress",
+            ));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -707,6 +749,17 @@ pub mod query_server {
             request: tonic::Request<super::QueryIbcDepositScriptRequest>,
         ) -> core::result::Result<
             tonic::Response<super::QueryIbcDepositScriptResponse>,
+            tonic::Status,
+        >;
+        async fn query_rate_limit(
+            &self,
+            request: tonic::Request<super::QueryRateLimitRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryRateLimitResponse>, tonic::Status>;
+        async fn query_rate_limit_by_address(
+            &self,
+            request: tonic::Request<super::QueryRateLimitByAddressRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryRateLimitByAddressResponse>,
             tonic::Status,
         >;
     }
@@ -1683,6 +1736,86 @@ pub mod query_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = QueryIBCDepositScriptSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.btcbridge.Query/QueryRateLimit" => {
+                    #[allow(non_camel_case_types)]
+                    struct QueryRateLimitSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryRateLimitRequest> for QueryRateLimitSvc<T> {
+                        type Response = super::QueryRateLimitResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryRateLimitRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).query_rate_limit(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = QueryRateLimitSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.btcbridge.Query/QueryRateLimitByAddress" => {
+                    #[allow(non_camel_case_types)]
+                    struct QueryRateLimitByAddressSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query>
+                        tonic::server::UnaryService<super::QueryRateLimitByAddressRequest>
+                        for QueryRateLimitByAddressSvc<T>
+                    {
+                        type Response = super::QueryRateLimitByAddressResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryRateLimitByAddressRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut =
+                                async move { (*inner).query_rate_limit_by_address(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = QueryRateLimitByAddressSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

@@ -14,10 +14,13 @@ impl serde::Serialize for AssetMetadata {
         if !self.symbol.is_empty() {
             len += 1;
         }
+        if self.decimals != 0 {
+            len += 1;
+        }
         if !self.price_symbol.is_empty() {
             len += 1;
         }
-        if self.decimals != 0 {
+        if self.is_base_price_asset {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.liquidation.AssetMetadata", len)?;
@@ -27,11 +30,14 @@ impl serde::Serialize for AssetMetadata {
         if !self.symbol.is_empty() {
             struct_ser.serialize_field("symbol", &self.symbol)?;
         }
+        if self.decimals != 0 {
+            struct_ser.serialize_field("decimals", &self.decimals)?;
+        }
         if !self.price_symbol.is_empty() {
             struct_ser.serialize_field("priceSymbol", &self.price_symbol)?;
         }
-        if self.decimals != 0 {
-            struct_ser.serialize_field("decimals", &self.decimals)?;
+        if self.is_base_price_asset {
+            struct_ser.serialize_field("isBasePriceAsset", &self.is_base_price_asset)?;
         }
         struct_ser.end()
     }
@@ -43,14 +49,23 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["denom", "symbol", "price_symbol", "priceSymbol", "decimals"];
+        const FIELDS: &[&str] = &[
+            "denom",
+            "symbol",
+            "decimals",
+            "price_symbol",
+            "priceSymbol",
+            "is_base_price_asset",
+            "isBasePriceAsset",
+        ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Denom,
             Symbol,
-            PriceSymbol,
             Decimals,
+            PriceSymbol,
+            IsBasePriceAsset,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -78,8 +93,11 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
                         match value {
                             "denom" => Ok(GeneratedField::Denom),
                             "symbol" => Ok(GeneratedField::Symbol),
-                            "priceSymbol" | "price_symbol" => Ok(GeneratedField::PriceSymbol),
                             "decimals" => Ok(GeneratedField::Decimals),
+                            "priceSymbol" | "price_symbol" => Ok(GeneratedField::PriceSymbol),
+                            "isBasePriceAsset" | "is_base_price_asset" => {
+                                Ok(GeneratedField::IsBasePriceAsset)
+                            }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -101,8 +119,9 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
             {
                 let mut denom__ = None;
                 let mut symbol__ = None;
-                let mut price_symbol__ = None;
                 let mut decimals__ = None;
+                let mut price_symbol__ = None;
+                let mut is_base_price_asset__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Denom => {
@@ -117,12 +136,6 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
                             }
                             symbol__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::PriceSymbol => {
-                            if price_symbol__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("priceSymbol"));
-                            }
-                            price_symbol__ = Some(map_.next_value()?);
-                        }
                         GeneratedField::Decimals => {
                             if decimals__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("decimals"));
@@ -132,13 +145,26 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
                                     .0,
                             );
                         }
+                        GeneratedField::PriceSymbol => {
+                            if price_symbol__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("priceSymbol"));
+                            }
+                            price_symbol__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::IsBasePriceAsset => {
+                            if is_base_price_asset__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("isBasePriceAsset"));
+                            }
+                            is_base_price_asset__ = Some(map_.next_value()?);
+                        }
                     }
                 }
                 Ok(AssetMetadata {
                     denom: denom__.unwrap_or_default(),
                     symbol: symbol__.unwrap_or_default(),
-                    price_symbol: price_symbol__.unwrap_or_default(),
                     decimals: decimals__.unwrap_or_default(),
+                    price_symbol: price_symbol__.unwrap_or_default(),
+                    is_base_price_asset: is_base_price_asset__.unwrap_or_default(),
                 })
             }
         }

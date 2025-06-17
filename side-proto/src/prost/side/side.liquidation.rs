@@ -6,10 +6,12 @@ pub struct AssetMetadata {
     pub denom: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub symbol: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub price_symbol: ::prost::alloc::string::String,
-    #[prost(int32, tag = "4")]
+    #[prost(int32, tag = "3")]
     pub decimals: i32,
+    #[prost(string, tag = "4")]
+    pub price_symbol: ::prost::alloc::string::String,
+    #[prost(bool, tag = "5")]
+    pub is_base_price_asset: bool,
 }
 impl ::prost::Name for AssetMetadata {
     const NAME: &'static str = "AssetMetadata";

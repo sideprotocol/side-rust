@@ -707,6 +707,9 @@ impl serde::Serialize for OracleVoteExtension {
         if !self.blocks.is_empty() {
             len += 1;
         }
+        if self.has_error {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("side.oracle.OracleVoteExtension", len)?;
         if self.height != 0 {
             #[allow(clippy::needless_borrow)]
@@ -721,6 +724,9 @@ impl serde::Serialize for OracleVoteExtension {
         if !self.blocks.is_empty() {
             struct_ser.serialize_field("blocks", &self.blocks)?;
         }
+        if self.has_error {
+            struct_ser.serialize_field("hasError", &self.has_error)?;
+        }
         struct_ser.end()
     }
 }
@@ -731,13 +737,14 @@ impl<'de> serde::Deserialize<'de> for OracleVoteExtension {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["height", "prices", "blocks"];
+        const FIELDS: &[&str] = &["height", "prices", "blocks", "has_error", "hasError"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Height,
             Prices,
             Blocks,
+            HasError,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -766,6 +773,7 @@ impl<'de> serde::Deserialize<'de> for OracleVoteExtension {
                             "height" => Ok(GeneratedField::Height),
                             "prices" => Ok(GeneratedField::Prices),
                             "blocks" => Ok(GeneratedField::Blocks),
+                            "hasError" | "has_error" => Ok(GeneratedField::HasError),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -791,6 +799,7 @@ impl<'de> serde::Deserialize<'de> for OracleVoteExtension {
                 let mut height__ = None;
                 let mut prices__ = None;
                 let mut blocks__ = None;
+                let mut has_error__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Height => {
@@ -814,12 +823,19 @@ impl<'de> serde::Deserialize<'de> for OracleVoteExtension {
                             }
                             blocks__ = Some(map_.next_value()?);
                         }
+                        GeneratedField::HasError => {
+                            if has_error__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("hasError"));
+                            }
+                            has_error__ = Some(map_.next_value()?);
+                        }
                     }
                 }
                 Ok(OracleVoteExtension {
                     height: height__.unwrap_or_default(),
                     prices: prices__.unwrap_or_default(),
                     blocks: blocks__.unwrap_or_default(),
+                    has_error: has_error__.unwrap_or_default(),
                 })
             }
         }

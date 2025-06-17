@@ -1,5 +1,391 @@
 // @generated
 #[cfg(feature = "serde")]
+impl serde::Serialize for AddressRateLimit {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.start_time.is_some() {
+            len += 1;
+        }
+        if self.end_time.is_some() {
+            len += 1;
+        }
+        if self.quota != 0 {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.btcbridge.AddressRateLimit", len)?;
+        if let Some(v) = self.start_time.as_ref() {
+            struct_ser.serialize_field("startTime", v)?;
+        }
+        if let Some(v) = self.end_time.as_ref() {
+            struct_ser.serialize_field("endTime", v)?;
+        }
+        if self.quota != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "quota",
+                alloc::string::ToString::to_string(&self.quota).as_str(),
+            )?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for AddressRateLimit {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["start_time", "startTime", "end_time", "endTime", "quota"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            StartTime,
+            EndTime,
+            Quota,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "startTime" | "start_time" => Ok(GeneratedField::StartTime),
+                            "endTime" | "end_time" => Ok(GeneratedField::EndTime),
+                            "quota" => Ok(GeneratedField::Quota),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = AddressRateLimit;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.AddressRateLimit")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<AddressRateLimit, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut start_time__ = None;
+                let mut end_time__ = None;
+                let mut quota__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::StartTime => {
+                            if start_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("startTime"));
+                            }
+                            start_time__ = map_.next_value()?;
+                        }
+                        GeneratedField::EndTime => {
+                            if end_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("endTime"));
+                            }
+                            end_time__ = map_.next_value()?;
+                        }
+                        GeneratedField::Quota => {
+                            if quota__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("quota"));
+                            }
+                            quota__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(AddressRateLimit {
+                    start_time: start_time__,
+                    end_time: end_time__,
+                    quota: quota__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.btcbridge.AddressRateLimit", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for AddressRateLimitDetails {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.address.is_empty() {
+            len += 1;
+        }
+        if self.used != 0 {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.AddressRateLimitDetails", len)?;
+        if !self.address.is_empty() {
+            struct_ser.serialize_field("address", &self.address)?;
+        }
+        if self.used != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "used",
+                alloc::string::ToString::to_string(&self.used).as_str(),
+            )?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for AddressRateLimitDetails {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["address", "used"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Address,
+            Used,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "address" => Ok(GeneratedField::Address),
+                            "used" => Ok(GeneratedField::Used),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = AddressRateLimitDetails;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.AddressRateLimitDetails")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<AddressRateLimitDetails, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut address__ = None;
+                let mut used__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Address => {
+                            if address__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("address"));
+                            }
+                            address__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Used => {
+                            if used__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("used"));
+                            }
+                            used__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(AddressRateLimitDetails {
+                    address: address__.unwrap_or_default(),
+                    used: used__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.AddressRateLimitDetails",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for AddressRateLimitParams {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.period.is_some() {
+            len += 1;
+        }
+        if self.quota != 0 {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.AddressRateLimitParams", len)?;
+        if let Some(v) = self.period.as_ref() {
+            struct_ser.serialize_field("period", v)?;
+        }
+        if self.quota != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "quota",
+                alloc::string::ToString::to_string(&self.quota).as_str(),
+            )?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for AddressRateLimitParams {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["period", "quota"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Period,
+            Quota,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "period" => Ok(GeneratedField::Period),
+                            "quota" => Ok(GeneratedField::Quota),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = AddressRateLimitParams;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.AddressRateLimitParams")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<AddressRateLimitParams, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut period__ = None;
+                let mut quota__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Period => {
+                            if period__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("period"));
+                            }
+                            period__ = map_.next_value()?;
+                        }
+                        GeneratedField::Quota => {
+                            if quota__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("quota"));
+                            }
+                            quota__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(AddressRateLimitParams {
+                    period: period__,
+                    quota: quota__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.AddressRateLimitParams",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
 impl serde::Serialize for AssetType {
     #[allow(deprecated)]
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
@@ -1472,6 +1858,296 @@ impl<'de> serde::Deserialize<'de> for GenesisState {
             }
         }
         deserializer.deserialize_struct("side.btcbridge.GenesisState", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for GlobalRateLimit {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.start_time.is_some() {
+            len += 1;
+        }
+        if self.end_time.is_some() {
+            len += 1;
+        }
+        if self.quota != 0 {
+            len += 1;
+        }
+        if self.used != 0 {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.btcbridge.GlobalRateLimit", len)?;
+        if let Some(v) = self.start_time.as_ref() {
+            struct_ser.serialize_field("startTime", v)?;
+        }
+        if let Some(v) = self.end_time.as_ref() {
+            struct_ser.serialize_field("endTime", v)?;
+        }
+        if self.quota != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "quota",
+                alloc::string::ToString::to_string(&self.quota).as_str(),
+            )?;
+        }
+        if self.used != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "used",
+                alloc::string::ToString::to_string(&self.used).as_str(),
+            )?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for GlobalRateLimit {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "start_time",
+            "startTime",
+            "end_time",
+            "endTime",
+            "quota",
+            "used",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            StartTime,
+            EndTime,
+            Quota,
+            Used,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "startTime" | "start_time" => Ok(GeneratedField::StartTime),
+                            "endTime" | "end_time" => Ok(GeneratedField::EndTime),
+                            "quota" => Ok(GeneratedField::Quota),
+                            "used" => Ok(GeneratedField::Used),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = GlobalRateLimit;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.GlobalRateLimit")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<GlobalRateLimit, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut start_time__ = None;
+                let mut end_time__ = None;
+                let mut quota__ = None;
+                let mut used__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::StartTime => {
+                            if start_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("startTime"));
+                            }
+                            start_time__ = map_.next_value()?;
+                        }
+                        GeneratedField::EndTime => {
+                            if end_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("endTime"));
+                            }
+                            end_time__ = map_.next_value()?;
+                        }
+                        GeneratedField::Quota => {
+                            if quota__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("quota"));
+                            }
+                            quota__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Used => {
+                            if used__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("used"));
+                            }
+                            used__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(GlobalRateLimit {
+                    start_time: start_time__,
+                    end_time: end_time__,
+                    quota: quota__.unwrap_or_default(),
+                    used: used__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.btcbridge.GlobalRateLimit", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for GlobalRateLimitParams {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.period.is_some() {
+            len += 1;
+        }
+        if self.supply_percentage_quota != 0 {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.GlobalRateLimitParams", len)?;
+        if let Some(v) = self.period.as_ref() {
+            struct_ser.serialize_field("period", v)?;
+        }
+        if self.supply_percentage_quota != 0 {
+            struct_ser.serialize_field("supplyPercentageQuota", &self.supply_percentage_quota)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for GlobalRateLimitParams {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["period", "supply_percentage_quota", "supplyPercentageQuota"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Period,
+            SupplyPercentageQuota,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "period" => Ok(GeneratedField::Period),
+                            "supplyPercentageQuota" | "supply_percentage_quota" => {
+                                Ok(GeneratedField::SupplyPercentageQuota)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = GlobalRateLimitParams;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.GlobalRateLimitParams")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<GlobalRateLimitParams, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut period__ = None;
+                let mut supply_percentage_quota__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Period => {
+                            if period__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("period"));
+                            }
+                            period__ = map_.next_value()?;
+                        }
+                        GeneratedField::SupplyPercentageQuota => {
+                            if supply_percentage_quota__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "supplyPercentageQuota",
+                                ));
+                            }
+                            supply_percentage_quota__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(GlobalRateLimitParams {
+                    period: period__,
+                    supply_percentage_quota: supply_percentage_quota__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.GlobalRateLimitParams",
+            FIELDS,
+            GeneratedVisitor,
+        )
     }
 }
 #[cfg(feature = "serde")]
@@ -5135,6 +5811,9 @@ impl serde::Serialize for Params {
         if self.ibc_params.is_some() {
             len += 1;
         }
+        if self.rate_limit_params.is_some() {
+            len += 1;
+        }
         let mut struct_ser = serializer.serialize_struct("side.btcbridge.Params", len)?;
         if self.deposit_confirmation_depth != 0 {
             struct_ser
@@ -5193,6 +5872,9 @@ impl serde::Serialize for Params {
         if let Some(v) = self.ibc_params.as_ref() {
             struct_ser.serialize_field("ibcParams", v)?;
         }
+        if let Some(v) = self.rate_limit_params.as_ref() {
+            struct_ser.serialize_field("rateLimitParams", v)?;
+        }
         struct_ser.end()
     }
 }
@@ -5233,6 +5915,8 @@ impl<'de> serde::Deserialize<'de> for Params {
             "tssParams",
             "ibc_params",
             "ibcParams",
+            "rate_limit_params",
+            "rateLimitParams",
         ];
 
         #[allow(clippy::enum_variant_names)]
@@ -5252,6 +5936,7 @@ impl<'de> serde::Deserialize<'de> for Params {
             ProtocolFees,
             TssParams,
             IbcParams,
+            RateLimitParams,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -5314,6 +5999,9 @@ impl<'de> serde::Deserialize<'de> for Params {
                             "protocolFees" | "protocol_fees" => Ok(GeneratedField::ProtocolFees),
                             "tssParams" | "tss_params" => Ok(GeneratedField::TssParams),
                             "ibcParams" | "ibc_params" => Ok(GeneratedField::IbcParams),
+                            "rateLimitParams" | "rate_limit_params" => {
+                                Ok(GeneratedField::RateLimitParams)
+                            }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -5348,6 +6036,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                 let mut protocol_fees__ = None;
                 let mut tss_params__ = None;
                 let mut ibc_params__ = None;
+                let mut rate_limit_params__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::DepositConfirmationDepth => {
@@ -5464,6 +6153,12 @@ impl<'de> serde::Deserialize<'de> for Params {
                             }
                             ibc_params__ = map_.next_value()?;
                         }
+                        GeneratedField::RateLimitParams => {
+                            if rate_limit_params__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("rateLimitParams"));
+                            }
+                            rate_limit_params__ = map_.next_value()?;
+                        }
                     }
                 }
                 Ok(Params {
@@ -5482,6 +6177,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                     protocol_fees: protocol_fees__,
                     tss_params: tss_params__,
                     ibc_params: ibc_params__,
+                    rate_limit_params: rate_limit_params__,
                 })
             }
         }
@@ -8077,6 +8773,483 @@ impl<'de> serde::Deserialize<'de> for QueryPendingSigningRequestsResponse {
         }
         deserializer.deserialize_struct(
             "side.btcbridge.QueryPendingSigningRequestsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryRateLimitByAddressRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.address.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.QueryRateLimitByAddressRequest", len)?;
+        if !self.address.is_empty() {
+            struct_ser.serialize_field("address", &self.address)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryRateLimitByAddressRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["address"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Address,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "address" => Ok(GeneratedField::Address),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryRateLimitByAddressRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.QueryRateLimitByAddressRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryRateLimitByAddressRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut address__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Address => {
+                            if address__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("address"));
+                            }
+                            address__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryRateLimitByAddressRequest {
+                    address: address__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.QueryRateLimitByAddressRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryRateLimitByAddressResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.address.is_empty() {
+            len += 1;
+        }
+        if self.start_time.is_some() {
+            len += 1;
+        }
+        if self.end_time.is_some() {
+            len += 1;
+        }
+        if self.quota != 0 {
+            len += 1;
+        }
+        if self.used != 0 {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.QueryRateLimitByAddressResponse", len)?;
+        if !self.address.is_empty() {
+            struct_ser.serialize_field("address", &self.address)?;
+        }
+        if let Some(v) = self.start_time.as_ref() {
+            struct_ser.serialize_field("startTime", v)?;
+        }
+        if let Some(v) = self.end_time.as_ref() {
+            struct_ser.serialize_field("endTime", v)?;
+        }
+        if self.quota != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "quota",
+                alloc::string::ToString::to_string(&self.quota).as_str(),
+            )?;
+        }
+        if self.used != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "used",
+                alloc::string::ToString::to_string(&self.used).as_str(),
+            )?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryRateLimitByAddressResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "address",
+            "start_time",
+            "startTime",
+            "end_time",
+            "endTime",
+            "quota",
+            "used",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Address,
+            StartTime,
+            EndTime,
+            Quota,
+            Used,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "address" => Ok(GeneratedField::Address),
+                            "startTime" | "start_time" => Ok(GeneratedField::StartTime),
+                            "endTime" | "end_time" => Ok(GeneratedField::EndTime),
+                            "quota" => Ok(GeneratedField::Quota),
+                            "used" => Ok(GeneratedField::Used),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryRateLimitByAddressResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.QueryRateLimitByAddressResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryRateLimitByAddressResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut address__ = None;
+                let mut start_time__ = None;
+                let mut end_time__ = None;
+                let mut quota__ = None;
+                let mut used__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Address => {
+                            if address__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("address"));
+                            }
+                            address__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::StartTime => {
+                            if start_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("startTime"));
+                            }
+                            start_time__ = map_.next_value()?;
+                        }
+                        GeneratedField::EndTime => {
+                            if end_time__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("endTime"));
+                            }
+                            end_time__ = map_.next_value()?;
+                        }
+                        GeneratedField::Quota => {
+                            if quota__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("quota"));
+                            }
+                            quota__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::Used => {
+                            if used__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("used"));
+                            }
+                            used__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(QueryRateLimitByAddressResponse {
+                    address: address__.unwrap_or_default(),
+                    start_time: start_time__,
+                    end_time: end_time__,
+                    quota: quota__.unwrap_or_default(),
+                    used: used__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.QueryRateLimitByAddressResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryRateLimitRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let len = 0;
+        let struct_ser =
+            serializer.serialize_struct("side.btcbridge.QueryRateLimitRequest", len)?;
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryRateLimitRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {}
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        Err(serde::de::Error::unknown_field(value, FIELDS))
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryRateLimitRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.QueryRateLimitRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryRateLimitRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                while map_.next_key::<GeneratedField>()?.is_some() {
+                    let _ = map_.next_value::<serde::de::IgnoredAny>()?;
+                }
+                Ok(QueryRateLimitRequest {})
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.QueryRateLimitRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryRateLimitResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.rate_limit.is_some() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.btcbridge.QueryRateLimitResponse", len)?;
+        if let Some(v) = self.rate_limit.as_ref() {
+            struct_ser.serialize_field("rateLimit", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryRateLimitResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["rate_limit", "rateLimit"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            RateLimit,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "rateLimit" | "rate_limit" => Ok(GeneratedField::RateLimit),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryRateLimitResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.QueryRateLimitResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryRateLimitResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut rate_limit__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::RateLimit => {
+                            if rate_limit__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("rateLimit"));
+                            }
+                            rate_limit__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(QueryRateLimitResponse {
+                    rate_limit: rate_limit__,
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.btcbridge.QueryRateLimitResponse",
             FIELDS,
             GeneratedVisitor,
         )
@@ -11017,6 +12190,250 @@ impl<'de> serde::Deserialize<'de> for QueryWithdrawalNetworkFeeResponse {
             FIELDS,
             GeneratedVisitor,
         )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for RateLimit {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.global_rate_limit.is_some() {
+            len += 1;
+        }
+        if self.address_rate_limit.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.btcbridge.RateLimit", len)?;
+        if let Some(v) = self.global_rate_limit.as_ref() {
+            struct_ser.serialize_field("globalRateLimit", v)?;
+        }
+        if let Some(v) = self.address_rate_limit.as_ref() {
+            struct_ser.serialize_field("addressRateLimit", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for RateLimit {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "global_rate_limit",
+            "globalRateLimit",
+            "address_rate_limit",
+            "addressRateLimit",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            GlobalRateLimit,
+            AddressRateLimit,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "globalRateLimit" | "global_rate_limit" => {
+                                Ok(GeneratedField::GlobalRateLimit)
+                            }
+                            "addressRateLimit" | "address_rate_limit" => {
+                                Ok(GeneratedField::AddressRateLimit)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = RateLimit;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.RateLimit")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<RateLimit, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut global_rate_limit__ = None;
+                let mut address_rate_limit__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::GlobalRateLimit => {
+                            if global_rate_limit__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("globalRateLimit"));
+                            }
+                            global_rate_limit__ = map_.next_value()?;
+                        }
+                        GeneratedField::AddressRateLimit => {
+                            if address_rate_limit__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("addressRateLimit"));
+                            }
+                            address_rate_limit__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(RateLimit {
+                    global_rate_limit: global_rate_limit__,
+                    address_rate_limit: address_rate_limit__,
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.btcbridge.RateLimit", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for RateLimitParams {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.global_rate_limit_params.is_some() {
+            len += 1;
+        }
+        if self.address_rate_limit_params.is_some() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.btcbridge.RateLimitParams", len)?;
+        if let Some(v) = self.global_rate_limit_params.as_ref() {
+            struct_ser.serialize_field("globalRateLimitParams", v)?;
+        }
+        if let Some(v) = self.address_rate_limit_params.as_ref() {
+            struct_ser.serialize_field("addressRateLimitParams", v)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for RateLimitParams {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "global_rate_limit_params",
+            "globalRateLimitParams",
+            "address_rate_limit_params",
+            "addressRateLimitParams",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            GlobalRateLimitParams,
+            AddressRateLimitParams,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "globalRateLimitParams" | "global_rate_limit_params" => {
+                                Ok(GeneratedField::GlobalRateLimitParams)
+                            }
+                            "addressRateLimitParams" | "address_rate_limit_params" => {
+                                Ok(GeneratedField::AddressRateLimitParams)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = RateLimitParams;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.btcbridge.RateLimitParams")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<RateLimitParams, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut global_rate_limit_params__ = None;
+                let mut address_rate_limit_params__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::GlobalRateLimitParams => {
+                            if global_rate_limit_params__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "globalRateLimitParams",
+                                ));
+                            }
+                            global_rate_limit_params__ = map_.next_value()?;
+                        }
+                        GeneratedField::AddressRateLimitParams => {
+                            if address_rate_limit_params__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "addressRateLimitParams",
+                                ));
+                            }
+                            address_rate_limit_params__ = map_.next_value()?;
+                        }
+                    }
+                }
+                Ok(RateLimitParams {
+                    global_rate_limit_params: global_rate_limit_params__,
+                    address_rate_limit_params: address_rate_limit_params__,
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.btcbridge.RateLimitParams", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]

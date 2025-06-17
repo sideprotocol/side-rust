@@ -72,6 +72,8 @@ pub struct OracleVoteExtension {
         ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
     #[prost(message, repeated, tag = "3")]
     pub blocks: ::prost::alloc::vec::Vec<BlockHeader>,
+    #[prost(bool, tag = "4")]
+    pub has_error: bool,
 }
 impl ::prost::Name for OracleVoteExtension {
     const NAME: &'static str = "OracleVoteExtension";
@@ -80,7 +82,7 @@ impl ::prost::Name for OracleVoteExtension {
         ::prost::alloc::format!("side.oracle.{}", Self::NAME)
     }
 }
-/// GenesisState defines the lending module's genesis state.
+/// GenesisState defines the oracle module's genesis state.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GenesisState {

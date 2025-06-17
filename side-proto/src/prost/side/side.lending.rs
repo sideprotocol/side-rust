@@ -24,6 +24,7 @@ impl ::prost::Name for Params {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
     }
 }
+/// Asset metadata
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AssetMetadata {
@@ -31,10 +32,12 @@ pub struct AssetMetadata {
     pub denom: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub symbol: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub price_symbol: ::prost::alloc::string::String,
-    #[prost(int32, tag = "4")]
+    #[prost(int32, tag = "3")]
     pub decimals: i32,
+    #[prost(string, tag = "4")]
+    pub price_symbol: ::prost::alloc::string::String,
+    #[prost(bool, tag = "5")]
+    pub is_base_price_asset: bool,
 }
 impl ::prost::Name for AssetMetadata {
     const NAME: &'static str = "AssetMetadata";
@@ -204,52 +207,54 @@ pub struct Loan {
     #[prost(string, tag = "3")]
     pub borrower_pub_key: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
+    pub borrower_auth_pub_key: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
     pub dcm: ::prost::alloc::string::String,
-    #[prost(int64, tag = "5")]
-    pub maturity_time: i64,
     #[prost(int64, tag = "6")]
+    pub maturity_time: i64,
+    #[prost(int64, tag = "7")]
     pub final_timeout: i64,
-    #[prost(string, tag = "7")]
+    #[prost(string, tag = "8")]
     pub pool_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "8")]
-    pub borrow_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, optional, tag = "9")]
+    pub borrow_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "10")]
     pub request_fee: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "10")]
-    pub origination_fee: ::prost::alloc::string::String,
     #[prost(string, tag = "11")]
-    pub interest: ::prost::alloc::string::String,
+    pub origination_fee: ::prost::alloc::string::String,
     #[prost(string, tag = "12")]
+    pub interest: ::prost::alloc::string::String,
+    #[prost(string, tag = "13")]
     pub protocol_fee: ::prost::alloc::string::String,
-    #[prost(int64, tag = "13")]
+    #[prost(int64, tag = "14")]
     pub maturity: i64,
-    #[prost(uint32, tag = "14")]
+    #[prost(uint32, tag = "15")]
     pub borrow_apr: u32,
-    #[prost(int64, tag = "15")]
+    #[prost(int64, tag = "16")]
     pub min_maturity: i64,
-    #[prost(string, tag = "16")]
-    pub start_borrow_index: ::prost::alloc::string::String,
     #[prost(string, tag = "17")]
+    pub start_borrow_index: ::prost::alloc::string::String,
+    #[prost(string, tag = "18")]
     pub liquidation_price: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "18")]
-    pub liquidation_event_id: u64,
     #[prost(uint64, tag = "19")]
-    pub default_liquidation_event_id: u64,
+    pub liquidation_event_id: u64,
     #[prost(uint64, tag = "20")]
+    pub default_liquidation_event_id: u64,
+    #[prost(uint64, tag = "21")]
     pub repayment_event_id: u64,
-    #[prost(message, repeated, tag = "21")]
+    #[prost(message, repeated, tag = "22")]
     pub authorizations: ::prost::alloc::vec::Vec<Authorization>,
-    #[prost(string, tag = "22")]
+    #[prost(string, tag = "23")]
     pub collateral_amount: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "23")]
+    #[prost(uint64, tag = "24")]
     pub liquidation_id: u64,
-    #[prost(string, tag = "24")]
+    #[prost(string, tag = "25")]
     pub referrer: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "25")]
-    pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
     #[prost(message, optional, tag = "26")]
+    pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
+    #[prost(message, optional, tag = "27")]
     pub disburse_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "LoanStatus", tag = "27")]
+    #[prost(enumeration = "LoanStatus", tag = "28")]
     pub status: i32,
 }
 impl ::prost::Name for Loan {
@@ -336,8 +341,10 @@ pub struct DlcMeta {
     #[prost(string, tag = "6")]
     pub internal_key: ::prost::alloc::string::String,
     #[prost(string, tag = "7")]
-    pub multisig_script: ::prost::alloc::string::String,
+    pub liquidation_script: ::prost::alloc::string::String,
     #[prost(string, tag = "8")]
+    pub repayment_script: ::prost::alloc::string::String,
+    #[prost(string, tag = "9")]
     pub timeout_refund_script: ::prost::alloc::string::String,
 }
 impl ::prost::Name for DlcMeta {
@@ -805,8 +812,10 @@ pub struct QueryCollateralAddressRequest {
     #[prost(string, tag = "1")]
     pub borrower_pubkey: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
+    pub borrower_auth_pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
     pub dcm_pubkey: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "3")]
+    #[prost(uint64, tag = "4")]
     pub maturity_time: u64,
 }
 impl ::prost::Name for QueryCollateralAddressRequest {
@@ -1235,14 +1244,16 @@ pub struct MsgApply {
     #[prost(string, tag = "2")]
     pub borrower_pubkey: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
+    pub borrower_auth_pubkey: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
     pub pool_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "4")]
+    #[prost(message, optional, tag = "5")]
     pub borrow_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(int64, tag = "5")]
+    #[prost(int64, tag = "6")]
     pub maturity: i64,
-    #[prost(uint64, tag = "6")]
+    #[prost(uint64, tag = "7")]
     pub dcm_id: u64,
-    #[prost(string, tag = "7")]
+    #[prost(string, tag = "8")]
     pub referrer: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgApply {

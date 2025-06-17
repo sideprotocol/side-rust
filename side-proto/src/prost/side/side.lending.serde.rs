@@ -14,10 +14,13 @@ impl serde::Serialize for AssetMetadata {
         if !self.symbol.is_empty() {
             len += 1;
         }
+        if self.decimals != 0 {
+            len += 1;
+        }
         if !self.price_symbol.is_empty() {
             len += 1;
         }
-        if self.decimals != 0 {
+        if self.is_base_price_asset {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.lending.AssetMetadata", len)?;
@@ -27,11 +30,14 @@ impl serde::Serialize for AssetMetadata {
         if !self.symbol.is_empty() {
             struct_ser.serialize_field("symbol", &self.symbol)?;
         }
+        if self.decimals != 0 {
+            struct_ser.serialize_field("decimals", &self.decimals)?;
+        }
         if !self.price_symbol.is_empty() {
             struct_ser.serialize_field("priceSymbol", &self.price_symbol)?;
         }
-        if self.decimals != 0 {
-            struct_ser.serialize_field("decimals", &self.decimals)?;
+        if self.is_base_price_asset {
+            struct_ser.serialize_field("isBasePriceAsset", &self.is_base_price_asset)?;
         }
         struct_ser.end()
     }
@@ -43,14 +49,23 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["denom", "symbol", "price_symbol", "priceSymbol", "decimals"];
+        const FIELDS: &[&str] = &[
+            "denom",
+            "symbol",
+            "decimals",
+            "price_symbol",
+            "priceSymbol",
+            "is_base_price_asset",
+            "isBasePriceAsset",
+        ];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Denom,
             Symbol,
-            PriceSymbol,
             Decimals,
+            PriceSymbol,
+            IsBasePriceAsset,
         }
         #[cfg(feature = "serde")]
         impl<'de> serde::Deserialize<'de> for GeneratedField {
@@ -78,8 +93,11 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
                         match value {
                             "denom" => Ok(GeneratedField::Denom),
                             "symbol" => Ok(GeneratedField::Symbol),
-                            "priceSymbol" | "price_symbol" => Ok(GeneratedField::PriceSymbol),
                             "decimals" => Ok(GeneratedField::Decimals),
+                            "priceSymbol" | "price_symbol" => Ok(GeneratedField::PriceSymbol),
+                            "isBasePriceAsset" | "is_base_price_asset" => {
+                                Ok(GeneratedField::IsBasePriceAsset)
+                            }
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
                         }
                     }
@@ -101,8 +119,9 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
             {
                 let mut denom__ = None;
                 let mut symbol__ = None;
-                let mut price_symbol__ = None;
                 let mut decimals__ = None;
+                let mut price_symbol__ = None;
+                let mut is_base_price_asset__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
                         GeneratedField::Denom => {
@@ -117,12 +136,6 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
                             }
                             symbol__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::PriceSymbol => {
-                            if price_symbol__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("priceSymbol"));
-                            }
-                            price_symbol__ = Some(map_.next_value()?);
-                        }
                         GeneratedField::Decimals => {
                             if decimals__.is_some() {
                                 return Err(serde::de::Error::duplicate_field("decimals"));
@@ -132,13 +145,26 @@ impl<'de> serde::Deserialize<'de> for AssetMetadata {
                                     .0,
                             );
                         }
+                        GeneratedField::PriceSymbol => {
+                            if price_symbol__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("priceSymbol"));
+                            }
+                            price_symbol__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::IsBasePriceAsset => {
+                            if is_base_price_asset__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("isBasePriceAsset"));
+                            }
+                            is_base_price_asset__ = Some(map_.next_value()?);
+                        }
                     }
                 }
                 Ok(AssetMetadata {
                     denom: denom__.unwrap_or_default(),
                     symbol: symbol__.unwrap_or_default(),
-                    price_symbol: price_symbol__.unwrap_or_default(),
                     decimals: decimals__.unwrap_or_default(),
+                    price_symbol: price_symbol__.unwrap_or_default(),
+                    is_base_price_asset: is_base_price_asset__.unwrap_or_default(),
                 })
             }
         }
@@ -618,7 +644,10 @@ impl serde::Serialize for DlcMeta {
         if !self.internal_key.is_empty() {
             len += 1;
         }
-        if !self.multisig_script.is_empty() {
+        if !self.liquidation_script.is_empty() {
+            len += 1;
+        }
+        if !self.repayment_script.is_empty() {
             len += 1;
         }
         if !self.timeout_refund_script.is_empty() {
@@ -643,8 +672,11 @@ impl serde::Serialize for DlcMeta {
         if !self.internal_key.is_empty() {
             struct_ser.serialize_field("internalKey", &self.internal_key)?;
         }
-        if !self.multisig_script.is_empty() {
-            struct_ser.serialize_field("multisigScript", &self.multisig_script)?;
+        if !self.liquidation_script.is_empty() {
+            struct_ser.serialize_field("liquidationScript", &self.liquidation_script)?;
+        }
+        if !self.repayment_script.is_empty() {
+            struct_ser.serialize_field("repaymentScript", &self.repayment_script)?;
         }
         if !self.timeout_refund_script.is_empty() {
             struct_ser.serialize_field("timeoutRefundScript", &self.timeout_refund_script)?;
@@ -672,8 +704,10 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
             "vaultUtxos",
             "internal_key",
             "internalKey",
-            "multisig_script",
-            "multisigScript",
+            "liquidation_script",
+            "liquidationScript",
+            "repayment_script",
+            "repaymentScript",
             "timeout_refund_script",
             "timeoutRefundScript",
         ];
@@ -686,7 +720,8 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
             TimeoutRefundTx,
             VaultUtxos,
             InternalKey,
-            MultisigScript,
+            LiquidationScript,
+            RepaymentScript,
             TimeoutRefundScript,
         }
         #[cfg(feature = "serde")]
@@ -725,8 +760,11 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                             }
                             "vaultUtxos" | "vault_utxos" => Ok(GeneratedField::VaultUtxos),
                             "internalKey" | "internal_key" => Ok(GeneratedField::InternalKey),
-                            "multisigScript" | "multisig_script" => {
-                                Ok(GeneratedField::MultisigScript)
+                            "liquidationScript" | "liquidation_script" => {
+                                Ok(GeneratedField::LiquidationScript)
+                            }
+                            "repaymentScript" | "repayment_script" => {
+                                Ok(GeneratedField::RepaymentScript)
                             }
                             "timeoutRefundScript" | "timeout_refund_script" => {
                                 Ok(GeneratedField::TimeoutRefundScript)
@@ -756,7 +794,8 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                 let mut timeout_refund_tx__ = None;
                 let mut vault_utxos__ = None;
                 let mut internal_key__ = None;
-                let mut multisig_script__ = None;
+                let mut liquidation_script__ = None;
+                let mut repayment_script__ = None;
                 let mut timeout_refund_script__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
@@ -798,11 +837,17 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                             }
                             internal_key__ = Some(map_.next_value()?);
                         }
-                        GeneratedField::MultisigScript => {
-                            if multisig_script__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("multisigScript"));
+                        GeneratedField::LiquidationScript => {
+                            if liquidation_script__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("liquidationScript"));
                             }
-                            multisig_script__ = Some(map_.next_value()?);
+                            liquidation_script__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::RepaymentScript => {
+                            if repayment_script__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("repaymentScript"));
+                            }
+                            repayment_script__ = Some(map_.next_value()?);
                         }
                         GeneratedField::TimeoutRefundScript => {
                             if timeout_refund_script__.is_some() {
@@ -821,7 +866,8 @@ impl<'de> serde::Deserialize<'de> for DlcMeta {
                     timeout_refund_tx: timeout_refund_tx__.unwrap_or_default(),
                     vault_utxos: vault_utxos__.unwrap_or_default(),
                     internal_key: internal_key__.unwrap_or_default(),
-                    multisig_script: multisig_script__.unwrap_or_default(),
+                    liquidation_script: liquidation_script__.unwrap_or_default(),
+                    repayment_script: repayment_script__.unwrap_or_default(),
                     timeout_refund_script: timeout_refund_script__.unwrap_or_default(),
                 })
             }
@@ -1680,6 +1726,9 @@ impl serde::Serialize for Loan {
         if !self.borrower_pub_key.is_empty() {
             len += 1;
         }
+        if !self.borrower_auth_pub_key.is_empty() {
+            len += 1;
+        }
         if !self.dcm.is_empty() {
             len += 1;
         }
@@ -1761,6 +1810,9 @@ impl serde::Serialize for Loan {
         }
         if !self.borrower_pub_key.is_empty() {
             struct_ser.serialize_field("borrowerPubKey", &self.borrower_pub_key)?;
+        }
+        if !self.borrower_auth_pub_key.is_empty() {
+            struct_ser.serialize_field("borrowerAuthPubKey", &self.borrower_auth_pub_key)?;
         }
         if !self.dcm.is_empty() {
             struct_ser.serialize_field("dcm", &self.dcm)?;
@@ -1884,6 +1936,7 @@ impl<'de> serde::Deserialize<'de> for Loan {
             "vaultAddress",
             "borrower",
             "borrowerPubKey",
+            "borrowerAuthPubKey",
             "dcm",
             "maturity_time",
             "maturityTime",
@@ -1933,6 +1986,7 @@ impl<'de> serde::Deserialize<'de> for Loan {
             VaultAddress,
             Borrower,
             BorrowerPubKey,
+            BorrowerAuthPubKey,
             Dcm,
             MaturityTime,
             FinalTimeout,
@@ -1985,6 +2039,7 @@ impl<'de> serde::Deserialize<'de> for Loan {
                             "vaultAddress" | "vault_address" => Ok(GeneratedField::VaultAddress),
                             "borrower" => Ok(GeneratedField::Borrower),
                             "borrowerPubKey" => Ok(GeneratedField::BorrowerPubKey),
+                            "borrowerAuthPubKey" => Ok(GeneratedField::BorrowerAuthPubKey),
                             "dcm" => Ok(GeneratedField::Dcm),
                             "maturityTime" | "maturity_time" => Ok(GeneratedField::MaturityTime),
                             "finalTimeout" | "final_timeout" => Ok(GeneratedField::FinalTimeout),
@@ -2045,6 +2100,7 @@ impl<'de> serde::Deserialize<'de> for Loan {
                 let mut vault_address__ = None;
                 let mut borrower__ = None;
                 let mut borrower_pub_key__ = None;
+                let mut borrower_auth_pub_key__ = None;
                 let mut dcm__ = None;
                 let mut maturity_time__ = None;
                 let mut final_timeout__ = None;
@@ -2088,6 +2144,14 @@ impl<'de> serde::Deserialize<'de> for Loan {
                                 return Err(serde::de::Error::duplicate_field("borrowerPubKey"));
                             }
                             borrower_pub_key__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::BorrowerAuthPubKey => {
+                            if borrower_auth_pub_key__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "borrowerAuthPubKey",
+                                ));
+                            }
+                            borrower_auth_pub_key__ = Some(map_.next_value()?);
                         }
                         GeneratedField::Dcm => {
                             if dcm__.is_some() {
@@ -2270,6 +2334,7 @@ impl<'de> serde::Deserialize<'de> for Loan {
                     vault_address: vault_address__.unwrap_or_default(),
                     borrower: borrower__.unwrap_or_default(),
                     borrower_pub_key: borrower_pub_key__.unwrap_or_default(),
+                    borrower_auth_pub_key: borrower_auth_pub_key__.unwrap_or_default(),
                     dcm: dcm__.unwrap_or_default(),
                     maturity_time: maturity_time__.unwrap_or_default(),
                     final_timeout: final_timeout__.unwrap_or_default(),
@@ -2619,6 +2684,9 @@ impl serde::Serialize for MsgApply {
         if !self.borrower_pubkey.is_empty() {
             len += 1;
         }
+        if !self.borrower_auth_pubkey.is_empty() {
+            len += 1;
+        }
         if !self.pool_id.is_empty() {
             len += 1;
         }
@@ -2640,6 +2708,9 @@ impl serde::Serialize for MsgApply {
         }
         if !self.borrower_pubkey.is_empty() {
             struct_ser.serialize_field("borrowerPubkey", &self.borrower_pubkey)?;
+        }
+        if !self.borrower_auth_pubkey.is_empty() {
+            struct_ser.serialize_field("borrowerAuthPubkey", &self.borrower_auth_pubkey)?;
         }
         if !self.pool_id.is_empty() {
             struct_ser.serialize_field("poolId", &self.pool_id)?;
@@ -2678,6 +2749,8 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
             "borrower",
             "borrower_pubkey",
             "borrowerPubkey",
+            "borrower_auth_pubkey",
+            "borrowerAuthPubkey",
             "pool_id",
             "poolId",
             "borrow_amount",
@@ -2692,6 +2765,7 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
         enum GeneratedField {
             Borrower,
             BorrowerPubkey,
+            BorrowerAuthPubkey,
             PoolId,
             BorrowAmount,
             Maturity,
@@ -2726,6 +2800,9 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
                             "borrowerPubkey" | "borrower_pubkey" => {
                                 Ok(GeneratedField::BorrowerPubkey)
                             }
+                            "borrowerAuthPubkey" | "borrower_auth_pubkey" => {
+                                Ok(GeneratedField::BorrowerAuthPubkey)
+                            }
                             "poolId" | "pool_id" => Ok(GeneratedField::PoolId),
                             "borrowAmount" | "borrow_amount" => Ok(GeneratedField::BorrowAmount),
                             "maturity" => Ok(GeneratedField::Maturity),
@@ -2752,6 +2829,7 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
             {
                 let mut borrower__ = None;
                 let mut borrower_pubkey__ = None;
+                let mut borrower_auth_pubkey__ = None;
                 let mut pool_id__ = None;
                 let mut borrow_amount__ = None;
                 let mut maturity__ = None;
@@ -2770,6 +2848,14 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
                                 return Err(serde::de::Error::duplicate_field("borrowerPubkey"));
                             }
                             borrower_pubkey__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::BorrowerAuthPubkey => {
+                            if borrower_auth_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "borrowerAuthPubkey",
+                                ));
+                            }
+                            borrower_auth_pubkey__ = Some(map_.next_value()?);
                         }
                         GeneratedField::PoolId => {
                             if pool_id__.is_some() {
@@ -2812,6 +2898,7 @@ impl<'de> serde::Deserialize<'de> for MsgApply {
                 Ok(MsgApply {
                     borrower: borrower__.unwrap_or_default(),
                     borrower_pubkey: borrower_pubkey__.unwrap_or_default(),
+                    borrower_auth_pubkey: borrower_auth_pubkey__.unwrap_or_default(),
                     pool_id: pool_id__.unwrap_or_default(),
                     borrow_amount: borrow_amount__,
                     maturity: maturity__.unwrap_or_default(),
@@ -5609,6 +5696,9 @@ impl serde::Serialize for QueryCollateralAddressRequest {
         if !self.borrower_pubkey.is_empty() {
             len += 1;
         }
+        if !self.borrower_auth_pubkey.is_empty() {
+            len += 1;
+        }
         if !self.dcm_pubkey.is_empty() {
             len += 1;
         }
@@ -5619,6 +5709,9 @@ impl serde::Serialize for QueryCollateralAddressRequest {
             serializer.serialize_struct("side.lending.QueryCollateralAddressRequest", len)?;
         if !self.borrower_pubkey.is_empty() {
             struct_ser.serialize_field("borrowerPubkey", &self.borrower_pubkey)?;
+        }
+        if !self.borrower_auth_pubkey.is_empty() {
+            struct_ser.serialize_field("borrowerAuthPubkey", &self.borrower_auth_pubkey)?;
         }
         if !self.dcm_pubkey.is_empty() {
             struct_ser.serialize_field("dcmPubkey", &self.dcm_pubkey)?;
@@ -5643,6 +5736,8 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
         const FIELDS: &[&str] = &[
             "borrower_pubkey",
             "borrowerPubkey",
+            "borrower_auth_pubkey",
+            "borrowerAuthPubkey",
             "dcm_pubkey",
             "dcmPubkey",
             "maturity_time",
@@ -5652,6 +5747,7 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             BorrowerPubkey,
+            BorrowerAuthPubkey,
             DcmPubkey,
             MaturityTime,
         }
@@ -5682,6 +5778,9 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
                             "borrowerPubkey" | "borrower_pubkey" => {
                                 Ok(GeneratedField::BorrowerPubkey)
                             }
+                            "borrowerAuthPubkey" | "borrower_auth_pubkey" => {
+                                Ok(GeneratedField::BorrowerAuthPubkey)
+                            }
                             "dcmPubkey" | "dcm_pubkey" => Ok(GeneratedField::DcmPubkey),
                             "maturityTime" | "maturity_time" => Ok(GeneratedField::MaturityTime),
                             _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
@@ -5707,6 +5806,7 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut borrower_pubkey__ = None;
+                let mut borrower_auth_pubkey__ = None;
                 let mut dcm_pubkey__ = None;
                 let mut maturity_time__ = None;
                 while let Some(k) = map_.next_key()? {
@@ -5716,6 +5816,14 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
                                 return Err(serde::de::Error::duplicate_field("borrowerPubkey"));
                             }
                             borrower_pubkey__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::BorrowerAuthPubkey => {
+                            if borrower_auth_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "borrowerAuthPubkey",
+                                ));
+                            }
+                            borrower_auth_pubkey__ = Some(map_.next_value()?);
                         }
                         GeneratedField::DcmPubkey => {
                             if dcm_pubkey__.is_some() {
@@ -5736,6 +5844,7 @@ impl<'de> serde::Deserialize<'de> for QueryCollateralAddressRequest {
                 }
                 Ok(QueryCollateralAddressRequest {
                     borrower_pubkey: borrower_pubkey__.unwrap_or_default(),
+                    borrower_auth_pubkey: borrower_auth_pubkey__.unwrap_or_default(),
                     dcm_pubkey: dcm_pubkey__.unwrap_or_default(),
                     maturity_time: maturity_time__.unwrap_or_default(),
                 })
