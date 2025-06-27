@@ -257,47 +257,22 @@ impl DkgIntent {
         }
     }
 }
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PricePair {
-    #[prost(string, tag = "1")]
-    pub pair: ::prost::alloc::string::String,
-    #[prost(int32, tag = "2")]
-    pub decimals: i32,
-    #[prost(string, tag = "3")]
-    pub interval: ::prost::alloc::string::String,
-}
-impl ::prost::Name for PricePair {
-    const NAME: &'static str = "PricePair";
-    const PACKAGE: &'static str = "side.dlc";
-    fn full_name() -> ::prost::alloc::string::String {
-        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
-    }
-}
 /// Params defines the parameters for the module.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
     #[prost(uint32, tag = "1")]
-    pub price_event_nonce_queue_size: u32,
-    #[prost(message, repeated, tag = "2")]
-    pub price_pairs: ::prost::alloc::vec::Vec<PricePair>,
-    #[prost(uint32, tag = "3")]
-    pub date_event_nonce_queue_size: u32,
-    #[prost(message, optional, tag = "4")]
-    pub date_interval: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
-    #[prost(uint32, tag = "5")]
-    pub lending_event_nonce_queue_size: u32,
-    #[prost(string, repeated, tag = "6")]
-    pub allowed_oracle_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(uint32, tag = "7")]
-    pub oracle_participant_num: u32,
-    #[prost(uint32, tag = "8")]
-    pub oracle_participant_threshold: u32,
-    #[prost(uint32, tag = "9")]
+    pub nonce_queue_size: u32,
+    #[prost(uint32, tag = "2")]
     pub nonce_generation_batch_size: u32,
-    #[prost(int64, tag = "10")]
+    #[prost(int64, tag = "3")]
     pub nonce_generation_interval: i64,
+    #[prost(string, repeated, tag = "4")]
+    pub allowed_oracle_participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, tag = "5")]
+    pub oracle_participant_num: u32,
+    #[prost(uint32, tag = "6")]
+    pub oracle_participant_threshold: u32,
 }
 impl ::prost::Name for Params {
     const NAME: &'static str = "Params";

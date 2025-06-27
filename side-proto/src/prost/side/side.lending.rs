@@ -237,28 +237,40 @@ pub struct Loan {
     #[prost(string, tag = "18")]
     pub liquidation_price: ::prost::alloc::string::String,
     #[prost(uint64, tag = "19")]
-    pub liquidation_event_id: u64,
-    #[prost(uint64, tag = "20")]
-    pub default_liquidation_event_id: u64,
-    #[prost(uint64, tag = "21")]
-    pub repayment_event_id: u64,
-    #[prost(message, repeated, tag = "22")]
+    pub dlc_event_id: u64,
+    #[prost(message, repeated, tag = "20")]
     pub authorizations: ::prost::alloc::vec::Vec<Authorization>,
-    #[prost(string, tag = "23")]
+    #[prost(string, tag = "21")]
     pub collateral_amount: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "24")]
+    #[prost(uint64, tag = "22")]
     pub liquidation_id: u64,
-    #[prost(string, tag = "25")]
+    #[prost(string, tag = "23")]
     pub referrer: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "26")]
+    #[prost(message, optional, tag = "24")]
     pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(message, optional, tag = "27")]
+    #[prost(message, optional, tag = "25")]
     pub disburse_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "LoanStatus", tag = "28")]
+    #[prost(enumeration = "LoanStatus", tag = "26")]
     pub status: i32,
 }
 impl ::prost::Name for Loan {
     const NAME: &'static str = "Loan";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// LeafScript defines the tap leaf script
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LeafScript {
+    #[prost(string, tag = "1")]
+    pub script: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub control_block: ::prost::alloc::string::String,
+}
+impl ::prost::Name for LeafScript {
+    const NAME: &'static str = "LeafScript";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -273,8 +285,8 @@ pub struct CetInfo {
     pub outcome_index: u32,
     #[prost(string, tag = "3")]
     pub signature_point: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub script: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "4")]
+    pub script: ::core::option::Option<LeafScript>,
 }
 impl ::prost::Name for CetInfo {
     const NAME: &'static str = "CetInfo";
@@ -340,12 +352,12 @@ pub struct DlcMeta {
     pub vault_utxos: ::prost::alloc::vec::Vec<super::btcbridge::Utxo>,
     #[prost(string, tag = "6")]
     pub internal_key: ::prost::alloc::string::String,
-    #[prost(string, tag = "7")]
-    pub liquidation_script: ::prost::alloc::string::String,
-    #[prost(string, tag = "8")]
-    pub repayment_script: ::prost::alloc::string::String,
-    #[prost(string, tag = "9")]
-    pub timeout_refund_script: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "7")]
+    pub liquidation_script: ::core::option::Option<LeafScript>,
+    #[prost(message, optional, tag = "8")]
+    pub repayment_script: ::core::option::Option<LeafScript>,
+    #[prost(message, optional, tag = "9")]
+    pub timeout_refund_script: ::core::option::Option<LeafScript>,
 }
 impl ::prost::Name for DlcMeta {
     const NAME: &'static str = "DLCMeta";
@@ -736,7 +748,7 @@ impl ::prost::Name for QueryPoolExchangeRateResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryLiquidationEventRequest {
+pub struct QueryLiquidationPriceRequest {
     #[prost(string, tag = "1")]
     pub pool_id: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -746,8 +758,8 @@ pub struct QueryLiquidationEventRequest {
     #[prost(int64, tag = "4")]
     pub maturity: i64,
 }
-impl ::prost::Name for QueryLiquidationEventRequest {
-    const NAME: &'static str = "QueryLiquidationEventRequest";
+impl ::prost::Name for QueryLiquidationPriceRequest {
+    const NAME: &'static str = "QueryLiquidationPriceRequest";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -755,20 +767,37 @@ impl ::prost::Name for QueryLiquidationEventRequest {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct QueryLiquidationEventResponse {
-    #[prost(uint64, tag = "1")]
-    pub event_id: u64,
-    #[prost(string, tag = "2")]
-    pub oracle_pubkey: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub nonce: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
+pub struct QueryLiquidationPriceResponse {
+    #[prost(string, tag = "1")]
     pub price: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub signature_point: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub pair: ::prost::alloc::string::String,
 }
-impl ::prost::Name for QueryLiquidationEventResponse {
-    const NAME: &'static str = "QueryLiquidationEventResponse";
+impl ::prost::Name for QueryLiquidationPriceResponse {
+    const NAME: &'static str = "QueryLiquidationPriceResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryDlcEventCountRequest {}
+impl ::prost::Name for QueryDlcEventCountRequest {
+    const NAME: &'static str = "QueryDlcEventCountRequest";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryDlcEventCountResponse {
+    #[prost(uint64, tag = "1")]
+    pub count: u64,
+}
+impl ::prost::Name for QueryDlcEventCountResponse {
+    const NAME: &'static str = "QueryDlcEventCountResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -779,8 +808,6 @@ impl ::prost::Name for QueryLiquidationEventResponse {
 pub struct QueryLoanCetInfosRequest {
     #[prost(string, tag = "1")]
     pub loan_id: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub collateral_amount: ::prost::alloc::string::String,
 }
 impl ::prost::Name for QueryLoanCetInfosRequest {
     const NAME: &'static str = "QueryLoanCetInfosRequest";
@@ -1014,6 +1041,32 @@ pub struct QueryLoanAuthorizationResponse {
 }
 impl ::prost::Name for QueryLoanAuthorizationResponse {
     const NAME: &'static str = "QueryLoanAuthorizationResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryLoanDepositsRequest {
+    #[prost(string, tag = "1")]
+    pub loan_id: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryLoanDepositsRequest {
+    const NAME: &'static str = "QueryLoanDepositsRequest";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryLoanDepositsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub deposits: ::prost::alloc::vec::Vec<DepositLog>,
+}
+impl ::prost::Name for QueryLoanDepositsResponse {
+    const NAME: &'static str = "QueryLoanDepositsResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)

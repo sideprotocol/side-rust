@@ -180,11 +180,11 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.lending.Query", "CollateralAddress"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn liquidation_event(
+        pub async fn liquidation_price(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryLiquidationEventRequest>,
+            request: impl tonic::IntoRequest<super::QueryLiquidationPriceRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryLiquidationEventResponse>,
+            tonic::Response<super::QueryLiquidationPriceResponse>,
             tonic::Status,
         > {
             self.inner.ready().await.map_err(|e| {
@@ -194,10 +194,28 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LiquidationEvent");
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LiquidationPrice");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.lending.Query", "LiquidationEvent"));
+                .insert(GrpcMethod::new("side.lending.Query", "LiquidationPrice"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn dlc_event_count(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryDlcEventCountRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryDlcEventCountResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/DlcEventCount");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Query", "DlcEventCount"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn loan(
@@ -311,6 +329,24 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.lending.Query", "LoanAuthorization"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn loan_deposits(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryLoanDepositsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryLoanDepositsResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LoanDeposits");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Query", "LoanDeposits"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn redemption(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryRedemptionRequest>,
@@ -401,13 +437,17 @@ pub mod query_server {
             tonic::Response<super::QueryCollateralAddressResponse>,
             tonic::Status,
         >;
-        async fn liquidation_event(
+        async fn liquidation_price(
             &self,
-            request: tonic::Request<super::QueryLiquidationEventRequest>,
+            request: tonic::Request<super::QueryLiquidationPriceRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryLiquidationEventResponse>,
+            tonic::Response<super::QueryLiquidationPriceResponse>,
             tonic::Status,
         >;
+        async fn dlc_event_count(
+            &self,
+            request: tonic::Request<super::QueryDlcEventCountRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryDlcEventCountResponse>, tonic::Status>;
         async fn loan(
             &self,
             request: tonic::Request<super::QueryLoanRequest>,
@@ -435,6 +475,10 @@ pub mod query_server {
             tonic::Response<super::QueryLoanAuthorizationResponse>,
             tonic::Status,
         >;
+        async fn loan_deposits(
+            &self,
+            request: tonic::Request<super::QueryLoanDepositsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryLoanDepositsResponse>, tonic::Status>;
         async fn redemption(
             &self,
             request: tonic::Request<super::QueryRedemptionRequest>,
@@ -718,20 +762,20 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.lending.Query/LiquidationEvent" => {
+                "/side.lending.Query/LiquidationPrice" => {
                     #[allow(non_camel_case_types)]
-                    struct LiquidationEventSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryLiquidationEventRequest>
-                        for LiquidationEventSvc<T>
+                    struct LiquidationPriceSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryLiquidationPriceRequest>
+                        for LiquidationPriceSvc<T>
                     {
-                        type Response = super::QueryLiquidationEventResponse;
+                        type Response = super::QueryLiquidationPriceResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryLiquidationEventRequest>,
+                            request: tonic::Request<super::QueryLiquidationPriceRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).liquidation_event(request).await };
+                            let fut = async move { (*inner).liquidation_price(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -742,7 +786,47 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = LiquidationEventSvc(inner);
+                        let method = LiquidationPriceSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Query/DlcEventCount" => {
+                    #[allow(non_camel_case_types)]
+                    struct DlcEventCountSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryDlcEventCountRequest>
+                        for DlcEventCountSvc<T>
+                    {
+                        type Response = super::QueryDlcEventCountResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryDlcEventCountRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).dlc_event_count(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = DlcEventCountSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -975,6 +1059,44 @@ pub mod query_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = LoanAuthorizationSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Query/LoanDeposits" => {
+                    #[allow(non_camel_case_types)]
+                    struct LoanDepositsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryLoanDepositsRequest> for LoanDepositsSvc<T> {
+                        type Response = super::QueryLoanDepositsResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryLoanDepositsRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).loan_deposits(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = LoanDepositsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
