@@ -161,15 +161,15 @@ impl SigningIntent {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
-    /// minimum liquidation factor permille
-    #[prost(uint32, tag = "1")]
-    pub min_liquidation_factor: u32,
-    /// liquidation bonus factor permille
-    #[prost(uint32, tag = "2")]
-    pub liquidation_bonus_factor: u32,
-    /// protocol liquidation fee factor permille
-    #[prost(uint32, tag = "3")]
-    pub protocol_liquidation_fee_factor: u32,
+    /// minimum liquidation factor
+    #[prost(string, tag = "1")]
+    pub min_liquidation_factor: ::prost::alloc::string::String,
+    /// liquidation bonus factor
+    #[prost(string, tag = "2")]
+    pub liquidation_bonus_factor: ::prost::alloc::string::String,
+    /// protocol liquidation fee factor
+    #[prost(string, tag = "3")]
+    pub protocol_liquidation_fee_factor: ::prost::alloc::string::String,
     /// protocol liquidation fee collector
     #[prost(string, tag = "4")]
     pub protocol_liquidation_fee_collector: ::prost::alloc::string::String,

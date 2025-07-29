@@ -1513,26 +1513,26 @@ impl serde::Serialize for Params {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if self.min_liquidation_factor != 0 {
+        if !self.min_liquidation_factor.is_empty() {
             len += 1;
         }
-        if self.liquidation_bonus_factor != 0 {
+        if !self.liquidation_bonus_factor.is_empty() {
             len += 1;
         }
-        if self.protocol_liquidation_fee_factor != 0 {
+        if !self.protocol_liquidation_fee_factor.is_empty() {
             len += 1;
         }
         if !self.protocol_liquidation_fee_collector.is_empty() {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.liquidation.Params", len)?;
-        if self.min_liquidation_factor != 0 {
+        if !self.min_liquidation_factor.is_empty() {
             struct_ser.serialize_field("minLiquidationFactor", &self.min_liquidation_factor)?;
         }
-        if self.liquidation_bonus_factor != 0 {
+        if !self.liquidation_bonus_factor.is_empty() {
             struct_ser.serialize_field("liquidationBonusFactor", &self.liquidation_bonus_factor)?;
         }
-        if self.protocol_liquidation_fee_factor != 0 {
+        if !self.protocol_liquidation_fee_factor.is_empty() {
             struct_ser.serialize_field(
                 "protocolLiquidationFeeFactor",
                 &self.protocol_liquidation_fee_factor,
@@ -1640,10 +1640,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                                     "minLiquidationFactor",
                                 ));
                             }
-                            min_liquidation_factor__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            min_liquidation_factor__ = Some(map_.next_value()?);
                         }
                         GeneratedField::LiquidationBonusFactor => {
                             if liquidation_bonus_factor__.is_some() {
@@ -1651,10 +1648,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                                     "liquidationBonusFactor",
                                 ));
                             }
-                            liquidation_bonus_factor__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            liquidation_bonus_factor__ = Some(map_.next_value()?);
                         }
                         GeneratedField::ProtocolLiquidationFeeFactor => {
                             if protocol_liquidation_fee_factor__.is_some() {
@@ -1662,10 +1656,7 @@ impl<'de> serde::Deserialize<'de> for Params {
                                     "protocolLiquidationFeeFactor",
                                 ));
                             }
-                            protocol_liquidation_fee_factor__ = Some(
-                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
-                                    .0,
-                            );
+                            protocol_liquidation_fee_factor__ = Some(map_.next_value()?);
                         }
                         GeneratedField::ProtocolLiquidationFeeCollector => {
                             if protocol_liquidation_fee_collector__.is_some() {

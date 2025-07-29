@@ -2159,9 +2159,6 @@ impl serde::Serialize for IbcParams {
     {
         use serde::ser::SerializeStruct;
         let mut len = 0;
-        if !self.port_id.is_empty() {
-            len += 1;
-        }
         if self.timeout_height_offset != 0 {
             len += 1;
         }
@@ -2169,9 +2166,6 @@ impl serde::Serialize for IbcParams {
             len += 1;
         }
         let mut struct_ser = serializer.serialize_struct("side.btcbridge.IBCParams", len)?;
-        if !self.port_id.is_empty() {
-            struct_ser.serialize_field("portId", &self.port_id)?;
-        }
         if self.timeout_height_offset != 0 {
             #[allow(clippy::needless_borrow)]
             struct_ser.serialize_field(
@@ -2193,8 +2187,6 @@ impl<'de> serde::Deserialize<'de> for IbcParams {
         D: serde::Deserializer<'de>,
     {
         const FIELDS: &[&str] = &[
-            "port_id",
-            "portId",
             "timeout_height_offset",
             "timeoutHeightOffset",
             "timeout_duration",
@@ -2203,7 +2195,6 @@ impl<'de> serde::Deserialize<'de> for IbcParams {
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
-            PortId,
             TimeoutHeightOffset,
             TimeoutDuration,
         }
@@ -2231,7 +2222,6 @@ impl<'de> serde::Deserialize<'de> for IbcParams {
                         E: serde::de::Error,
                     {
                         match value {
-                            "portId" | "port_id" => Ok(GeneratedField::PortId),
                             "timeoutHeightOffset" | "timeout_height_offset" => {
                                 Ok(GeneratedField::TimeoutHeightOffset)
                             }
@@ -2257,17 +2247,10 @@ impl<'de> serde::Deserialize<'de> for IbcParams {
             where
                 V: serde::de::MapAccess<'de>,
             {
-                let mut port_id__ = None;
                 let mut timeout_height_offset__ = None;
                 let mut timeout_duration__ = None;
                 while let Some(k) = map_.next_key()? {
                     match k {
-                        GeneratedField::PortId => {
-                            if port_id__.is_some() {
-                                return Err(serde::de::Error::duplicate_field("portId"));
-                            }
-                            port_id__ = Some(map_.next_value()?);
-                        }
                         GeneratedField::TimeoutHeightOffset => {
                             if timeout_height_offset__.is_some() {
                                 return Err(serde::de::Error::duplicate_field(
@@ -2288,7 +2271,6 @@ impl<'de> serde::Deserialize<'de> for IbcParams {
                     }
                 }
                 Ok(IbcParams {
-                    port_id: port_id__.unwrap_or_default(),
                     timeout_height_offset: timeout_height_offset__.unwrap_or_default(),
                     timeout_duration: timeout_duration__,
                 })

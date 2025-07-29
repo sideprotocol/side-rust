@@ -4,15 +4,17 @@
 pub struct DlcOracle {
     #[prost(uint64, tag = "1")]
     pub id: u64,
-    #[prost(string, tag = "2")]
-    pub desc: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub dkg_id: u64,
     #[prost(string, tag = "3")]
+    pub desc: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
     pub pubkey: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "4")]
+    #[prost(uint64, tag = "5")]
     pub nonce_index: u64,
-    #[prost(message, optional, tag = "5")]
+    #[prost(message, optional, tag = "6")]
     pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "DlcOracleStatus", tag = "6")]
+    #[prost(enumeration = "DlcOracleStatus", tag = "7")]
     pub status: i32,
 }
 impl ::prost::Name for DlcOracle {
@@ -27,13 +29,15 @@ impl ::prost::Name for DlcOracle {
 pub struct Dcm {
     #[prost(uint64, tag = "1")]
     pub id: u64,
-    #[prost(string, tag = "2")]
-    pub desc: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub dkg_id: u64,
     #[prost(string, tag = "3")]
+    pub desc: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
     pub pubkey: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "4")]
+    #[prost(message, optional, tag = "5")]
     pub time: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "DcmStatus", tag = "5")]
+    #[prost(enumeration = "DcmStatus", tag = "6")]
     pub status: i32,
 }
 impl ::prost::Name for Dcm {
@@ -111,6 +115,30 @@ pub struct DlcAttestation {
 }
 impl ::prost::Name for DlcAttestation {
     const NAME: &'static str = "DLCAttestation";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+/// Oracle participant liveness
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OracleParticipantLiveness {
+    /// consensus pub key
+    #[prost(string, tag = "1")]
+    pub consensus_pubkey: ::prost::alloc::string::String,
+    /// Indicates if the participant is alive
+    #[prost(bool, tag = "2")]
+    pub is_alive: bool,
+    /// Id of the last participating DKG
+    #[prost(uint64, tag = "3")]
+    pub last_dkg_id: u64,
+    /// last block height at which the participant was active
+    #[prost(int64, tag = "4")]
+    pub last_block_height: i64,
+}
+impl ::prost::Name for OracleParticipantLiveness {
+    const NAME: &'static str = "OracleParticipantLiveness";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -382,6 +410,36 @@ impl ::prost::Name for QueryAttestationsResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryDcmRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(string, tag = "2")]
+    pub pub_key: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryDcmRequest {
+    const NAME: &'static str = "QueryDCMRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryDcmResponse {
+    #[prost(message, optional, tag = "1")]
+    pub dcm: ::core::option::Option<Dcm>,
+    #[prost(string, repeated, tag = "2")]
+    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for QueryDcmResponse {
+    const NAME: &'static str = "QueryDCMResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryDcMsRequest {
     #[prost(enumeration = "DcmStatus", tag = "1")]
     pub status: i32,
@@ -406,6 +464,36 @@ pub struct QueryDcMsResponse {
 }
 impl ::prost::Name for QueryDcMsResponse {
     const NAME: &'static str = "QueryDCMsResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryOracleRequest {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(string, tag = "2")]
+    pub pub_key: ::prost::alloc::string::String,
+}
+impl ::prost::Name for QueryOracleRequest {
+    const NAME: &'static str = "QueryOracleRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryOracleResponse {
+    #[prost(message, optional, tag = "1")]
+    pub oracle: ::core::option::Option<DlcOracle>,
+    #[prost(string, repeated, tag = "2")]
+    pub participants: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+impl ::prost::Name for QueryOracleResponse {
+    const NAME: &'static str = "QueryOracleResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)
@@ -583,6 +671,34 @@ pub struct QueryEventsResponse {
 }
 impl ::prost::Name for QueryEventsResponse {
     const NAME: &'static str = "QueryEventsResponse";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryOracleParticipantLivenessRequest {
+    #[prost(string, tag = "1")]
+    pub consensus_pubkey: ::prost::alloc::string::String,
+    #[prost(bool, tag = "2")]
+    pub alive: bool,
+}
+impl ::prost::Name for QueryOracleParticipantLivenessRequest {
+    const NAME: &'static str = "QueryOracleParticipantLivenessRequest";
+    const PACKAGE: &'static str = "side.dlc";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.dlc.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryOracleParticipantLivenessResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub participant_livenesses: ::prost::alloc::vec::Vec<OracleParticipantLiveness>,
+}
+impl ::prost::Name for QueryOracleParticipantLivenessResponse {
+    const NAME: &'static str = "QueryOracleParticipantLivenessResponse";
     const PACKAGE: &'static str = "side.dlc";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.dlc.{}", Self::NAME)

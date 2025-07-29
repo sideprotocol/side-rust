@@ -11,6 +11,9 @@ impl serde::Serialize for Dcm {
         if self.id != 0 {
             len += 1;
         }
+        if self.dkg_id != 0 {
+            len += 1;
+        }
         if !self.desc.is_empty() {
             len += 1;
         }
@@ -28,6 +31,13 @@ impl serde::Serialize for Dcm {
             #[allow(clippy::needless_borrow)]
             struct_ser
                 .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        if self.dkg_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "dkgId",
+                alloc::string::ToString::to_string(&self.dkg_id).as_str(),
+            )?;
         }
         if !self.desc.is_empty() {
             struct_ser.serialize_field("desc", &self.desc)?;
@@ -54,11 +64,12 @@ impl<'de> serde::Deserialize<'de> for Dcm {
     where
         D: serde::Deserializer<'de>,
     {
-        const FIELDS: &[&str] = &["id", "desc", "pubkey", "time", "status"];
+        const FIELDS: &[&str] = &["id", "dkg_id", "dkgId", "desc", "pubkey", "time", "status"];
 
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Id,
+            DkgId,
             Desc,
             Pubkey,
             Time,
@@ -89,6 +100,7 @@ impl<'de> serde::Deserialize<'de> for Dcm {
                     {
                         match value {
                             "id" => Ok(GeneratedField::Id),
+                            "dkgId" | "dkg_id" => Ok(GeneratedField::DkgId),
                             "desc" => Ok(GeneratedField::Desc),
                             "pubkey" => Ok(GeneratedField::Pubkey),
                             "time" => Ok(GeneratedField::Time),
@@ -113,6 +125,7 @@ impl<'de> serde::Deserialize<'de> for Dcm {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut id__ = None;
+                let mut dkg_id__ = None;
                 let mut desc__ = None;
                 let mut pubkey__ = None;
                 let mut time__ = None;
@@ -124,6 +137,15 @@ impl<'de> serde::Deserialize<'de> for Dcm {
                                 return Err(serde::de::Error::duplicate_field("id"));
                             }
                             id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::DkgId => {
+                            if dkg_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dkgId"));
+                            }
+                            dkg_id__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -156,6 +178,7 @@ impl<'de> serde::Deserialize<'de> for Dcm {
                 }
                 Ok(Dcm {
                     id: id__.unwrap_or_default(),
+                    dkg_id: dkg_id__.unwrap_or_default(),
                     desc: desc__.unwrap_or_default(),
                     pubkey: pubkey__.unwrap_or_default(),
                     time: time__,
@@ -937,6 +960,9 @@ impl serde::Serialize for DlcOracle {
         if self.id != 0 {
             len += 1;
         }
+        if self.dkg_id != 0 {
+            len += 1;
+        }
         if !self.desc.is_empty() {
             len += 1;
         }
@@ -957,6 +983,13 @@ impl serde::Serialize for DlcOracle {
             #[allow(clippy::needless_borrow)]
             struct_ser
                 .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        if self.dkg_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "dkgId",
+                alloc::string::ToString::to_string(&self.dkg_id).as_str(),
+            )?;
         }
         if !self.desc.is_empty() {
             struct_ser.serialize_field("desc", &self.desc)?;
@@ -992,6 +1025,8 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
     {
         const FIELDS: &[&str] = &[
             "id",
+            "dkg_id",
+            "dkgId",
             "desc",
             "pubkey",
             "nonce_index",
@@ -1003,6 +1038,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
         #[allow(clippy::enum_variant_names)]
         enum GeneratedField {
             Id,
+            DkgId,
             Desc,
             Pubkey,
             NonceIndex,
@@ -1034,6 +1070,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
                     {
                         match value {
                             "id" => Ok(GeneratedField::Id),
+                            "dkgId" | "dkg_id" => Ok(GeneratedField::DkgId),
                             "desc" => Ok(GeneratedField::Desc),
                             "pubkey" => Ok(GeneratedField::Pubkey),
                             "nonceIndex" | "nonce_index" => Ok(GeneratedField::NonceIndex),
@@ -1059,6 +1096,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
                 V: serde::de::MapAccess<'de>,
             {
                 let mut id__ = None;
+                let mut dkg_id__ = None;
                 let mut desc__ = None;
                 let mut pubkey__ = None;
                 let mut nonce_index__ = None;
@@ -1071,6 +1109,15 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
                                 return Err(serde::de::Error::duplicate_field("id"));
                             }
                             id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::DkgId => {
+                            if dkg_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dkgId"));
+                            }
+                            dkg_id__ = Some(
                                 map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
                                     .0,
                             );
@@ -1112,6 +1159,7 @@ impl<'de> serde::Deserialize<'de> for DlcOracle {
                 }
                 Ok(DlcOracle {
                     id: id__.unwrap_or_default(),
+                    dkg_id: dkg_id__.unwrap_or_default(),
                     desc: desc__.unwrap_or_default(),
                     pubkey: pubkey__.unwrap_or_default(),
                     nonce_index: nonce_index__.unwrap_or_default(),
@@ -1788,6 +1836,184 @@ impl<'de> serde::Deserialize<'de> for MsgUpdateParamsResponse {
         }
         deserializer.deserialize_struct(
             "side.dlc.MsgUpdateParamsResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for OracleParticipantLiveness {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.consensus_pubkey.is_empty() {
+            len += 1;
+        }
+        if self.is_alive {
+            len += 1;
+        }
+        if self.last_dkg_id != 0 {
+            len += 1;
+        }
+        if self.last_block_height != 0 {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.dlc.OracleParticipantLiveness", len)?;
+        if !self.consensus_pubkey.is_empty() {
+            struct_ser.serialize_field("consensusPubkey", &self.consensus_pubkey)?;
+        }
+        if self.is_alive {
+            struct_ser.serialize_field("isAlive", &self.is_alive)?;
+        }
+        if self.last_dkg_id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "lastDkgId",
+                alloc::string::ToString::to_string(&self.last_dkg_id).as_str(),
+            )?;
+        }
+        if self.last_block_height != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser.serialize_field(
+                "lastBlockHeight",
+                alloc::string::ToString::to_string(&self.last_block_height).as_str(),
+            )?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for OracleParticipantLiveness {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &[
+            "consensus_pubkey",
+            "consensusPubkey",
+            "is_alive",
+            "isAlive",
+            "last_dkg_id",
+            "lastDkgId",
+            "last_block_height",
+            "lastBlockHeight",
+        ];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            ConsensusPubkey,
+            IsAlive,
+            LastDkgId,
+            LastBlockHeight,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "consensusPubkey" | "consensus_pubkey" => {
+                                Ok(GeneratedField::ConsensusPubkey)
+                            }
+                            "isAlive" | "is_alive" => Ok(GeneratedField::IsAlive),
+                            "lastDkgId" | "last_dkg_id" => Ok(GeneratedField::LastDkgId),
+                            "lastBlockHeight" | "last_block_height" => {
+                                Ok(GeneratedField::LastBlockHeight)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = OracleParticipantLiveness;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.OracleParticipantLiveness")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<OracleParticipantLiveness, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut consensus_pubkey__ = None;
+                let mut is_alive__ = None;
+                let mut last_dkg_id__ = None;
+                let mut last_block_height__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::ConsensusPubkey => {
+                            if consensus_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("consensusPubkey"));
+                            }
+                            consensus_pubkey__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::IsAlive => {
+                            if is_alive__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("isAlive"));
+                            }
+                            is_alive__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::LastDkgId => {
+                            if last_dkg_id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("lastDkgId"));
+                            }
+                            last_dkg_id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::LastBlockHeight => {
+                            if last_block_height__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("lastBlockHeight"));
+                            }
+                            last_block_height__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                    }
+                }
+                Ok(OracleParticipantLiveness {
+                    consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
+                    is_alive: is_alive__.unwrap_or_default(),
+                    last_dkg_id: last_dkg_id__.unwrap_or_default(),
+                    last_block_height: last_block_height__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.dlc.OracleParticipantLiveness",
             FIELDS,
             GeneratedVisitor,
         )
@@ -2863,6 +3089,233 @@ impl<'de> serde::Deserialize<'de> for QueryCountNoncesResponse {
             FIELDS,
             GeneratedVisitor,
         )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryDcmRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.id != 0 {
+            len += 1;
+        }
+        if !self.pub_key.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.dlc.QueryDCMRequest", len)?;
+        if self.id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        if !self.pub_key.is_empty() {
+            struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryDcmRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["id", "pub_key", "pubKey"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+            PubKey,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            "pubKey" | "pub_key" => Ok(GeneratedField::PubKey),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryDcmRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryDCMRequest")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryDcmRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                let mut pub_key__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::PubKey => {
+                            if pub_key__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pubKey"));
+                            }
+                            pub_key__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryDcmRequest {
+                    id: id__.unwrap_or_default(),
+                    pub_key: pub_key__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.dlc.QueryDCMRequest", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryDcmResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.dcm.is_some() {
+            len += 1;
+        }
+        if !self.participants.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.dlc.QueryDCMResponse", len)?;
+        if let Some(v) = self.dcm.as_ref() {
+            struct_ser.serialize_field("dcm", v)?;
+        }
+        if !self.participants.is_empty() {
+            struct_ser.serialize_field("participants", &self.participants)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryDcmResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["dcm", "participants"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Dcm,
+            Participants,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "dcm" => Ok(GeneratedField::Dcm),
+                            "participants" => Ok(GeneratedField::Participants),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryDcmResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryDCMResponse")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryDcmResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut dcm__ = None;
+                let mut participants__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Dcm => {
+                            if dcm__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("dcm"));
+                            }
+                            dcm__ = map_.next_value()?;
+                        }
+                        GeneratedField::Participants => {
+                            if participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("participants"));
+                            }
+                            participants__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryDcmResponse {
+                    dcm: dcm__,
+                    participants: participants__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.dlc.QueryDCMResponse", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]
@@ -3956,6 +4409,464 @@ impl<'de> serde::Deserialize<'de> for QueryNoncesResponse {
             }
         }
         deserializer.deserialize_struct("side.dlc.QueryNoncesResponse", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryOracleParticipantLivenessRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.consensus_pubkey.is_empty() {
+            len += 1;
+        }
+        if self.alive {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.dlc.QueryOracleParticipantLivenessRequest", len)?;
+        if !self.consensus_pubkey.is_empty() {
+            struct_ser.serialize_field("consensusPubkey", &self.consensus_pubkey)?;
+        }
+        if self.alive {
+            struct_ser.serialize_field("alive", &self.alive)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryOracleParticipantLivenessRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["consensus_pubkey", "consensusPubkey", "alive"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            ConsensusPubkey,
+            Alive,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "consensusPubkey" | "consensus_pubkey" => {
+                                Ok(GeneratedField::ConsensusPubkey)
+                            }
+                            "alive" => Ok(GeneratedField::Alive),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryOracleParticipantLivenessRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryOracleParticipantLivenessRequest")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryOracleParticipantLivenessRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut consensus_pubkey__ = None;
+                let mut alive__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::ConsensusPubkey => {
+                            if consensus_pubkey__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("consensusPubkey"));
+                            }
+                            consensus_pubkey__ = Some(map_.next_value()?);
+                        }
+                        GeneratedField::Alive => {
+                            if alive__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("alive"));
+                            }
+                            alive__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryOracleParticipantLivenessRequest {
+                    consensus_pubkey: consensus_pubkey__.unwrap_or_default(),
+                    alive: alive__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.dlc.QueryOracleParticipantLivenessRequest",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryOracleParticipantLivenessResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if !self.participant_livenesses.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser =
+            serializer.serialize_struct("side.dlc.QueryOracleParticipantLivenessResponse", len)?;
+        if !self.participant_livenesses.is_empty() {
+            struct_ser.serialize_field("participantLivenesses", &self.participant_livenesses)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryOracleParticipantLivenessResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["participant_livenesses", "participantLivenesses"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            ParticipantLivenesses,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "participantLivenesses" | "participant_livenesses" => {
+                                Ok(GeneratedField::ParticipantLivenesses)
+                            }
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryOracleParticipantLivenessResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryOracleParticipantLivenessResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryOracleParticipantLivenessResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut participant_livenesses__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::ParticipantLivenesses => {
+                            if participant_livenesses__.is_some() {
+                                return Err(serde::de::Error::duplicate_field(
+                                    "participantLivenesses",
+                                ));
+                            }
+                            participant_livenesses__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryOracleParticipantLivenessResponse {
+                    participant_livenesses: participant_livenesses__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct(
+            "side.dlc.QueryOracleParticipantLivenessResponse",
+            FIELDS,
+            GeneratedVisitor,
+        )
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryOracleRequest {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.id != 0 {
+            len += 1;
+        }
+        if !self.pub_key.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.dlc.QueryOracleRequest", len)?;
+        if self.id != 0 {
+            #[allow(clippy::needless_borrow)]
+            struct_ser
+                .serialize_field("id", alloc::string::ToString::to_string(&self.id).as_str())?;
+        }
+        if !self.pub_key.is_empty() {
+            struct_ser.serialize_field("pubKey", &self.pub_key)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryOracleRequest {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["id", "pub_key", "pubKey"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Id,
+            PubKey,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "id" => Ok(GeneratedField::Id),
+                            "pubKey" | "pub_key" => Ok(GeneratedField::PubKey),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryOracleRequest;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryOracleRequest")
+            }
+
+            fn visit_map<V>(self, mut map_: V) -> core::result::Result<QueryOracleRequest, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut id__ = None;
+                let mut pub_key__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Id => {
+                            if id__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            id__ = Some(
+                                map_.next_value::<::pbjson::private::NumberDeserialize<_>>()?
+                                    .0,
+                            );
+                        }
+                        GeneratedField::PubKey => {
+                            if pub_key__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("pubKey"));
+                            }
+                            pub_key__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryOracleRequest {
+                    id: id__.unwrap_or_default(),
+                    pub_key: pub_key__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.dlc.QueryOracleRequest", FIELDS, GeneratedVisitor)
+    }
+}
+#[cfg(feature = "serde")]
+impl serde::Serialize for QueryOracleResponse {
+    #[allow(deprecated)]
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeStruct;
+        let mut len = 0;
+        if self.oracle.is_some() {
+            len += 1;
+        }
+        if !self.participants.is_empty() {
+            len += 1;
+        }
+        let mut struct_ser = serializer.serialize_struct("side.dlc.QueryOracleResponse", len)?;
+        if let Some(v) = self.oracle.as_ref() {
+            struct_ser.serialize_field("oracle", v)?;
+        }
+        if !self.participants.is_empty() {
+            struct_ser.serialize_field("participants", &self.participants)?;
+        }
+        struct_ser.end()
+    }
+}
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QueryOracleResponse {
+    #[allow(deprecated)]
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        const FIELDS: &[&str] = &["oracle", "participants"];
+
+        #[allow(clippy::enum_variant_names)]
+        enum GeneratedField {
+            Oracle,
+            Participants,
+        }
+        #[cfg(feature = "serde")]
+        impl<'de> serde::Deserialize<'de> for GeneratedField {
+            fn deserialize<D>(deserializer: D) -> core::result::Result<GeneratedField, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                struct GeneratedVisitor;
+
+                impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+                    type Value = GeneratedField;
+
+                    fn expecting(
+                        &self,
+                        formatter: &mut core::fmt::Formatter<'_>,
+                    ) -> core::fmt::Result {
+                        write!(formatter, "expected one of: {:?}", &FIELDS)
+                    }
+
+                    #[allow(unused_variables)]
+                    fn visit_str<E>(self, value: &str) -> core::result::Result<GeneratedField, E>
+                    where
+                        E: serde::de::Error,
+                    {
+                        match value {
+                            "oracle" => Ok(GeneratedField::Oracle),
+                            "participants" => Ok(GeneratedField::Participants),
+                            _ => Err(serde::de::Error::unknown_field(value, FIELDS)),
+                        }
+                    }
+                }
+                deserializer.deserialize_identifier(GeneratedVisitor)
+            }
+        }
+        struct GeneratedVisitor;
+        impl<'de> serde::de::Visitor<'de> for GeneratedVisitor {
+            type Value = QueryOracleResponse;
+
+            fn expecting(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                formatter.write_str("struct side.dlc.QueryOracleResponse")
+            }
+
+            fn visit_map<V>(
+                self,
+                mut map_: V,
+            ) -> core::result::Result<QueryOracleResponse, V::Error>
+            where
+                V: serde::de::MapAccess<'de>,
+            {
+                let mut oracle__ = None;
+                let mut participants__ = None;
+                while let Some(k) = map_.next_key()? {
+                    match k {
+                        GeneratedField::Oracle => {
+                            if oracle__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("oracle"));
+                            }
+                            oracle__ = map_.next_value()?;
+                        }
+                        GeneratedField::Participants => {
+                            if participants__.is_some() {
+                                return Err(serde::de::Error::duplicate_field("participants"));
+                            }
+                            participants__ = Some(map_.next_value()?);
+                        }
+                    }
+                }
+                Ok(QueryOracleResponse {
+                    oracle: oracle__,
+                    participants: participants__.unwrap_or_default(),
+                })
+            }
+        }
+        deserializer.deserialize_struct("side.dlc.QueryOracleResponse", FIELDS, GeneratedVisitor)
     }
 }
 #[cfg(feature = "serde")]

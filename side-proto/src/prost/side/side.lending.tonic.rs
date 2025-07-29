@@ -272,6 +272,24 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.lending.Query", "LoansByAddress"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn loans_by_oracle(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryLoansByOracleRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryLoansByOracleResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/LoansByOracle");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Query", "LoansByOracle"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn loan_cet_infos(
             &mut self,
             request: impl tonic::IntoRequest<super::QueryLoanCetInfosRequest>,
@@ -401,6 +419,24 @@ pub mod query_client {
                 .insert(GrpcMethod::new("side.lending.Query", "CurrentInterest"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn referrers(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryReferrersRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryReferrersResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Query/Referrers");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Query", "Referrers"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -460,6 +496,10 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryLoansByAddressRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryLoansByAddressResponse>, tonic::Status>;
+        async fn loans_by_oracle(
+            &self,
+            request: tonic::Request<super::QueryLoansByOracleRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryLoansByOracleResponse>, tonic::Status>;
         async fn loan_cet_infos(
             &self,
             request: tonic::Request<super::QueryLoanCetInfosRequest>,
@@ -491,6 +531,10 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryCurrentInterestRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryCurrentInterestResponse>, tonic::Status>;
+        async fn referrers(
+            &self,
+            request: tonic::Request<super::QueryReferrersRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryReferrersResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -958,6 +1002,46 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
+                "/side.lending.Query/LoansByOracle" => {
+                    #[allow(non_camel_case_types)]
+                    struct LoansByOracleSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryLoansByOracleRequest>
+                        for LoansByOracleSvc<T>
+                    {
+                        type Response = super::QueryLoansByOracleResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryLoansByOracleRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).loans_by_oracle(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = LoansByOracleSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 "/side.lending.Query/LoanCetInfos" => {
                     #[allow(non_camel_case_types)]
                     struct LoanCetInfosSvc<T: Query>(pub Arc<T>);
@@ -1213,6 +1297,44 @@ pub mod query_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = CurrentInterestSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Query/Referrers" => {
+                    #[allow(non_camel_case_types)]
+                    struct ReferrersSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryReferrersRequest> for ReferrersSvc<T> {
+                        type Response = super::QueryReferrersResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryReferrersRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).referrers(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ReferrersSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1513,6 +1635,42 @@ pub mod msg_client {
                 .insert(GrpcMethod::new("side.lending.Msg", "Repay"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn register_referrer(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgRegisterReferrer>,
+        ) -> core::result::Result<tonic::Response<super::MsgRegisterReferrerResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Msg/RegisterReferrer");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Msg", "RegisterReferrer"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn update_referrer(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgUpdateReferrer>,
+        ) -> core::result::Result<tonic::Response<super::MsgUpdateReferrerResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.lending.Msg/UpdateReferrer");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.lending.Msg", "UpdateReferrer"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn update_params(
             &mut self,
             request: impl tonic::IntoRequest<super::MsgUpdateParams>,
@@ -1580,6 +1738,14 @@ pub mod msg_server {
             &self,
             request: tonic::Request<super::MsgRepay>,
         ) -> core::result::Result<tonic::Response<super::MsgRepayResponse>, tonic::Status>;
+        async fn register_referrer(
+            &self,
+            request: tonic::Request<super::MsgRegisterReferrer>,
+        ) -> core::result::Result<tonic::Response<super::MsgRegisterReferrerResponse>, tonic::Status>;
+        async fn update_referrer(
+            &self,
+            request: tonic::Request<super::MsgUpdateReferrer>,
+        ) -> core::result::Result<tonic::Response<super::MsgUpdateReferrerResponse>, tonic::Status>;
         async fn update_params(
             &self,
             request: tonic::Request<super::MsgUpdateParams>,
@@ -1991,6 +2157,82 @@ pub mod msg_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = RepaySvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Msg/RegisterReferrer" => {
+                    #[allow(non_camel_case_types)]
+                    struct RegisterReferrerSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgRegisterReferrer> for RegisterReferrerSvc<T> {
+                        type Response = super::MsgRegisterReferrerResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgRegisterReferrer>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).register_referrer(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RegisterReferrerSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.lending.Msg/UpdateReferrer" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateReferrerSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgUpdateReferrer> for UpdateReferrerSvc<T> {
+                        type Response = super::MsgUpdateReferrerResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgUpdateReferrer>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).update_referrer(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateReferrerSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

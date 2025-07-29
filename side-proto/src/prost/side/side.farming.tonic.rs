@@ -97,16 +97,16 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Params");
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Query/Params");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Params"));
+                .insert(GrpcMethod::new("side.farming.Query", "Params"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn event(
+        pub async fn staking(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryEventRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryEventResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::QueryStakingRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryStakingResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -115,16 +115,16 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Event");
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Query/Staking");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Event"));
+                .insert(GrpcMethod::new("side.farming.Query", "Staking"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn events(
+        pub async fn stakings(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryEventsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryEventsResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::QueryStakingsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryStakingsResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -133,198 +133,17 @@ pub mod query_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Events");
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Query/Stakings");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Events"));
+                .insert(GrpcMethod::new("side.farming.Query", "Stakings"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn attestation(
+        pub async fn stakings_by_address(
             &mut self,
-            request: impl tonic::IntoRequest<super::QueryAttestationRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAttestationResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Attestation");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Attestation"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn attestation_by_event(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryAttestationByEventRequest>,
+            request: impl tonic::IntoRequest<super::QueryStakingsByAddressRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryAttestationByEventResponse>,
-            tonic::Status,
-        > {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/AttestationByEvent");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "AttestationByEvent"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn attestations(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryAttestationsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAttestationsResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Attestations");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Attestations"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn nonce(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryNonceRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryNonceResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Nonce");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Nonce"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn nonces(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryNoncesRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryNoncesResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Nonces");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Nonces"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn count_nonces(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryCountNoncesRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryCountNoncesResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/CountNonces");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "CountNonces"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn dcm(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryDcmRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryDcmResponse>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/DCM");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "DCM"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn dc_ms(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryDcMsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryDcMsResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/DCMs");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "DCMs"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn oracle(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryOracleRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryOracleResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Oracle");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Oracle"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn oracles(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryOraclesRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryOraclesResponse>, tonic::Status>
-        {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    alloc::format!("Service was not ready: {}", e.into()),
-                )
-            })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Query/Oracles");
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Query", "Oracles"));
-            self.inner.unary(req, path, codec).await
-        }
-        pub async fn oracle_participant_liveness(
-            &mut self,
-            request: impl tonic::IntoRequest<super::QueryOracleParticipantLivenessRequest>,
-        ) -> core::result::Result<
-            tonic::Response<super::QueryOracleParticipantLivenessResponse>,
+            tonic::Response<super::QueryStakingsByAddressResponse>,
             tonic::Status,
         > {
             self.inner.ready().await.map_err(|e| {
@@ -335,12 +154,123 @@ pub mod query_client {
             })?;
             let codec = tonic::codec::ProstCodec::default();
             let path =
-                http::uri::PathAndQuery::from_static("/side.dlc.Query/OracleParticipantLiveness");
+                http::uri::PathAndQuery::from_static("/side.farming.Query/StakingsByAddress");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Query", "StakingsByAddress"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn total_staking(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryTotalStakingRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryTotalStakingResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Query/TotalStaking");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Query", "TotalStaking"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn current_epoch(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryCurrentEpochRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryCurrentEpochResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Query/CurrentEpoch");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Query", "CurrentEpoch"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn rewards(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryRewardsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryRewardsResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Query/Rewards");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Query", "Rewards"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn pending_reward(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryPendingRewardRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryPendingRewardResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Query/PendingReward");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Query", "PendingReward"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn pending_reward_by_address(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryPendingRewardByAddressRequest>,
+        ) -> core::result::Result<
+            tonic::Response<super::QueryPendingRewardByAddressResponse>,
+            tonic::Status,
+        > {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path =
+                http::uri::PathAndQuery::from_static("/side.farming.Query/PendingRewardByAddress");
             let mut req = request.into_request();
             req.extensions_mut().insert(GrpcMethod::new(
-                "side.dlc.Query",
-                "OracleParticipantLiveness",
+                "side.farming.Query",
+                "PendingRewardByAddress",
             ));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn estimated_reward(
+            &mut self,
+            request: impl tonic::IntoRequest<super::QueryEstimatedRewardRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryEstimatedRewardResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Query/EstimatedReward");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Query", "EstimatedReward"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -357,64 +287,48 @@ pub mod query_server {
             &self,
             request: tonic::Request<super::QueryParamsRequest>,
         ) -> core::result::Result<tonic::Response<super::QueryParamsResponse>, tonic::Status>;
-        async fn event(
+        async fn staking(
             &self,
-            request: tonic::Request<super::QueryEventRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryEventResponse>, tonic::Status>;
-        async fn events(
+            request: tonic::Request<super::QueryStakingRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryStakingResponse>, tonic::Status>;
+        async fn stakings(
             &self,
-            request: tonic::Request<super::QueryEventsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryEventsResponse>, tonic::Status>;
-        async fn attestation(
+            request: tonic::Request<super::QueryStakingsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryStakingsResponse>, tonic::Status>;
+        async fn stakings_by_address(
             &self,
-            request: tonic::Request<super::QueryAttestationRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAttestationResponse>, tonic::Status>;
-        async fn attestation_by_event(
-            &self,
-            request: tonic::Request<super::QueryAttestationByEventRequest>,
+            request: tonic::Request<super::QueryStakingsByAddressRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryAttestationByEventResponse>,
+            tonic::Response<super::QueryStakingsByAddressResponse>,
             tonic::Status,
         >;
-        async fn attestations(
+        async fn total_staking(
             &self,
-            request: tonic::Request<super::QueryAttestationsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryAttestationsResponse>, tonic::Status>;
-        async fn nonce(
+            request: tonic::Request<super::QueryTotalStakingRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryTotalStakingResponse>, tonic::Status>;
+        async fn current_epoch(
             &self,
-            request: tonic::Request<super::QueryNonceRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryNonceResponse>, tonic::Status>;
-        async fn nonces(
+            request: tonic::Request<super::QueryCurrentEpochRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryCurrentEpochResponse>, tonic::Status>;
+        async fn rewards(
             &self,
-            request: tonic::Request<super::QueryNoncesRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryNoncesResponse>, tonic::Status>;
-        async fn count_nonces(
+            request: tonic::Request<super::QueryRewardsRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryRewardsResponse>, tonic::Status>;
+        async fn pending_reward(
             &self,
-            request: tonic::Request<super::QueryCountNoncesRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryCountNoncesResponse>, tonic::Status>;
-        async fn dcm(
+            request: tonic::Request<super::QueryPendingRewardRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryPendingRewardResponse>, tonic::Status>;
+        async fn pending_reward_by_address(
             &self,
-            request: tonic::Request<super::QueryDcmRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryDcmResponse>, tonic::Status>;
-        async fn dc_ms(
-            &self,
-            request: tonic::Request<super::QueryDcMsRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryDcMsResponse>, tonic::Status>;
-        async fn oracle(
-            &self,
-            request: tonic::Request<super::QueryOracleRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryOracleResponse>, tonic::Status>;
-        async fn oracles(
-            &self,
-            request: tonic::Request<super::QueryOraclesRequest>,
-        ) -> core::result::Result<tonic::Response<super::QueryOraclesResponse>, tonic::Status>;
-        async fn oracle_participant_liveness(
-            &self,
-            request: tonic::Request<super::QueryOracleParticipantLivenessRequest>,
+            request: tonic::Request<super::QueryPendingRewardByAddressRequest>,
         ) -> core::result::Result<
-            tonic::Response<super::QueryOracleParticipantLivenessResponse>,
+            tonic::Response<super::QueryPendingRewardByAddressResponse>,
             tonic::Status,
         >;
+        async fn estimated_reward(
+            &self,
+            request: tonic::Request<super::QueryEstimatedRewardRequest>,
+        ) -> core::result::Result<tonic::Response<super::QueryEstimatedRewardResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct QueryServer<T: Query> {
@@ -492,7 +406,7 @@ pub mod query_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/side.dlc.Query/Params" => {
+                "/side.farming.Query/Params" => {
                     #[allow(non_camel_case_types)]
                     struct ParamsSvc<T: Query>(pub Arc<T>);
                     impl<T: Query> tonic::server::UnaryService<super::QueryParamsRequest> for ParamsSvc<T> {
@@ -530,18 +444,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Query/Event" => {
+                "/side.farming.Query/Staking" => {
                     #[allow(non_camel_case_types)]
-                    struct EventSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryEventRequest> for EventSvc<T> {
-                        type Response = super::QueryEventResponse;
+                    struct StakingSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryStakingRequest> for StakingSvc<T> {
+                        type Response = super::QueryStakingResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryEventRequest>,
+                            request: tonic::Request<super::QueryStakingRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).event(request).await };
+                            let fut = async move { (*inner).staking(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -552,7 +466,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = EventSvc(inner);
+                        let method = StakingSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -568,18 +482,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Query/Events" => {
+                "/side.farming.Query/Stakings" => {
                     #[allow(non_camel_case_types)]
-                    struct EventsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryEventsRequest> for EventsSvc<T> {
-                        type Response = super::QueryEventsResponse;
+                    struct StakingsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryStakingsRequest> for StakingsSvc<T> {
+                        type Response = super::QueryStakingsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryEventsRequest>,
+                            request: tonic::Request<super::QueryStakingsRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).events(request).await };
+                            let fut = async move { (*inner).stakings(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -590,7 +504,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = EventsSvc(inner);
+                        let method = StakingsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -606,59 +520,20 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Query/Attestation" => {
+                "/side.farming.Query/StakingsByAddress" => {
                     #[allow(non_camel_case_types)]
-                    struct AttestationSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryAttestationRequest> for AttestationSvc<T> {
-                        type Response = super::QueryAttestationResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::QueryAttestationRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).attestation(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AttestationSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.dlc.Query/AttestationByEvent" => {
-                    #[allow(non_camel_case_types)]
-                    struct AttestationByEventSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query>
-                        tonic::server::UnaryService<super::QueryAttestationByEventRequest>
-                        for AttestationByEventSvc<T>
+                    struct StakingsByAddressSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryStakingsByAddressRequest>
+                        for StakingsByAddressSvc<T>
                     {
-                        type Response = super::QueryAttestationByEventResponse;
+                        type Response = super::QueryStakingsByAddressResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryAttestationByEventRequest>,
+                            request: tonic::Request<super::QueryStakingsByAddressRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).attestation_by_event(request).await };
+                            let fut = async move { (*inner).stakings_by_address(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -669,7 +544,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = AttestationByEventSvc(inner);
+                        let method = StakingsByAddressSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -685,18 +560,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Query/Attestations" => {
+                "/side.farming.Query/TotalStaking" => {
                     #[allow(non_camel_case_types)]
-                    struct AttestationsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryAttestationsRequest> for AttestationsSvc<T> {
-                        type Response = super::QueryAttestationsResponse;
+                    struct TotalStakingSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryTotalStakingRequest> for TotalStakingSvc<T> {
+                        type Response = super::QueryTotalStakingResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryAttestationsRequest>,
+                            request: tonic::Request<super::QueryTotalStakingRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).attestations(request).await };
+                            let fut = async move { (*inner).total_staking(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -707,7 +582,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = AttestationsSvc(inner);
+                        let method = TotalStakingSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -723,18 +598,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Query/Nonce" => {
+                "/side.farming.Query/CurrentEpoch" => {
                     #[allow(non_camel_case_types)]
-                    struct NonceSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryNonceRequest> for NonceSvc<T> {
-                        type Response = super::QueryNonceResponse;
+                    struct CurrentEpochSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryCurrentEpochRequest> for CurrentEpochSvc<T> {
+                        type Response = super::QueryCurrentEpochResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryNonceRequest>,
+                            request: tonic::Request<super::QueryCurrentEpochRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).nonce(request).await };
+                            let fut = async move { (*inner).current_epoch(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -745,7 +620,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = NonceSvc(inner);
+                        let method = CurrentEpochSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -761,18 +636,18 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Query/Nonces" => {
+                "/side.farming.Query/Rewards" => {
                     #[allow(non_camel_case_types)]
-                    struct NoncesSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryNoncesRequest> for NoncesSvc<T> {
-                        type Response = super::QueryNoncesResponse;
+                    struct RewardsSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryRewardsRequest> for RewardsSvc<T> {
+                        type Response = super::QueryRewardsResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryNoncesRequest>,
+                            request: tonic::Request<super::QueryRewardsRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).nonces(request).await };
+                            let fut = async move { (*inner).rewards(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -783,7 +658,7 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = NoncesSvc(inner);
+                        let method = RewardsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -799,212 +674,62 @@ pub mod query_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Query/CountNonces" => {
+                "/side.farming.Query/PendingReward" => {
                     #[allow(non_camel_case_types)]
-                    struct CountNoncesSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryCountNoncesRequest> for CountNoncesSvc<T> {
-                        type Response = super::QueryCountNoncesResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::QueryCountNoncesRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).count_nonces(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = CountNoncesSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.dlc.Query/DCM" => {
-                    #[allow(non_camel_case_types)]
-                    struct DCMSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryDcmRequest> for DCMSvc<T> {
-                        type Response = super::QueryDcmResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::QueryDcmRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).dcm(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DCMSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.dlc.Query/DCMs" => {
-                    #[allow(non_camel_case_types)]
-                    struct DCMsSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryDcMsRequest> for DCMsSvc<T> {
-                        type Response = super::QueryDcMsResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::QueryDcMsRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).dc_ms(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = DCMsSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.dlc.Query/Oracle" => {
-                    #[allow(non_camel_case_types)]
-                    struct OracleSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryOracleRequest> for OracleSvc<T> {
-                        type Response = super::QueryOracleResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::QueryOracleRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).oracle(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = OracleSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.dlc.Query/Oracles" => {
-                    #[allow(non_camel_case_types)]
-                    struct OraclesSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query> tonic::server::UnaryService<super::QueryOraclesRequest> for OraclesSvc<T> {
-                        type Response = super::QueryOraclesResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::QueryOraclesRequest>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).oracles(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = OraclesSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/side.dlc.Query/OracleParticipantLiveness" => {
-                    #[allow(non_camel_case_types)]
-                    struct OracleParticipantLivenessSvc<T: Query>(pub Arc<T>);
-                    impl<T: Query>
-                        tonic::server::UnaryService<super::QueryOracleParticipantLivenessRequest>
-                        for OracleParticipantLivenessSvc<T>
+                    struct PendingRewardSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryPendingRewardRequest>
+                        for PendingRewardSvc<T>
                     {
-                        type Response = super::QueryOracleParticipantLivenessResponse;
+                        type Response = super::QueryPendingRewardResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::QueryOracleParticipantLivenessRequest>,
+                            request: tonic::Request<super::QueryPendingRewardRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).pending_reward(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = PendingRewardSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.farming.Query/PendingRewardByAddress" => {
+                    #[allow(non_camel_case_types)]
+                    struct PendingRewardByAddressSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query>
+                        tonic::server::UnaryService<super::QueryPendingRewardByAddressRequest>
+                        for PendingRewardByAddressSvc<T>
+                    {
+                        type Response = super::QueryPendingRewardByAddressResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryPendingRewardByAddressRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut =
-                                async move { (*inner).oracle_participant_liveness(request).await };
+                                async move { (*inner).pending_reward_by_address(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1015,7 +740,47 @@ pub mod query_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = OracleParticipantLivenessSvc(inner);
+                        let method = PendingRewardByAddressSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.farming.Query/EstimatedReward" => {
+                    #[allow(non_camel_case_types)]
+                    struct EstimatedRewardSvc<T: Query>(pub Arc<T>);
+                    impl<T: Query> tonic::server::UnaryService<super::QueryEstimatedRewardRequest>
+                        for EstimatedRewardSvc<T>
+                    {
+                        type Response = super::QueryEstimatedRewardResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::QueryEstimatedRewardRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).estimated_reward(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = EstimatedRewardSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1065,7 +830,7 @@ pub mod query_server {
         }
     }
     impl<T: Query> tonic::server::NamedService for QueryServer<T> {
-        const NAME: &'static str = "side.dlc.Query";
+        const NAME: &'static str = "side.farming.Query";
     }
 }
 /// Generated client implementations.
@@ -1151,10 +916,27 @@ pub mod msg_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        pub async fn create_dcm(
+        pub async fn stake(
             &mut self,
-            request: impl tonic::IntoRequest<super::MsgCreateDcm>,
-        ) -> core::result::Result<tonic::Response<super::MsgCreateDcmResponse>, tonic::Status>
+            request: impl tonic::IntoRequest<super::MsgStake>,
+        ) -> core::result::Result<tonic::Response<super::MsgStakeResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Msg/Stake");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Msg", "Stake"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn unstake(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgUnstake>,
+        ) -> core::result::Result<tonic::Response<super::MsgUnstakeResponse>, tonic::Status>
         {
             self.inner.ready().await.map_err(|e| {
                 tonic::Status::new(
@@ -1163,10 +945,45 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/CreateDCM");
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Msg/Unstake");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Msg", "CreateDCM"));
+                .insert(GrpcMethod::new("side.farming.Msg", "Unstake"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn claim(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgClaim>,
+        ) -> core::result::Result<tonic::Response<super::MsgClaimResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Msg/Claim");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Msg", "Claim"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn claim_all(
+            &mut self,
+            request: impl tonic::IntoRequest<super::MsgClaimAll>,
+        ) -> core::result::Result<tonic::Response<super::MsgClaimAllResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    alloc::format!("Service was not ready: {}", e.into()),
+                )
+            })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Msg/ClaimAll");
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("side.farming.Msg", "ClaimAll"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn update_params(
@@ -1181,10 +998,10 @@ pub mod msg_client {
                 )
             })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/side.dlc.Msg/UpdateParams");
+            let path = http::uri::PathAndQuery::from_static("/side.farming.Msg/UpdateParams");
             let mut req = request.into_request();
             req.extensions_mut()
-                .insert(GrpcMethod::new("side.dlc.Msg", "UpdateParams"));
+                .insert(GrpcMethod::new("side.farming.Msg", "UpdateParams"));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -1197,10 +1014,22 @@ pub mod msg_server {
     /// Generated trait containing gRPC methods that should be implemented for use with MsgServer.
     #[async_trait]
     pub trait Msg: Send + Sync + 'static {
-        async fn create_dcm(
+        async fn stake(
             &self,
-            request: tonic::Request<super::MsgCreateDcm>,
-        ) -> core::result::Result<tonic::Response<super::MsgCreateDcmResponse>, tonic::Status>;
+            request: tonic::Request<super::MsgStake>,
+        ) -> core::result::Result<tonic::Response<super::MsgStakeResponse>, tonic::Status>;
+        async fn unstake(
+            &self,
+            request: tonic::Request<super::MsgUnstake>,
+        ) -> core::result::Result<tonic::Response<super::MsgUnstakeResponse>, tonic::Status>;
+        async fn claim(
+            &self,
+            request: tonic::Request<super::MsgClaim>,
+        ) -> core::result::Result<tonic::Response<super::MsgClaimResponse>, tonic::Status>;
+        async fn claim_all(
+            &self,
+            request: tonic::Request<super::MsgClaimAll>,
+        ) -> core::result::Result<tonic::Response<super::MsgClaimAllResponse>, tonic::Status>;
         async fn update_params(
             &self,
             request: tonic::Request<super::MsgUpdateParams>,
@@ -1282,18 +1111,18 @@ pub mod msg_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/side.dlc.Msg/CreateDCM" => {
+                "/side.farming.Msg/Stake" => {
                     #[allow(non_camel_case_types)]
-                    struct CreateDCMSvc<T: Msg>(pub Arc<T>);
-                    impl<T: Msg> tonic::server::UnaryService<super::MsgCreateDcm> for CreateDCMSvc<T> {
-                        type Response = super::MsgCreateDcmResponse;
+                    struct StakeSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgStake> for StakeSvc<T> {
+                        type Response = super::MsgStakeResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::MsgCreateDcm>,
+                            request: tonic::Request<super::MsgStake>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).create_dcm(request).await };
+                            let fut = async move { (*inner).stake(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1304,7 +1133,7 @@ pub mod msg_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = CreateDCMSvc(inner);
+                        let method = StakeSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1320,7 +1149,121 @@ pub mod msg_server {
                     };
                     Box::pin(fut)
                 }
-                "/side.dlc.Msg/UpdateParams" => {
+                "/side.farming.Msg/Unstake" => {
+                    #[allow(non_camel_case_types)]
+                    struct UnstakeSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgUnstake> for UnstakeSvc<T> {
+                        type Response = super::MsgUnstakeResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgUnstake>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).unstake(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UnstakeSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.farming.Msg/Claim" => {
+                    #[allow(non_camel_case_types)]
+                    struct ClaimSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgClaim> for ClaimSvc<T> {
+                        type Response = super::MsgClaimResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgClaim>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).claim(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ClaimSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.farming.Msg/ClaimAll" => {
+                    #[allow(non_camel_case_types)]
+                    struct ClaimAllSvc<T: Msg>(pub Arc<T>);
+                    impl<T: Msg> tonic::server::UnaryService<super::MsgClaimAll> for ClaimAllSvc<T> {
+                        type Response = super::MsgClaimAllResponse;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::MsgClaimAll>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move { (*inner).claim_all(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ClaimAllSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/side.farming.Msg/UpdateParams" => {
                     #[allow(non_camel_case_types)]
                     struct UpdateParamsSvc<T: Msg>(pub Arc<T>);
                     impl<T: Msg> tonic::server::UnaryService<super::MsgUpdateParams> for UpdateParamsSvc<T> {
@@ -1392,6 +1335,6 @@ pub mod msg_server {
         }
     }
     impl<T: Msg> tonic::server::NamedService for MsgServer<T> {
-        const NAME: &'static str = "side.dlc.Msg";
+        const NAME: &'static str = "side.farming.Msg";
     }
 }

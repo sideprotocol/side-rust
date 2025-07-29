@@ -53,12 +53,9 @@ pub struct PoolTrancheConfig {
     /// maturity duration in seconds
     #[prost(int64, tag = "1")]
     pub maturity: i64,
-    /// borrow apr permille
-    #[prost(uint32, tag = "2")]
-    pub borrow_apr: u32,
-    /// minimum maturity factor permille
-    #[prost(uint32, tag = "3")]
-    pub min_maturity_factor: u32,
+    /// borrow apr
+    #[prost(string, tag = "2")]
+    pub borrow_apr: ::prost::alloc::string::String,
 }
 impl ::prost::Name for PoolTrancheConfig {
     const NAME: &'static str = "PoolTrancheConfig";
@@ -95,23 +92,20 @@ pub struct PoolConfig {
     /// request fee
     #[prost(message, optional, tag = "8")]
     pub request_fee: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-    /// origination fee
+    /// origination fee factor
     #[prost(string, tag = "9")]
-    pub origination_fee: ::prost::alloc::string::String,
-    /// reserve factor permille
-    #[prost(uint32, tag = "10")]
-    pub reserve_factor: u32,
-    /// referral fee factor permille
-    #[prost(uint32, tag = "11")]
-    pub referral_fee_factor: u32,
-    /// maximum ltv percent
-    #[prost(uint32, tag = "12")]
-    pub max_ltv: u32,
-    /// liquidation ltv percent
-    #[prost(uint32, tag = "13")]
-    pub liquidation_threshold: u32,
+    pub origination_fee_factor: ::prost::alloc::string::String,
+    /// reserve factor
+    #[prost(string, tag = "10")]
+    pub reserve_factor: ::prost::alloc::string::String,
+    /// maximum ltv
+    #[prost(string, tag = "11")]
+    pub max_ltv: ::prost::alloc::string::String,
+    /// liquidation ltv
+    #[prost(string, tag = "12")]
+    pub liquidation_threshold: ::prost::alloc::string::String,
     /// indicates if the pool is paused
-    #[prost(bool, tag = "14")]
+    #[prost(bool, tag = "13")]
     pub paused: bool,
 }
 impl ::prost::Name for PoolConfig {
@@ -163,7 +157,7 @@ pub struct LendingPool {
     #[prost(string, tag = "7")]
     pub total_reserve: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "8")]
-    pub total_stokens: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    pub total_ytokens: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, repeated, tag = "9")]
     pub tranches: ::prost::alloc::vec::Vec<PoolTranche>,
     #[prost(message, optional, tag = "10")]
@@ -228,33 +222,55 @@ pub struct Loan {
     pub protocol_fee: ::prost::alloc::string::String,
     #[prost(int64, tag = "14")]
     pub maturity: i64,
-    #[prost(uint32, tag = "15")]
-    pub borrow_apr: u32,
-    #[prost(int64, tag = "16")]
-    pub min_maturity: i64,
-    #[prost(string, tag = "17")]
+    #[prost(string, tag = "15")]
+    pub borrow_apr: ::prost::alloc::string::String,
+    #[prost(string, tag = "16")]
     pub start_borrow_index: ::prost::alloc::string::String,
-    #[prost(string, tag = "18")]
+    #[prost(string, tag = "17")]
     pub liquidation_price: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "19")]
+    #[prost(uint64, tag = "18")]
     pub dlc_event_id: u64,
-    #[prost(message, repeated, tag = "20")]
+    #[prost(message, repeated, tag = "19")]
     pub authorizations: ::prost::alloc::vec::Vec<Authorization>,
-    #[prost(string, tag = "21")]
+    #[prost(string, tag = "20")]
     pub collateral_amount: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "22")]
+    #[prost(uint64, tag = "21")]
     pub liquidation_id: u64,
-    #[prost(string, tag = "23")]
-    pub referrer: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "24")]
+    #[prost(message, optional, tag = "22")]
+    pub referrer: ::core::option::Option<Referrer>,
+    #[prost(message, optional, tag = "23")]
     pub create_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(message, optional, tag = "25")]
+    #[prost(message, optional, tag = "24")]
     pub disburse_at: ::core::option::Option<::tendermint_proto::google::protobuf::Timestamp>,
-    #[prost(enumeration = "LoanStatus", tag = "26")]
+    #[prost(enumeration = "LoanStatus", tag = "25")]
     pub status: i32,
 }
 impl ::prost::Name for Loan {
     const NAME: &'static str = "Loan";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// Referrer defines the referrer
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Referrer {
+    /// Optional name
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    /// Unique referral code with 8 alphanumeric characters
+    #[prost(string, tag = "2")]
+    pub referral_code: ::prost::alloc::string::String,
+    /// Referrer address
+    #[prost(string, tag = "3")]
+    pub address: ::prost::alloc::string::String,
+    /// Referral fee factor
+    #[prost(string, tag = "4")]
+    pub referral_fee_factor: ::prost::alloc::string::String,
+}
+impl ::prost::Name for Referrer {
+    const NAME: &'static str = "Referrer";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
@@ -287,6 +303,8 @@ pub struct CetInfo {
     pub signature_point: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "4")]
     pub script: ::core::option::Option<LeafScript>,
+    #[prost(uint32, tag = "5")]
+    pub sighash_type: u32,
 }
 impl ::prost::Name for CetInfo {
     const NAME: &'static str = "CetInfo";
@@ -467,20 +485,22 @@ pub enum LoanStatus {
     Unspecified = 0,
     /// Loan Requested
     Requested = 1,
+    /// Loan Cancelled
+    Cancelled = 2,
     /// Loan Authorized
-    Authorized = 2,
+    Authorized = 3,
     /// Loan Rejected
-    Rejected = 3,
+    Rejected = 4,
     /// Loan Open
-    Open = 4,
+    Open = 5,
     /// Loan Repaid
-    Repaid = 5,
+    Repaid = 6,
     /// Loan Defaulted
-    Defaulted = 6,
+    Defaulted = 7,
     /// Loan Liquidated
-    Liquidated = 7,
+    Liquidated = 8,
     /// Loan Closed
-    Closed = 8,
+    Closed = 9,
 }
 impl LoanStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -491,6 +511,7 @@ impl LoanStatus {
         match self {
             LoanStatus::Unspecified => "Unspecified",
             LoanStatus::Requested => "Requested",
+            LoanStatus::Cancelled => "Cancelled",
             LoanStatus::Authorized => "Authorized",
             LoanStatus::Rejected => "Rejected",
             LoanStatus::Open => "Open",
@@ -505,6 +526,7 @@ impl LoanStatus {
         match value {
             "Unspecified" => Some(Self::Unspecified),
             "Requested" => Some(Self::Requested),
+            "Cancelled" => Some(Self::Cancelled),
             "Authorized" => Some(Self::Authorized),
             "Rejected" => Some(Self::Rejected),
             "Open" => Some(Self::Open),
@@ -808,6 +830,8 @@ impl ::prost::Name for QueryDlcEventCountResponse {
 pub struct QueryLoanCetInfosRequest {
     #[prost(string, tag = "1")]
     pub loan_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub collateral_amount: ::prost::alloc::string::String,
 }
 impl ::prost::Name for QueryLoanCetInfosRequest {
     const NAME: &'static str = "QueryLoanCetInfosRequest";
@@ -986,6 +1010,39 @@ impl ::prost::Name for QueryLoansByAddressResponse {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)
     }
 }
+/// QueryLoansByOracleRequest is request type for the Query/LoansByOracle RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryLoansByOracleRequest {
+    #[prost(string, tag = "1")]
+    pub oracle_pubkey: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryLoansByOracleRequest {
+    const NAME: &'static str = "QueryLoansByOracleRequest";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// QueryLoansByOracleResponse is response type for the Query/LoansByOracle RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryLoansByOracleResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub loans: ::prost::alloc::vec::Vec<Loan>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryLoansByOracleResponse {
+    const NAME: &'static str = "QueryLoansByOracleResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
 /// QueryLoanDlcMetaRequest is request type for the Query/LoanDlcMeta RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1154,6 +1211,35 @@ impl ::prost::Name for QueryCurrentInterestResponse {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryReferrersRequest {
+    #[prost(message, optional, tag = "1")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+impl ::prost::Name for QueryReferrersRequest {
+    const NAME: &'static str = "QueryReferrersRequest";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct QueryReferrersResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub referrers: ::prost::alloc::vec::Vec<Referrer>,
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+impl ::prost::Name for QueryReferrersResponse {
+    const NAME: &'static str = "QueryReferrersResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgCreatePool {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -1270,7 +1356,7 @@ pub struct MsgRemoveLiquidity {
     #[prost(string, tag = "1")]
     pub lender: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
-    pub stokens: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    pub ytokens: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
 }
 impl ::prost::Name for MsgRemoveLiquidity {
     const NAME: &'static str = "MsgRemoveLiquidity";
@@ -1307,7 +1393,7 @@ pub struct MsgApply {
     #[prost(uint64, tag = "7")]
     pub dcm_id: u64,
     #[prost(string, tag = "8")]
-    pub referrer: ::prost::alloc::string::String,
+    pub referral_code: ::prost::alloc::string::String,
 }
 impl ::prost::Name for MsgApply {
     const NAME: &'static str = "MsgApply";
@@ -1419,6 +1505,82 @@ impl ::prost::Name for MsgRedeem {
 pub struct MsgRedeemResponse {}
 impl ::prost::Name for MsgRedeemResponse {
     const NAME: &'static str = "MsgRedeemResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// MsgRegisterReferrer is the Msg/RegisterReferrer request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgRegisterReferrer {
+    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
+    #[prost(string, tag = "1")]
+    pub authority: ::prost::alloc::string::String,
+    /// Optional referrer name
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    /// Unique referral code with 8 alphanumeric characters
+    #[prost(string, tag = "3")]
+    pub referral_code: ::prost::alloc::string::String,
+    /// Referrer address
+    #[prost(string, tag = "4")]
+    pub address: ::prost::alloc::string::String,
+    /// Referral fee factor
+    #[prost(string, tag = "5")]
+    pub referral_fee_factor: ::prost::alloc::string::String,
+}
+impl ::prost::Name for MsgRegisterReferrer {
+    const NAME: &'static str = "MsgRegisterReferrer";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// MsgRegisterReferrerResponse defines the Msg/RegisterReferrer response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgRegisterReferrerResponse {}
+impl ::prost::Name for MsgRegisterReferrerResponse {
+    const NAME: &'static str = "MsgRegisterReferrerResponse";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// MsgUpdateReferrer is the Msg/UpdateReferrer request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgUpdateReferrer {
+    /// authority is the address that controls the module (defaults to x/gov unless overwritten).
+    #[prost(string, tag = "1")]
+    pub authority: ::prost::alloc::string::String,
+    /// new referrer name
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    /// Unique referral code with 8 alphanumeric characters
+    #[prost(string, tag = "3")]
+    pub referral_code: ::prost::alloc::string::String,
+    /// new referrer address
+    #[prost(string, tag = "4")]
+    pub address: ::prost::alloc::string::String,
+    /// new referral fee factor
+    #[prost(string, tag = "5")]
+    pub referral_fee_factor: ::prost::alloc::string::String,
+}
+impl ::prost::Name for MsgUpdateReferrer {
+    const NAME: &'static str = "MsgUpdateReferrer";
+    const PACKAGE: &'static str = "side.lending";
+    fn full_name() -> ::prost::alloc::string::String {
+        ::prost::alloc::format!("side.lending.{}", Self::NAME)
+    }
+}
+/// MsgUpdateReferrerResponse defines the Msg/UpdateReferrer response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MsgUpdateReferrerResponse {}
+impl ::prost::Name for MsgUpdateReferrerResponse {
+    const NAME: &'static str = "MsgUpdateReferrerResponse";
     const PACKAGE: &'static str = "side.lending";
     fn full_name() -> ::prost::alloc::string::String {
         ::prost::alloc::format!("side.lending.{}", Self::NAME)

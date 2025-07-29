@@ -282,14 +282,11 @@ impl ::prost::Name for TssParams {
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct IbcParams {
-    /// Id of the IBC port used to transfer sBTC
-    #[prost(string, tag = "1")]
-    pub port_id: ::prost::alloc::string::String,
     /// Timeout height offset relative to the current client height
-    #[prost(uint64, tag = "2")]
+    #[prost(uint64, tag = "1")]
     pub timeout_height_offset: u64,
     /// Timeout duration relative to the current time
-    #[prost(message, optional, tag = "3")]
+    #[prost(message, optional, tag = "2")]
     pub timeout_duration: ::core::option::Option<::tendermint_proto::google::protobuf::Duration>,
 }
 impl ::prost::Name for IbcParams {
